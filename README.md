@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 148aa701aeb838d39a9d5112dd460588fbbb57ac
+
 # [Horizon UI TailwindCSS React ⚡️](https://horizon-ui.com/horizon-tailwind-react) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=Check%20Horizon%20UI,%20the%20trendiest%20open-source%20admin%20template%20for%20%23tailwindcss%20and%20%23react!%0A%0Ahorizon-ui.com%20)
 
 ![version](https://img.shields.io/badge/version-1.0.1-brightgreen.svg)
@@ -156,5 +153,4 @@ If you encounter any issues or have questions, feel free to [open an issue] or c
 This project is licensed under the [License Name] - see the [LICENSE.md](LICENSE.md) file for details.
 
 Thank you for being a part of the El Kindy Project! We look forward to transforming the future of education together.
->>>>>>> 867a458b46c0750caf9d672b58bf840081676c96
->>>>>>> 148aa701aeb838d39a9d5112dd460588fbbb57ac
+
