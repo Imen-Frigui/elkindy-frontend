@@ -1,3 +1,23 @@
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import RtlLayout from "layouts/rtl";
+import AdminLayout from "layouts/admin";
+import AuthLayout from "layouts/auth";
+const App = () => {
+  return (
+    <Routes>
+      <Route path="auth/*" element={<AuthLayout />} />
+      <Route path="admin/*" element={<AdminLayout />} />
+      <Route path="rtl/*" element={<RtlLayout />} />
+      <Route path="/" element={<Navigate to="/admin" replace />} />
+    </Routes>
+  );
+};
+
+export default App;
+
+/*
 // eslint-disable-next-line no-unused-vars
 import React from "react";
 import './tailwind.output.css';
@@ -34,3 +54,5 @@ function App() {
 }
 
 export default App
+>>>>>>> 867a458b46c0750caf9d672b58bf840081676c96
+*/
