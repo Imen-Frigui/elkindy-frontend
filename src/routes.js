@@ -19,7 +19,6 @@ import {
   MdPerson,
   MdLock,
 } from "react-icons/md";
-import CoursesList from "views/course/CoursesList";
 
 const routes = [
   {
