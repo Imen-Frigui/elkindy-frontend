@@ -4,7 +4,7 @@ import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
-
+import { Outlet } from "react-router-dom";
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
@@ -84,6 +84,7 @@ export default function Admin(props) {
                   element={<Navigate to="/admin/default" replace />}
                 />
               </Routes>
+              <Outlet />
             </div>
             <div className="p-3">
               <Footer />
