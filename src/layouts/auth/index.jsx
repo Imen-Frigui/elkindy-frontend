@@ -1,5 +1,4 @@
 import Footer from "components/footer/FooterAuthDefault";
-import authImg from "assets/img/auth/auth.png";
 import { Link, Routes, Route, Navigate } from "react-router-dom";
 import routes from "routes.js";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
@@ -51,11 +50,8 @@ export default function Auth() {
                     element={<Navigate to="/auth/sign-in" replace />}
                   />
                 </Routes>
-                <div className="absolute right-0 hidden h-full min-h-screen md:block lg:w-[49vw] 2xl:w-[44vw]">
-                  <div
-                    className="absolute flex h-full w-full items-end justify-center bg-cover bg-center lg:rounded-bl-[120px] xl:rounded-bl-[200px]"
-                    style={{ backgroundImage: `url(${authImg})` }}
-                  />
+                <div className="absolute mr-26 right-10 hidden h-[25px] min-h-screen md:block lg:w-[49vw] 2xl:w-[44vw]">
+                  
                 </div>
               </div>
               <Footer />
