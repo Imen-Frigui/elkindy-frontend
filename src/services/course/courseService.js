@@ -40,6 +40,31 @@ export const updateCourse = async (courseId, courseData) => {
         console.error("Failed to update course:", error);
     }
 };
+
+
+// In your frontend service file where fetchCourses is defined
+
+export const addCourse = async (courseData) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(courseData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to add course:", error);
+    }
+};
+
+
 export const deleteCourse = async (courseId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
