@@ -1,13 +1,32 @@
 import { useEffect, useState } from 'react';
-import { fetchCourses, addCourse } from '../../services/course/courseService';
+import { fetchCourses, archiveCourse, updateCourse } from '../../services/course/courseService';
 import {useNavigate} from "react-router-dom";
 import ButtonComponent from "../../components/button/ButtonComponnent";
 import AddCourse from "./components/AddCourse";
+import ArchivedCourses from "./components/ArchivedCourses";
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from "@mui/material/Button";
+
 
 const CoursesList = () => {
 
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate()
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [newName, setNewName] = useState('');
+
+    const updateCourseName = async (courseId, newName) => {
+        // Assuming you have a service function to update the course
+        await updateCourse(courseId, { name: newName });
+        // Refresh course list
+        fetchCourses().then(setCourses);
+    };
+
 
 
     useEffect(() => {
@@ -30,6 +49,33 @@ const CoursesList = () => {
         fetchCourses().then(setCourses);
     };
 
+    const handleArchiveCourse = async (courseId) => {
+        try {
+            // Directly call the archiveCourse function imported from courseService
+            const response = await archiveCourse(courseId);
+            if (response) {
+                // Refresh the courses list or update the state to reflect the change
+                fetchCourses().then(setCourses);
+            } else {
+                throw new Error('Failed to archive the course');
+            }
+        } catch (error) {
+            console.error("Failed to archive course:", error);
+        }
+    };
+
+    const handlePopoverOpen = (event, currentName) => {
+        setNewName(currentName); // Set the current name of the course to edit
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
 
     return (
         <>
@@ -38,55 +84,103 @@ const CoursesList = () => {
                     <div className="inline-block min-w-full align-middle">
                         <AddCourse onCourseAdded={handleCourseAdded}/>
 
-                        <div className="overflow-hidden shadow sm:rounded-lg mt-4">
-                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                                <thead className="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th scope="col"
-                                        className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        Title
-                                    </th>
-                                    <th scope="col"
-                                        className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        Category
-                                    </th>
-                                    <th scope="col"
-                                        className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        Description
-                                    </th>
-                                    <th scope="col"
-                                        className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        Actions
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody className="bg-white dark:bg-gray-800">
-                                {courses.map(course => (
-                                    <tr key={course._id} role="row">
-                                        <td role="cell"
-                                            className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                            <p className="font-bold">{course.title}</p>
-                                        </td>
-                                        <td role="cell"
-                                            className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                            <p>{course.category}</p>
-                                        </td>
-                                        <td role="cell"
-                                            className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                            <p>{course.description}</p>
-                                        </td>
-                                        <td className="p-4 whitespace-nowrap">
-                                            <ButtonComponent
-                                                text="Details"
-                                                onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
-                                                color="#FB9D37"
-                                            />
-                                        </td>
+                        <div className="grid grid-cols-12 gap-4">
+
+                            <div className="col-span-9 overflow-hidden shadow sm:rounded-lg mt-4">
+                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                                    <thead className="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th scope="col"
+                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                            Title
+                                        </th>
+                                        <th scope="col"
+                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                            Category
+                                        </th>
+                                        <th scope="col"
+                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                            Description
+                                        </th>
+                                        <th scope="col"
+                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                            Actions
+                                        </th>
                                     </tr>
-                                ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="bg-white dark:bg-gray-800">
+                                    {courses.map(course => (
+                                        <tr key={course._id} role="row">
+                                            <td role="cell"
+                                                className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                                <p className="font-bold">{course.title}</p>
+                                                <IconButton
+                                                    aria-describedby={id}
+                                                    variant="contained"
+                                                    onClick={(e) => handlePopoverOpen(e, course.name)}
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
+                                                <Popover
+                                                    id={id}
+                                                    open={open}
+                                                    anchorEl={anchorEl}
+                                                    onClose={handlePopoverClose}
+                                                    anchorOrigin={{
+                                                        vertical: 'bottom',
+                                                        horizontal: 'left',
+                                                    }}
+                                                >
+                                                    <Typography sx={{ p: 2 }}>
+                                                        Change Course Name
+                                                        <TextField
+                                                            value={newName}
+                                                            onChange={(e) => setNewName(e.target.value)}
+                                                            margin="normal"
+                                                        />
+                                                        <Button onClick={() => {
+                                                            updateCourseName(course._id, newName);
+                                                            handlePopoverClose();
+                                                        }}>
+                                                            Update
+                                                        </Button>
+                                                    </Typography>
+                                                </Popover>
+
+
+                                            </td>
+                                            <td role="cell"
+                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                <p>{course.category}</p>
+                                            </td>
+                                            <td role="cell"
+                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                <p>{course.description}</p>
+                                            </td>
+                                            <td className="p-4 whitespace-nowrap">
+                                                <ButtonComponent
+                                                    text="Details"
+                                                    onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
+                                                    color="#FB9D37"
+                                                />
+                                                <ButtonComponent
+                                                    text="Archive"
+                                                    onClick={() => handleArchiveCourse(course._id)}
+                                                    color="red"
+                                                />
+
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="col-span-3 mt-4"> {/* Archived courses container */}
+                                <ArchivedCourses/> {/* Render ArchivedCourses component */}
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

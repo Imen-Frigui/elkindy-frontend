@@ -79,3 +79,37 @@ export const deleteCourse = async (courseId) => {
         console.error("Failed to delete course:", error);
     }
 };
+
+export const archiveCourse = async (courseId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/archive/${courseId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include other headers as required, like authorization tokens
+            },
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Failed to archive the course');
+        }
+    } catch (error) {
+        console.error("Failed to archive course:", error);
+    }
+};
+
+export const fetchArchivedCourses = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/courses/archived`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("Failed to fetch archived courses:", error);
+    }
+};
+
+
