@@ -106,9 +106,7 @@ module.exports = {
         "99p": "99%",
       },
       fontFamily: {
-        jost: ["Jost", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-        dm: ["DM Sans", "sans-serif"],
+        body: ["Jost"]
       },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
