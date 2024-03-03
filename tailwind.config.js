@@ -136,6 +136,13 @@ module.exports = {
       "4xl-max": { max: "1850px" },
     },
     colors: () => ({
+      pageBackground: "#f7f5ef",
+      customBackground: "#F7F8FD",
+      white: "#ffffff",
+      lightPrimary: "#F4F7FE",
+      blueSecondary: "#4318FF",
+      brandLinear: "#868CFF",
+      customOrange: '#F98100',
       baground: '#F7F5EF',
       white: '#ffffff',
       lightPrimary: '#F4F7FE',
@@ -148,6 +155,7 @@ module.exports = {
       kindygray: '#F7F5EF',
       fontcolor: '#3A4374',
       bluebg: '#F7F8FD',
+
       gray: {
         50: "#f8f9fa",
         100: "#edf2f7",
