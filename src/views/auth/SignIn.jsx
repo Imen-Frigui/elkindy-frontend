@@ -133,10 +133,12 @@ const handleSuccess = (msg) =>
         </a>
       </div>
       <button
-type="submit"  className="linear mt-2 w-full rounded-tr-lg rounded-bl-lg bg-blue-700 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500 dark:active:bg-blue-300"
+  type="submit"
+  className="linear mt-2 w-full bg-blue-700 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500 dark:active:bg-blue-300 rounded-tr-[25px] rounded-bl-[25px]"
 >
   Sign In
 </button>
+
 <div className="mt-4 flex justify-center">
           <span className="text-sm font-medium text-navy-700 dark:text-gray-600">
             Not registered yet ?
