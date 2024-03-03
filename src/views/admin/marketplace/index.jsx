@@ -8,6 +8,7 @@ import useInstrumentStore from "store/instrumentStore";
 import { useEffect, useCallback, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button, SortByDropdown, NoData } from "../../../components";
+import InstrumentSkeleton from "./components/InstrumentSkeleton";
 const Marketplace = () => {
   const { type } = useParams();
   const [status, setStatus] = useState("All");
@@ -29,9 +30,9 @@ const Marketplace = () => {
   const isActiveAge = useCallback(
     (elem) => {
       if (!age || age === elem) {
-        return "bg-kindydarkblue text-white";
+        return "bg-kindyorange text-white";
       } else {
-        return "text-blue-800";
+        return " bg-indigo-50 text-kindyblue";
       }
     },
     [age]
@@ -40,9 +41,9 @@ const Marketplace = () => {
   const isActiveCategory = useCallback(
     (elem) => {
       if (!status || status === elem) {
-        return "bg-kindydarkblue text-white";
+        return "bg-kindyorange text-white";
       } else {
-        return "text-blue-800";
+        return " bg-indigo-50 text-kindyblue";
       }
     },
     [status]
@@ -79,7 +80,13 @@ const Marketplace = () => {
 
         <div className=" grid grid-cols-1 gap-5 md:grid-cols-4">
           <div className=" grid grid-cols-1 gap-5 md:col-span-3 md:grid-cols-3">
-            {instruments.length > 0 ? (
+            {loading  ? (
+              <>
+                {"123456".split("").map((v) => (
+                  <InstrumentSkeleton key={v} />
+                ))}
+              </>
+            ) : instruments.length > 0 ? (
               instruments.map((i) => (
                 <InstrumentCard
                   bidders={[avatar1]}
@@ -94,67 +101,67 @@ const Marketplace = () => {
               </div>
             )}
           </div>
-          <div className=" 3xl:p-![18px] relative  flex h-full w-full flex-col rounded-[20px] bg-white bg-clip-border !p-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none ">
-            <div className="intro bg-dark layered-background h-32 rounded-lg py-6 px-6 ">
-              <p className=" text-black text-left font-bold">
-                El Kindy Marketplace
-              </p>
-              <p className=" text-black text-left opacity-70">
-                Instruments Board
-              </p>
-            </div>
-            <div className="">
-            <div className="px-4">
-                <p className=" text-black opacity-70">Filter by age:</p>
+          <div className=" ">
+            <div className="  grid md:grid-rows-1 ">
+              <div className=" mb-3 h-20 space-y-1 rounded-lg bg-kindyblue py-5 px-6 dark:bg-indigo-50  ">
+                <p className=" text-left font-bold text-white dark:text-navy-800">
+                  El Kindy Marketplace
+                </p>
+                <p className=" text-left text-white opacity-80 dark:text-navy-800">
+                  Instruments Board
+                </p>
+              </div>
+              <div className="mb-3 flex flex-wrap rounded-lg bg-white p-4 ">
+                <p className=" text-black opacity-80 dark:text-navy-800">
+                  Filter by age:
+                </p>
+                <div className="flex flex-wrap rounded-lg bg-white">
+                  {["3-5", "4-5", "4-6", "5-7", "7-9", "9-12", "Adult"].map(
+                    (age, i) => {
+                      return (
+                        <Button
+                          onClick={(e) =>
+                            setAge(e.target.innerText.toLowerCase())
+                          }
+                          key={i}
+                          text={age}
+                          className={
+                            "my-1  mr-2  py-2 hover:border-kindyorange  " +
+                            isActiveAge(age.toLowerCase())
+                          }
+                        />
+                      );
+                    }
+                  )}
+                </div>
               </div>
               <div className="flex flex-wrap rounded-lg bg-white p-4">
-                {["3-5", "4-5", "4-6", "5-7", "7-9", "9-12", "Adult"].map(
-                  (age, i) => {
+                <p className=" text-black text-left opacity-80 dark:text-navy-800">
+                  Filter by category:
+                </p>
+                <div className="flex flex-wrap rounded-lg bg-white ">
+                  {[
+                    "All",
+                    "Exchange",
+                    "Maintenance",
+                    "Available for borrow",
+                    "Buy",
+                  ].map((cat, i) => {
                     return (
                       <Button
                         onClick={(e) =>
-                          setAge(e.target.innerText.toLowerCase())
+                          setStatus(e.target.innerText.toLowerCase())
                         }
                         key={i}
-                        text={age}
+                        text={cat}
                         className={
-                          "my-1  mr-2 bg-indigo-50 py-2 hover:border-kindyorange " +
-                          isActiveAge(age.toLowerCase())
+                          "my-1  mr-2 py-2 hover:border-kindyorange " +
+                          isActiveCategory(cat.toLowerCase())
                         }
                       />
                     );
-                  }
-                )}
-              </div>
-            </div>
-            <div className="">
-              <div className="px-4">
-                <p className=" text-black text-left opacity-70">
-                  Filter by category:
-                </p>
-              </div>
-              <div className="flex flex-wrap rounded-lg bg-white p-4">
-                {[
-                  "All",
-                  "Exchange",
-                  "Maintenance",
-                  "Available for borrow",
-                  "Buy",
-                ].map((cat, i) => {
-                  return (
-                    <Button
-                      onClick={(e) =>
-                        setStatus(e.target.innerText.toLowerCase())
-                      }
-                      key={i}
-                      text={cat}
-                      className={
-                        "my-1  mr-2 bg-indigo-50 py-2 hover:border-kindyorange " +
-                        isActiveCategory(cat.toLowerCase())
-                      }
-                    />
-                  );
-                })}
+                  })}
+                </div>
               </div>
             </div>
           </div>

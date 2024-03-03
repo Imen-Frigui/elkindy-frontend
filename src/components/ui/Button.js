@@ -5,7 +5,7 @@ function Button({ text, className, onClick }) {
     <button
       onClick={onClick}
       className={
-        " border-transparent rounded-lg border-2 px-3 text-sm  transition duration-300  focus:ring-2 " +
+        " border-transparent rounded-[15px] border-2 px-3 text-sm  transition duration-300  focus:ring-2 " +
         className
       }
     >

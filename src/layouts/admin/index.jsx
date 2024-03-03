@@ -6,6 +6,7 @@ import Footer from "components/footer/Footer";
 import routes from "routes.js";
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
+import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -84,6 +85,10 @@ export default function Admin(props) {
                 <Route
                   path="/marketplace/create"
                   element={<CreateInstrument />}
+                />
+                <Route
+                  path="/marketplace/instrument/:id"
+                  element={<InstrumentDetail />}
                 />
                 <Route
                   path="/"

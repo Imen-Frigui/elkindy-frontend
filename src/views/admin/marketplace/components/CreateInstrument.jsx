@@ -100,11 +100,14 @@ function CreateInstrument({ history }) {
               <FormTitle text="Share Your Musical Gear with the Community" />
               <Form>
                 <FormControl>
-                  <Label
-                    subtitle="Add a short, description headline"
-                    title="Instrument Title"
+                  <Label subtitle="" title="Instrument Title" />
+                  <Input
+                    placeholder="Add a short, description headline"
+                    status={status}
+                    name="title"
+                    id="title"
+                    type="text"
                   />
-                  <Input status={status} name="title" id="title" type="text" />
                 </FormControl>
                 <FormControl>
                   <Label
@@ -136,12 +139,13 @@ function CreateInstrument({ history }) {
                   />
                 </FormControl>
                 <FormControl>
-                  <Label
-                    title="Instrument Detail"
-                    subtitle="Provide specific details about your instrument."
-                    id="Details"
+                  <Label title="Instrument Detail" subtitle="" id="Details" />
+                  <TextArea
+                    placeholder="Provide specific details about your instrument."
+                    name="details"
+                    status={status}
+                    id="details"
                   />
-                  <TextArea name="details" status={status} id="details" />
                 </FormControl>
                 <ButtonsGroup>
                   <Button
@@ -151,7 +155,6 @@ function CreateInstrument({ history }) {
                       history.push("/admin/marketplace");
                     }}
                   />
-                  {/* <button type="submit"> Add</button> */}
                   <FormButton
                     disabled={!isValid || isSubmitting}
                     className="flex items-center  bg-kindyblue hover:bg-kindydarkblue"

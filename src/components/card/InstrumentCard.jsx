@@ -2,6 +2,9 @@ import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { useState } from "react";
 import Card from "components/card";
 import useInstrumentStore from "store/instrumentStore";
+import { Link } from "react-router-dom";
+import { Button } from "../index";
+
 const InstrumentCard = ({ instrument, bidders, image }) => {
   const [heart, setHeart] = useState(false);
   const { likePost } = useInstrumentStore();
@@ -10,6 +13,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
     setHeart(!heart);
   }
   return (
+    // <Link to={"/admin/marketplace/instrument/" + instrument._id}>
     <Card
       extra={`flex flex-col w-full h-full !p-4 3xl:p-![18px] bg-white ${instrument.extra}`}
     >
@@ -17,7 +21,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
         <div className="relative w-full">
           <img
             src={image}
-            className="mb-3 h-full w-full rounded-xl 3xl:h-full 3xl:w-full"
+            className="mb-3 h-1/2 w-full rounded-xl 3xl:h-full 3xl:w-full"
             alt=""
           />
           <button
@@ -36,15 +40,16 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
 
         <div className="mb-3 flex items-center justify-between px-1 md:flex-col md:items-start lg:flex-row lg:justify-between xl:flex-col xl:items-start 3xl:flex-row 3xl:justify-between">
           <div className="mb-2">
-            <p className="text-lg font-bold text-navy-700 dark:text-white">
-              {" "}
-              {instrument.title}{" "}
-            </p>
+            <Link to={"/admin/marketplace/instrument/" + instrument._id}>
+              <p className="text-lg font-bold text-navy-700 dark:text-white">
+                {instrument.title}
+              </p>
+            </Link>
             <p className="mt-1 text-sm font-medium text-gray-600 md:mt-2">
-              Brand: {instrument.brand}{" "}
+              Brand: {instrument.brand}
             </p>
             <p className="mt-1 text-sm font-medium text-navy-700 md:mt-2">
-              {instrument.details}{" "}
+              {instrument.details}
             </p>
           </div>
 
@@ -69,19 +74,21 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
 
         <div className="flex items-center justify-between md:flex-col md:items-start lg:flex-row lg:justify-between xl:flex-col 2xl:items-start 3xl:flex-row 3xl:items-center 3xl:justify-between">
           <div className="flex">
-            <p className="mb-2 text-sm font-bold text-brand-500 dark:text-white">
-              Status: {instrument.status}
-            </p>
+            <Button
+              text={instrument.status}
+              className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
+            />
           </div>
-          <button
+          {/* <button
             href=""
-            className="linear rounded-[20px] bg-brand-900 px-4 py-2 text-base font-medium text-white transition duration-200 hover:bg-brand-800 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300 dark:active:opacity-90"
+            className="linear rounded-[15px] bg-kindyorange px-4 py-2 text-base font-medium text-white transition duration-200 hover:bg-brand-800 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300 dark:active:opacity-90"
           >
             See instrument
-          </button>
+          </button> */}
         </div>
       </div>
     </Card>
+    // </Link>
   );
 };
 
