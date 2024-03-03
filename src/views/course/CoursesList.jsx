@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from "@mui/material/Button";
-
+import Banner from "./components/Banner"
 
 const CoursesList = () => {
 
@@ -20,6 +20,17 @@ const CoursesList = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [newName, setNewName] = useState('');
 
+
+    const [editCourseId, setEditCourseId] = useState(null);
+    const [editCourseName, setEditCourseName] = useState('');
+
+    // Start editing a course name
+    const handleEditClick = (course) => {
+        setEditCourseId(course._id);
+        setEditCourseName(course.title);
+    };
+
+
     const updateCourseName = async (courseId, newName) => {
         // Assuming you have a service function to update the course
         await updateCourse(courseId, { name: newName });
@@ -27,7 +38,15 @@ const CoursesList = () => {
         fetchCourses().then(setCourses);
     };
 
+    const handleSaveClick = async (courseId, newName) => {
+        await updateCourse(courseId, { title: newName });
+        // Refresh course list
+        fetchCourses().then(setCourses);
 
+        // Reset editing state
+        setEditCourseId(null);
+        setEditCourseName('');
+    };
 
     useEffect(() => {
         const getCourses = async () => {
@@ -79,6 +98,7 @@ const CoursesList = () => {
 
     return (
         <>
+            <Banner />
             <div className="flex flex-col mt-6">
                 <div className="overflow-x-auto rounded-lg">
                     <div className="inline-block min-w-full align-middle">
@@ -106,6 +126,7 @@ const CoursesList = () => {
                                             className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                             Actions
                                         </th>
+                                        <th>d</th>
                                     </tr>
                                     </thead>
                                     <tbody className="bg-white dark:bg-gray-800">
@@ -119,7 +140,7 @@ const CoursesList = () => {
                                                     variant="contained"
                                                     onClick={(e) => handlePopoverOpen(e, course.name)}
                                                 >
-                                                    <EditIcon />
+                                                    <EditIcon/>
                                                 </IconButton>
                                                 <Popover
                                                     id={id}
@@ -131,7 +152,7 @@ const CoursesList = () => {
                                                         horizontal: 'left',
                                                     }}
                                                 >
-                                                    <Typography sx={{ p: 2 }}>
+                                                    <Typography sx={{p: 2}}>
                                                         Change Course Name
                                                         <TextField
                                                             value={newName}
@@ -169,6 +190,26 @@ const CoursesList = () => {
                                                     color="red"
                                                 />
 
+                                            </td>
+                                            <td className="p-4 whitespace-nowrap">
+                                                {editCourseId === course._id ? (
+                                                    <TextField
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        defaultValue={course.title}
+                                                        value={editCourseName}
+                                                        onChange={(e) => setEditCourseName(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                handleSaveClick(course._id, e.target.value).then(r => console.log(r));
+                                                            }
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <span
+                                                        onDoubleClick={() => handleEditClick(course)}>{course.title}</span>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
