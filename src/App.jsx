@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import RtlLayout from "layouts/rtl";
@@ -6,7 +6,17 @@ import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import CoursesList from "./views/course/CoursesList";
 import AssignTeachers from "./views/course/AssignTeachers"
+import useAuthStore from "store/authStore";
 const App = () => {
+
+  const { setToken } = useAuthStore();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setToken(token);
+    }
+  }, [setToken]);
   return (
     <Routes>
         <Route path="/" element={<Navigate to="/admin" replace />} />

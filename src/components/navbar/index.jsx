@@ -7,6 +7,7 @@ import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
 import axios from "axios";
+import useAuthStore from "store/authStore";
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
@@ -14,11 +15,13 @@ import {
 import avatar from "assets/img/avatars/avatar4.png";
 
 const Navbar = (props) => {
+  const {logout} = useAuthStore();
   const { onOpenSidenav, brandText } = props;
   const [darkmode, setDarkmode] = React.useState(false);
   const handleLogout = async () => {
+    // Call the logout function from Zustand store
     try {
-      await axios.get("http://localhost:3000/api/users/login");
+      logout();
       window.location.href = "/auth/sign-in";
     } catch (error) {
       console.error("Error logging out:", error);

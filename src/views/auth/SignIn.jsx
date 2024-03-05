@@ -1,67 +1,71 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import InputField from "components/fields/InputField";
 import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import useAuthStore from 'store/authStore'; // Ensure this path is correct
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState({
-    email: "",
-    password: "",
-  });
-  const { email, password } = inputValue;
+  const { setToken } = useAuthStore();
+  const [inputValue, setInputValue] = useState({ email: "", password: "" });
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setInputValue({
-      ...inputValue,
+    setInputValue(prevState => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
-  const handleError = (err) =>
-  toast.error(err, {
+
+  const handleError = (err) => toast.error(err, {
     position: "bottom-left",
   });
-const handleSuccess = (msg) =>
-  toast.success(msg, {
+
+  const handleSuccess = (msg) => toast.success(msg, {
     position: "bottom-left",
   });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+   
+    const { email, password } = inputValue; // Destructure the email and password from the state
+
+    if (!email || !password) {
+      handleError("Both email and password are required.");
+      return;
+    }
+
     try {
-      const { data } = await axios.post(
-        "http://localhost:3000/api/users/login",
-        {
-          ...inputValue,
+      const response = await fetch("http://localhost:3030/api/auth/login", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-              );
+        body: JSON.stringify({ email, password }), // Use destructured values
+      });
 
-      const { success, message, token } = data;
-
-      if (success) {
-        // Handle successful login
-        localStorage.setItem("token", token);
-        handleSuccess(message);
-        setTimeout(() => {
-          navigate("/admin/default");
-        }, 1000);
+      const data = await response.json();
+      console.log(data.token);
+    
+      if (response.ok) {
+        setToken(data.token);
+        handleSuccess(data.message || "Login successful!");
+        navigate("/admin/default");
       } else {
-        handleError(message);
+        handleError(data.message || "Login failed.");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      handleError(error.message || "An unexpected error occurred.");
     }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-    });
+
+
   };
+
   return (
    <div className="grid lg:grid-cols-2 lg:gap-0 md:grid-cols-1 sm:grid-cols-1 " >
     <div className="bg-customBackground ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full "
@@ -88,8 +92,9 @@ const handleSuccess = (msg) =>
         <p className="text-base text-gray-600 dark:text-white"> or </p>
         <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
       </div>
+      <form onSubmit={handleSubmit} className="container w-full">  
       {/* Email */}
-      <InputField
+      <input
         variant="auth"
         extra="mb-3"
         label="Email*"
@@ -104,7 +109,7 @@ const handleSuccess = (msg) =>
       />
 
       {/* Password */}
-      <InputField
+      <input
         variant="auth"
         extra="mb-3"
         label="Password*"
@@ -132,12 +137,15 @@ const handleSuccess = (msg) =>
           Forgot Password?
         </a>
       </div>
-      <button
-  type="submit"
-  className="linear mt-2 w-full bg-blue-700 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500 dark:active:bg-blue-300 rounded-tr-[25px] rounded-bl-[25px]"
->
-  Sign In
-</button>
+  
+  {/* Your input fields here */}
+  <button
+     type="submit"
+    className="linear mt-2 w-full bg-blue-700 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500 dark:active:bg-blue-300 rounded-tr-[25px] rounded-bl-[25px]"
+  >
+    Sign In
+  </button>
+</form>
 
 <div className="mt-4 flex justify-center">
           <span className="text-sm font-medium text-navy-700 dark:text-gray-600">
