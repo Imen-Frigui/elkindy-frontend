@@ -1,4 +1,4 @@
-import React from "react";
+
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import navbarimage from "assets/img/layout/Navbar.png";
 import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
+import React, {  useState } from 'react'; // Importer React
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
@@ -13,8 +14,12 @@ import {
 import avatar from "assets/img/avatars/avatar4.png";
 
 const Navbar = (props) => {
-  const { onOpenSidenav, brandText } = props;
+  const { onOpenSidenav, brandText ,onSearch  } = props;
   const [darkmode, setDarkmode] = React.useState(false);
+
+
+
+
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
@@ -53,10 +58,13 @@ const Navbar = (props) => {
             <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
           </p>
           <input
-            type="text"
-            placeholder="Search..."
-            class="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"
-          />
+             type="text"
+             placeholder="Search..."
+          
+             
+             class="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"
+/>
+
         </div>
         <span
           className="flex cursor-pointer text-xl text-gray-600 dark:text-white xl:hidden"

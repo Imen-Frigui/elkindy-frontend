@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUsers } from "../../services/user/userService";
+import { fetchTeachers } from "../../services/user/userService";
 import { differenceInYears } from 'date-fns';
 const AdminRegistrationTable = () => {
   const [users, setUsers] = useState([]);
@@ -7,7 +7,7 @@ const AdminRegistrationTable = () => {
   useEffect(() => {
     const getUsers = async () => {
       try { 
-        const usersData = await fetchUsers();
+        const usersData = await fetchTeachers();
         console.log(usersData); 
         setUsers(usersData);
       } catch (error) {
