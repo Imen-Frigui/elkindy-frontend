@@ -3,19 +3,13 @@ import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
 
 export default function SignIn() {
-  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
   });
-  const { email, password } = inputValue;
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -23,45 +17,8 @@ export default function SignIn() {
       [name]: value,
     });
   };
-  const handleError = (err) =>
-  toast.error(err, {
-    position: "bottom-left",
-  });
-const handleSuccess = (msg) =>
-  toast.success(msg, {
-    position: "bottom-left",
-  });
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        "http://localhost:3000/api/users/login",
-        {
-          ...inputValue,
-        },
-              );
 
-      const { success, message, token } = data;
 
-      if (success) {
-        // Handle successful login
-        localStorage.setItem("token", token);
-        handleSuccess(message);
-        setTimeout(() => {
-          navigate("/admin/default");
-        }, 1000);
-      } else {
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-    });
-  };
   return (
    <div className="grid lg:grid-cols-2 lg:gap-0 md:grid-cols-1 sm:grid-cols-1 " >
     <div className="bg-customBackground ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full "

@@ -218,6 +218,7 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
       href="#"
       className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"

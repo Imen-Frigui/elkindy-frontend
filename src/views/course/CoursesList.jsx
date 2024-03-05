@@ -4,25 +4,44 @@ import {useNavigate} from "react-router-dom";
 import ButtonComponent from "../../components/button/ButtonComponnent";
 import AddCourse from "./components/AddCourse";
 import ArchivedCourses from "./components/ArchivedCourses";
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import Button from "@mui/material/Button";
 import Banner from "./components/Banner"
-
+import Joyride from 'react-joyride'
 const CoursesList = () => {
+    const [{ run, steps }, setState] = useState({
+        run: true,
+        steps: [
+        {
+            title: 'Welcome to the Courses Page!',
+            target: '#addd',
+            content: 'This is where you can add a new course.',
+            placement: 'bottom',
+        },
+        {
+            title: 'Add a Course',
+            target: '#archive',
+            content: 'Use this to archive a course.',
+            placement: 'bottom',
+        },
+        {
+            title: 'Edit a Course',
+            target: '#table',
+            content: 'Click here to edit an existing course.',
+            placement: 'bottom',
+         }
+        ]
+    });
+
 
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate()
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [newName, setNewName] = useState('');
 
 
     const [editCourseId, setEditCourseId] = useState(null);
     const [editCourseName, setEditCourseName] = useState('');
+
+    const [joyrideRun, setJoyrideRun] = useState(false);
 
     // Start editing a course name
     const handleEditClick = (course) => {
@@ -30,13 +49,6 @@ const CoursesList = () => {
         setEditCourseName(course.title);
     };
 
-
-    const updateCourseName = async (courseId, newName) => {
-        // Assuming you have a service function to update the course
-        await updateCourse(courseId, { name: newName });
-        // Refresh course list
-        fetchCourses().then(setCourses);
-    };
 
     const handleSaveClick = async (courseId, newName) => {
         await updateCourse(courseId, { title: newName });
@@ -61,7 +73,8 @@ const CoursesList = () => {
             }
         };
 
-        getCourses().then(r => console.log(r));
+        getCourses();
+        setJoyrideRun(true);
     }, []);
 
     const handleCourseAdded = () => {
@@ -83,31 +96,18 @@ const CoursesList = () => {
         }
     };
 
-    const handlePopoverOpen = (event, currentName) => {
-        setNewName(currentName); // Set the current name of the course to edit
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handlePopoverClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
-
     return (
         <>
             <Banner />
             <div className="flex flex-col mt-6">
                 <div className="overflow-x-auto rounded-lg">
-                    <div className="inline-block min-w-full align-middle">
+                    <div className="inline-block min-w-full align-middle" id="addd" >
                         <AddCourse onCourseAdded={handleCourseAdded}/>
 
                         <div className="grid grid-cols-12 gap-4">
 
                             <div className="col-span-9 overflow-hidden shadow sm:rounded-lg mt-4">
-                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                                <table id="table" className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
                                     <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th scope="col"
@@ -126,7 +126,6 @@ const CoursesList = () => {
                                             className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                             Actions
                                         </th>
-                                        <th>d</th>
                                     </tr>
                                     </thead>
                                     <tbody className="bg-white dark:bg-gray-800">
@@ -134,64 +133,6 @@ const CoursesList = () => {
                                         <tr key={course._id} role="row">
                                             <td role="cell"
                                                 className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                                <p className="font-bold">{course.title}</p>
-                                                <IconButton
-                                                    aria-describedby={id}
-                                                    variant="contained"
-                                                    onClick={(e) => handlePopoverOpen(e, course.name)}
-                                                >
-                                                    <EditIcon/>
-                                                </IconButton>
-                                                <Popover
-                                                    id={id}
-                                                    open={open}
-                                                    anchorEl={anchorEl}
-                                                    onClose={handlePopoverClose}
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'left',
-                                                    }}
-                                                >
-                                                    <Typography sx={{p: 2}}>
-                                                        Change Course Name
-                                                        <TextField
-                                                            value={newName}
-                                                            onChange={(e) => setNewName(e.target.value)}
-                                                            margin="normal"
-                                                        />
-                                                        <Button onClick={() => {
-                                                            updateCourseName(course._id, newName);
-                                                            handlePopoverClose();
-                                                        }}>
-                                                            Update
-                                                        </Button>
-                                                    </Typography>
-                                                </Popover>
-
-
-                                            </td>
-                                            <td role="cell"
-                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                                <p>{course.category}</p>
-                                            </td>
-                                            <td role="cell"
-                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                                <p>{course.description}</p>
-                                            </td>
-                                            <td className="p-4 whitespace-nowrap">
-                                                <ButtonComponent
-                                                    text="Details"
-                                                    onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
-                                                    color="#FB9D37"
-                                                />
-                                                <ButtonComponent
-                                                    text="Archive"
-                                                    onClick={() => handleArchiveCourse(course._id)}
-                                                    color="red"
-                                                />
-
-                                            </td>
-                                            <td className="p-4 whitespace-nowrap">
                                                 {editCourseId === course._id ? (
                                                     <TextField
                                                         fullWidth
@@ -207,9 +148,31 @@ const CoursesList = () => {
                                                         }}
                                                     />
                                                 ) : (
-                                                    <span
-                                                        onDoubleClick={() => handleEditClick(course)}>{course.title}</span>
+                                                    <p className="font-bold"
+                                                       onDoubleClick={() => handleEditClick(course)}>{course.title}</p>
                                                 )}
+                                            </td>
+
+                                            <td role="cell"
+                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                <p>{course.category}</p>
+                                            </td>
+                                            <td role="cell"
+                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                <p>{course.description}</p>
+                                            </td>
+                                            <td id="archive" className="p-4 whitespace-nowrap">
+                                                <ButtonComponent
+                                                    text="Details"
+                                                    onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
+                                                    color="#FB9D37"
+                                                />
+                                                <ButtonComponent
+                                                    text="Archive"
+                                                    onClick={() => handleArchiveCourse(course._id)}
+                                                    color="red"
+                                                />
+
                                             </td>
                                         </tr>
                                     ))}
@@ -224,63 +187,16 @@ const CoursesList = () => {
 
                     </div>
                 </div>
+
             </div>
-
-
-            {/*
-            <div
-                className="!z-5 relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none w-full h-full px-6 pb-6 sm:overflow-x-auto">
-                <div className="relative flex items-center justify-between pt-4">
-                    <div className="text-xl font-bold text-navy-700 dark:text-white">Course Tables
-                        <div className="mt-8 overflow-x-scroll xl:overflow-hidden">
-                            <table role="table" className="w-full">
-                                <thead>
-                                <tr role="row">
-                                    <th role="columnheader"
-                                        className="border-b border-gray-200 pr-28 pb-[10px] text-start dark:!border-navy-700">
-                                        <p className="text-xs tracking-wide text-gray-600">Name</p>
-                                    </th>
-                                    <th role="columnheader"
-                                        className="border-b border-gray-200 pr-28 pb-[10px] text-start dark:!border-navy-700">
-                                        <p className="text-xs tracking-wide text-gray-600">Category</p>
-                                    </th>
-                                    <th role="columnheader"
-                                        className="border-b border-gray-200 pr-28 pb-[10px] text-start dark:!border-navy-700">
-                                        <p className="text-xs tracking-wide text-gray-600">description</p>
-                                    </th>
-                                    <th>
-
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {courses.map(course => (
-                                    <tr key={course._id} role="row">
-                                        <td role="cell" className="pt-[14px] pb-[18px] sm:text-[14px]">
-                                            <p className="text-sm font-bold text-navy-700 dark:text-white">{course.title}</p>
-                                        </td>
-                                        <td role="cell" className="pt-[14px] pb-[18px] sm:text-[14px]">
-                                            <p className="text-sm font-bold text-navy-700 dark:text-white">{course.category}</p>
-                                        </td>
-                                        <td role="cell" className="pt-[14px] pb-[18px] sm:text-[14px]">
-                                            <p className="text-sm font-bold text-navy-700 dark:text-white">{course.description}</p>
-                                        </td>
-                                        <td>
-                                            <ButtonComponent
-                                                text="Assign Teachers"
-                                                onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
-                                            />
-
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            */}
+            <Joyride continuous
+                     callback={() => {}}
+                     run={run}
+                     steps={steps}
+                     hideCloseButton
+                     scrollToFirstStep
+                     showSkipButton
+                     showProgress/>
         </>
 
     );
