@@ -7,7 +7,7 @@ function Dropdown({ options, onChange, value }) {
     <Listbox value={value} onChange={onChange}>
       <div className="relative">
         <Listbox.Button
-          className="bg-light  w-full cursor-pointer  rounded py-3 pl-4 text-left   
+          className="w-full  cursor-pointer rounded-lg  bg-white py-3 pl-4 text-left   
                shadow focus:outline-none focus:ring-1 focus:ring-kindyorange"
         >
           <span className="block truncate capitalize">{value}</span>

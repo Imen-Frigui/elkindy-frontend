@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Banner1 = () => {
   return (
     <div
-      className="flex w-full flex-col rounded-[20px] bg-cover px-[30px] py-[30px] md:px-[45px] md:py-[56px]"
+      className="flex w-full flex-col rounded-[20px] bg-cover px-[25px] py-[30px] md:px-[45px] md:py-[30px]"
       style={{ backgroundImage: `url(${banner})` }}
     >
       <div className="w-full">

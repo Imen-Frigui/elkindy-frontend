@@ -3,7 +3,7 @@ import DataService from "../services/data.service";
 
 const useInstrumentStore = create((set) => ({
   instruments: [],
-  instrument: null,
+  instrument: {},
   loading: false,
   fetchInstruments: async (status, sort) => {
     try {
@@ -16,10 +16,10 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  postInstrument: async (data) => {
+  postInstrument: async (data, status) => {
     try {
       set({ loading: true });
-      const { response } = await DataService.addInstrument(data);
+      const { response } = await DataService.addInstrument(data, status);
       set({ loading: false });
     } catch (error) {
       console.error(error);
@@ -41,8 +41,23 @@ const useInstrumentStore = create((set) => ({
 
   likePost: async (id) => {
     try {
-      set({ loading: true });
+      // set({ loading: true });
       const { response } = await DataService.likePost(id);
+      // set({ loading: false });
+    } catch (error) {
+      console.error(error);
+      // set({ loading: false });
+    }
+  },
+  searchInstruments: async (status, sort, searchQuery) => {
+    try {
+      set({ loading: true });
+      const { data } = await DataService.getPublicContent(
+        status,
+        sort,
+        searchQuery
+      );
+      set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {
       console.error(error);

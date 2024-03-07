@@ -7,25 +7,41 @@ import InstrumentCard from "components/card/InstrumentCard";
 import useInstrumentStore from "store/instrumentStore";
 import { useEffect, useCallback, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Button, SortByDropdown, NoData } from "../../../components";
+import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
-const Marketplace = () => {
+import { useQuery } from "../../../hooks/useQuery";
+
+const Marketplace = ({ location }) => {
   const { type } = useParams();
+  const query = useQuery();
   const [status, setStatus] = useState("All");
   const [age, setAge] = useState("3-5");
   const [sort, setSort] = useState("");
-
-  const { instruments, loading, fetchInstruments } = useInstrumentStore();
+  const searchQuery = query.get("search") || "";
+  const { instruments, loading, fetchInstruments, searchInstruments } =
+    useInstrumentStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchInstruments(
-        status.toLocaleLowerCase() !== "all" ? status.toLocaleLowerCase() : "",
-        sort
-      );
+      if (searchQuery) {
+        await searchInstruments(
+          status.toLocaleLowerCase() !== "all"
+            ? status.toLocaleLowerCase()
+            : "",
+          sort,
+          searchQuery
+        );
+      } else {
+        await fetchInstruments(
+          status.toLocaleLowerCase() !== "all"
+            ? status.toLocaleLowerCase()
+            : "",
+          sort
+        );
+      }
     };
     fetchData();
-  }, [age, status, sort]);
+  }, [age, status, sort, searchQuery]);
 
   const isActiveAge = useCallback(
     (elem) => {
@@ -54,11 +70,11 @@ const Marketplace = () => {
       <div className="col-span-1 h-fit w-full md:col-span-4">
         <Banner />
 
-        <div className=" z-1000 mb-4 mt-5 flex flex-col justify-between rounded-lg bg-kindyblue py-4 px-4 dark:bg-indigo-50 md:flex-row md:items-center">
+        <div className=" z-1000 mb-4 mt-5 flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue py-0 px-4 dark:bg-indigo-50 md:flex-row md:items-center">
           <h4 className="ml-1 text-2xl font-bold text-white dark:text-navy-700 ">
             Explore Instruments:
           </h4>
-          <div className="flex items-center">
+          <div className="flex flex-wrap items-center justify-between">
             <span className=" mr-2 text-sm font-light text-white dark:text-navy-700">
               Sort by :
             </span>
@@ -69,18 +85,19 @@ const Marketplace = () => {
                 options={["", "-likeScore", "likeScore"]}
               />
             </div>
+            <SearchBar />
           </div>
           <Link
             to="/admin/marketplace/create"
-            className="border-transparent border-1 rounded-lg bg-kindyorange py-2 px-4 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
+            className="border-transparent border-1 w-58  rounded-lg bg-kindyorange py-2 px-4 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
           >
             + Post Instrument
           </Link>
         </div>
 
-        <div className=" grid grid-cols-1 gap-5 md:grid-cols-4">
+        <div className=" grid  grid-cols-1 gap-5 md:grid-cols-4">
           <div className=" grid grid-cols-1 gap-5 md:col-span-3 md:grid-cols-3">
-            {loading  ? (
+            {loading ? (
               <>
                 {"123456".split("").map((v) => (
                   <InstrumentSkeleton key={v} />
@@ -101,21 +118,21 @@ const Marketplace = () => {
               </div>
             )}
           </div>
-          <div className=" ">
-            <div className="  grid md:grid-rows-1 ">
-              <div className=" mb-3 h-20 space-y-1 rounded-lg bg-kindyblue py-5 px-6 dark:bg-indigo-50  ">
-                <p className=" text-left font-bold text-white dark:text-navy-800">
+          <div className="order-first md:order-last">
+            <div className="grid grid-cols-1 md:grid-rows-1 ">
+              <div className=" h-15 md:h20 mb-2 flex items-baseline justify-between space-y-1 overflow-hidden rounded-[20px] bg-kindydarkblue py-5 px-6 dark:bg-indigo-50 md:flex-col  ">
+                <p className=" text-left font-bold text-white  dark:text-navy-800">
                   El Kindy Marketplace
                 </p>
-                <p className=" text-left text-white opacity-80 dark:text-navy-800">
+                <p className=" mr-3 text-left text-white opacity-80 dark:text-navy-800">
                   Instruments Board
                 </p>
               </div>
-              <div className="mb-3 flex flex-wrap rounded-lg bg-white p-4 ">
+              <div className="mb-3 flex flex-wrap items-center rounded-[20px] bg-white p-4 ">
                 <p className=" text-black opacity-80 dark:text-navy-800">
                   Filter by age:
                 </p>
-                <div className="flex flex-wrap rounded-lg bg-white">
+                <div className=" flex flex-wrap rounded-lg bg-white md:w-72">
                   {["3-5", "4-5", "4-6", "5-7", "7-9", "9-12", "Adult"].map(
                     (age, i) => {
                       return (
@@ -126,7 +143,7 @@ const Marketplace = () => {
                           key={i}
                           text={age}
                           className={
-                            "my-1  mr-2  py-2 hover:border-kindyorange  " +
+                            "my-1  mr-2   py-2 hover:border-kindyorange  " +
                             isActiveAge(age.toLowerCase())
                           }
                         />
@@ -135,8 +152,8 @@ const Marketplace = () => {
                   )}
                 </div>
               </div>
-              <div className="flex flex-wrap rounded-lg bg-white p-4">
-                <p className=" text-black text-left opacity-80 dark:text-navy-800">
+              <div className="flex flex-wrap items-center rounded-[20px]  bg-white p-4">
+                <p className=" text-black mr-3 text-left opacity-80 dark:text-navy-800">
                   Filter by category:
                 </p>
                 <div className="flex flex-wrap rounded-lg bg-white ">

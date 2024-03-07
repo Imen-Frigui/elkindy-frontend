@@ -1,6 +1,11 @@
-function FormTitle({ text }) {
+function FormTitle({ children, text }) {
   return (
-    <h3 className=" text-dark mb-3 font-jost text-kindydarkblue text-2xl font-bold">{text}</h3>
+    <div>
+      <h3 className=" text-dark font-jost mb-3 text-2xl font-bold text-kindydarkblue">
+        {text}
+      </h3>
+      {children}
+    </div>
   );
 }
 

@@ -15,7 +15,7 @@ function FormControl({
   return (
     <div className="mb-3">
       <Label title={title} subtitle={subtitle} id={id} />
-      <Input type={type} id={id} placeholder={placeholder}  value={value} />
+      <Input type={type} id={id} placeholder={placeholder} value={value} />
     </div>
   );
 }

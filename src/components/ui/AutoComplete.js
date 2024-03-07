@@ -61,13 +61,13 @@ function AutoSuggestComponent({ form, validate, ...props }) {
   );
   const inputStyles = {
     input:
-      "bg-light mt-2 mb-1 block w-full rounded py-3 px-2 text-gray-500 placeholder-gray-400 placeholder-opacity-60 shadow focus:outline-none focus:ring-1 focus:ring-kindyorange",
+      "bg-light mt-2 mb-1 block w-full rounded-lg py-3 px-2 text-gray-500 placeholder-gray-400 placeholder-opacity-60 shadow focus:outline-none focus:ring-1 focus:ring-kindyorange",
   };
   return (
     <div>
       <Autosuggest
-        {...field}
-        {...props}
+          {...field}
+          {...props}
         suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}

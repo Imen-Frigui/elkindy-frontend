@@ -12,3 +12,4 @@ export { default as FormButton } from "./ui/FormButton";
 export { default as FormLayout } from "./layout/FormLayout";
 export { default as AddIcon } from "./ui/AddIcons";
 export { default as NoData } from "./ui/NoData";
+export { default as SearchBar } from "./ui/SearchBar";
