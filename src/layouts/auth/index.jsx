@@ -50,6 +50,7 @@ export default function Auth() {
                     path="/"
                     element={<Navigate to="/auth/sign-in" replace />}
                   />
+                  
                 </Routes>
                 <div className="absolute mr-26 right-10 hidden h-[25px] min-h-screen md:block lg:w-[49vw] 2xl:w-[44vw]">
                   

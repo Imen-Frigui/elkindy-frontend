@@ -20,6 +20,7 @@ import {
   MdLock,
 } from "react-icons/md";
 
+
 const routes = [
   {
     name: "Elkindy Dashboard",
@@ -57,6 +58,8 @@ const routes = [
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
   },
+  
+  
   {
     name: "RTL Admin",
     layout: "/rtl",

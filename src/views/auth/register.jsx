@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import useAuthStore from 'store/authStore'; // Ensure this path is correct
 
-export default function SignIn() {
+export default function Register() {
 
 
 
@@ -122,6 +122,7 @@ if(validateForm()){
       {/* Email */}
       <input
       
+      className={`mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none mb-3 `}
         variant="auth"
         extra="mb-3"
         label="Email*"
@@ -131,10 +132,9 @@ if(validateForm()){
         name="email"
         value={inputValue.email}
         onChange={handleOnChange}
-        className={`bg-gray-50 border ${errors.courseName ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+        
 
-      /> {errors.courseName && <div className=" error-message text-red-500 text-sm mt-1">{errors.courseName}</div>}
-
+      />
 
       {/* Password */}
       <input

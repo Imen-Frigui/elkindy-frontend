@@ -156,6 +156,7 @@ module.exports = {
       fontcolor: '#3A4374',
       bluebg: '#F7F8FD',
 
+
       gray: {
         50: "#f8f9fa",
         100: "#edf2f7",

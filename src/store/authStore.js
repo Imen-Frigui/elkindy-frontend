@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 const useAuthStore = create (persist((set) => ({
   token: null,
   isAuth: false,
+  role: null, // Add a role state
   setToken: (token) => set({ token ,isAuth: true}),
   logout: () => set(() => ({ token: null, isAuth: false })),
 }), {
