@@ -137,16 +137,15 @@ const CoursesList = () => {
 
             <div className="flex flex-col mt-8">
                 {showStatCard && <StatCard />}
-                <div className="overflow-x-auto rounded-lg table-responsive">
-                    <div className="inline-block min-w-full align-middle"  >
+                <div className="table-responsive overflow-x-auto rounded-lg">
+                    <div className="inline-block min-w-full align-middle">
                         <a href="#!" id="addd"  >
                             <AddCourse id="start" onCourseAdded={handleCourseAdded}/>
                         </a>
 
 
-                        <div className="grid grid-cols-12 gap-4 mb-3">
-
-                            <div className="col-span-9 overflow-hidden shadow sm:rounded-lg mt-4">
+                        <div className="grid lg:grid-cols-12 md:grid-rows-2f gap-4 mb-3">
+                            <div className="col-span-9 overflow-auto shadow sm:rounded-lg mt-4">
                                 <table id="table" className="min-w-full min-h-full divide-y divide-gray-200 dark:divide-gray-600">
                                     <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>

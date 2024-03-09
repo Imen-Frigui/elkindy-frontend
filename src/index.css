@@ -28,6 +28,15 @@ input:checked.defaultCheckbox::before {
 	opacity: 1;
 }
 
+.table-responsive {
+	display: block;
+	width: 100%;
+	overflow-x: auto; /* Enable horizontal scrolling */
+	-webkit-overflow-scrolling: touch; /*Scrolling on touch devices */
+}
+
+
+
 @media (max-width: 768px) {
 	.grid-cols-12 {
 		grid-template-columns: 1fr; /* Makes everything stack vertically */
@@ -37,3 +46,5 @@ input:checked.defaultCheckbox::before {
 		col-span: 12; /* Makes both the table and the ArchivedCourses component take up all 12 columns */
 	}
 }
+
+
