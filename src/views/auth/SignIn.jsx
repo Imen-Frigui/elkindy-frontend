@@ -1,96 +1,46 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import InputField from "components/fields/InputField";
 import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import useAuthStore from 'store/authStore'; // Ensure this path is correct
-
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLoginMutation } from '../../slices/userApiSlice';
+import { setCredentials } from '../../slices/authSlice';
+import Loader from "components/button/Loader";
 export default function SignIn() {
 
+ // const navigate = useNavigate();
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [errors, setErrors] = useState({
-        courseName: '',
-      
-    });
-  const validateForm = () => {
-    let formIsValid = true;
-    let newErrors = { ...errors };
-
-    if (!inputValue.email) {
-        formIsValid = true;
-        newErrors["courseName"] = "Course name is required.";
-        console.log(newErrors)
-    }
-   
-    setErrors(newErrors);
-    console.log(newErrors)
-    return formIsValid;
-  };
-
-
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { setToken } = useAuthStore();
-  const [inputValue, setInputValue] = useState({ email: "", password: "" });
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setInputValue(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const [login, { isLoading }] = useLoginMutation();
 
-  const handleError = (err) => toast.error(err, {
-    position: "bottom-left",
-  });
+  const { userInfo } = useSelector((state) => state.auth);
 
-  const handleSuccess = (msg) => toast.success(msg, {
-    position: "bottom-left",
-  });
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [navigate, userInfo]);
 
-  const handleSubmit = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-   
-    const { email, password } = inputValue; // Destructure the email and password from the state
-if(validateForm()){
-
-    if (!email || !password) {
-      handleError("Both email and password are required.");
-      return ;
-    }
-
     try {
-      const response = await fetch("http://localhost:3030/api/auth/login", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }), // Use destructured values
-      });
-
-      const data = await response.json();
-      console.log(data.token);
-   //   localStorage.setItem('token', data.token);
-      if (response.ok) {
-        setToken(data.token);
-        handleSuccess(data.message || "Login successful!");
-        navigate("/admin/default");
-      } else {
-        handleError(data.message || "Login failed.");
-      }
-    } catch (error) {
-      console.error(error);
-      handleError(error.message || "An unexpected error occurred.");
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate('/admin/default');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
-  }
-  else{ console.log("Form is invalid")}
-
   };
+
 
   return (
    <div className="grid lg:grid-cols-2 lg:gap-0 md:grid-cols-1 sm:grid-cols-1 " >
@@ -118,7 +68,7 @@ if(validateForm()){
         <p className="text-base text-gray-600 dark:text-white"> or </p>
         <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
       </div>
-      <form onSubmit={handleSubmit} className="container w-full">  
+      <form onSubmit={submitHandler} className="container w-full">  
       {/* Email */}
       <input
       
@@ -129,11 +79,12 @@ if(validateForm()){
         id="email"
         type="text"
         name="email"
-        value={inputValue.email}
-        onChange={handleOnChange}
-        className={`bg-gray-50 border ${errors.courseName ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+ 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+        className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
 
-      /> {errors.courseName && <div className=" error-message text-red-500 text-sm mt-1">{errors.courseName}</div>}
+      /> 
 
 
       {/* Password */}
@@ -147,8 +98,8 @@ if(validateForm()){
         id="password"
         type="password"
         name="password"
-        value={inputValue.password}
-        onChange={handleOnChange}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
 
       />
       {/* Checkbox */}
@@ -169,19 +120,21 @@ if(validateForm()){
   
   {/* Your input fields here */}
   <button
+      disabled={isLoading}
      type="submit"
     className="linear mt-2 w-full bg-blue-700 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500 dark:active:bg-blue-300 rounded-tr-[25px] rounded-bl-[25px]"
   >
     Sign In
   </button>
 </form>
+{isLoading && <Loader />}
 
 <div className="mt-4 flex justify-center">
           <span className="text-sm font-medium text-navy-700 dark:text-gray-600">
             Not registered yet ?
           </span>
           <a
-            href=" "
+            href="/auth/register"
             className="ml-1 text-sm font-medium text-brand-600 hover:text-brand-600 dark:text-white"
           >
             Create an account

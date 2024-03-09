@@ -1,18 +1,16 @@
-import {create} from 'zustand';
+/*import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-const useAuthStore = create (persist((set) => ({
-  token: null,
+const useAuthStore = create(persist((set) => ({
   isAuth: false,
-  role: null, // Add a role state
-  setToken: (token) => set({ token ,isAuth: true}),
-  logout: () => set(() => ({ token: null, isAuth: false })),
+  role: null,
+  token: null,
+  setAuth: (isAuthenticated, userRole) => set({ isAuth: isAuthenticated, role: userRole }),
+
+  logout: () => set({ isAuth: false, role: null ,token:null}), // Add a logout method to reset the auth state
 }), {
-  name: 'auth-storage', // unique name
-  getStorage: () => localStorage, // define localStorage as the storage method
-}
+  name: 'auth-storage',
+  getStorage: () => sessionStorage, // Using sessionStorage for persistence
+}));
 
-
-));
-
-export default useAuthStore; 
+export default useAuthStore;*/

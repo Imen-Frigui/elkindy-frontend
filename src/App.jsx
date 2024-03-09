@@ -7,11 +7,9 @@ import AuthLayout from "layouts/auth";
 import CoursesList from "./views/course/CoursesList";
 import AssignTeachers from "./views/course/AssignTeachers"
 import useAuthStore from "store/authStore";
-
 const App = () => {
 
-  const { setToken } = useAuthStore();
-
+ // const { token, isAuth, setToken } = useAuthStore();
  /*useEffect(() => {
     const token = localStorage.getItem('token');  
     if (token) {
@@ -22,7 +20,7 @@ const App = () => {
     <Routes>
         <Route path="/" element={<Navigate to="/admin" replace />} />
         <Route path="auth/*" element={<AuthLayout />} />
-        <Route path="admin/*" element={<AdminLayout />} >
+                <Route path="admin/*" element={<AdminLayout />} >
             <Route path="courses" element={<CoursesList />} />
             <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
         </Route>

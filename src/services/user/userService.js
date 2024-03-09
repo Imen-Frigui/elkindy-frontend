@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_BASE_URL = 'http://localhost:3000/api';
 export const fetchTeachers = async () => {
     try {
@@ -19,4 +21,6 @@ export const fetchTeachers = async () => {
         return [];
     }
 };
+
+
 

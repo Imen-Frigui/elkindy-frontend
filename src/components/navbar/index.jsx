@@ -1,31 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import navbarimage from "assets/img/layout/Navbar.png";
 import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
-import axios from "axios";
 import useAuthStore from "store/authStore";
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
 } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar4.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useLogoutMutation } from '../../slices/userApiSlice';
 
+import { logout } from "../../slices/authSlice";
 const Navbar = (props) => {
-  const {logout} = useAuthStore();
   const { onOpenSidenav, brandText } = props;
   const [darkmode, setDarkmode] = React.useState(false);
-  const handleLogout = async () => {
-    // Call the logout function from Zustand store
+  const navigate = useNavigate();
+
+/*  useEffect(() => {
+    const verifyCookie = async () => {
+      if (!cookies.refreshToken) {
+        navigate("/auth/sign-in");
+      }
+      const { data } = await axios.post(
+        "http://localhost:3030",
+        {},
+        { withCredentials: true }
+      );
+      const { status, user } = data;
+      setUsername(user);
+      return status
+        ? toast(`Hello ${user}`, {
+            position: "top-right",
+          })
+        : (removeCookie("refreshToken"), navigate("/login"));
+    };
+    verifyCookie();
+  }, 
+  
+  [cookies, navigate, removeCookie]);*/
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
     try {
-      logout();
-      window.location.href = "/auth/sign-in";
-    } catch (error) {
-      console.error("Error logging out:", error);
-      // Handle error if needed
+     
+      dispatch(logout());
+      navigate('/auth/sign-in');
+    } catch (err) {
+      console.error(err);
     }
   };
   
@@ -202,7 +232,7 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey, Adela
+                    👋 Hey, {userInfo.user.firstName}
                   </p>{" "}
                 </div>
               </div>
@@ -221,11 +251,10 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
-                <a
-      href="#"
-      className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
-      onClick={handleLogout}
-    >
+                 <a href=" "
+                   className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
+                onClick={logoutHandler}
+                >
                   Log Out
                 </a>
               </div>
