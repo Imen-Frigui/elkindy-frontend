@@ -11,7 +11,7 @@ const StatCard = () => {
                 <div className="circle-progress"
                      style={{background: `conic-gradient(#006BBE 0% ${malePercentage}%, #EA7D17 ${femalePercentage}% 100%)`}}>
                     <div className="icon-wrapper">
-                        <img src={courses} alt="courses"/>
+                        <img src={courses} alt="courses" className="icon"/>
 
                     </div>
                 </div>

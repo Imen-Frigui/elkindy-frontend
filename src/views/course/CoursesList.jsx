@@ -137,7 +137,7 @@ const CoursesList = () => {
 
             <div className="flex flex-col mt-8">
                 {showStatCard && <StatCard />}
-                <div className="overflow-x-auto rounded-lg">
+                <div className="overflow-x-auto rounded-lg table-responsive">
                     <div className="inline-block min-w-full align-middle"  >
                         <a href="#!" id="addd"  >
                             <AddCourse id="start" onCourseAdded={handleCourseAdded}/>
@@ -220,8 +220,8 @@ const CoursesList = () => {
                                 </table>
                             </div>
 
-                            <div className="col-span-3 mt-4"> {/* Archived courses container */}
-                                <ArchivedCourses/> {/* Render ArchivedCourses component */}
+                            <div className="col-span-3 mt-4">
+                                <ArchivedCourses/>
                             </div>
                         </div>
 

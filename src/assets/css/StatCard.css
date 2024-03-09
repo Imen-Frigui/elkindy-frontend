@@ -2,21 +2,22 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 16px; /* Adjust as needed */
+    padding: 1rem; /* Adjust as needed */
     gap: 20px;
-    width: 293px;
-    height: 118px;
+    width: 100%;
+    max-width: 293px; /* Maximum width to maintain design */
+    min-height: 118px;
     background: white;
     border-radius: 20px;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
     font-family: 'Jost', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 16px;
-    line-height: 23px;
+    font-size: 1rem; /* Adjust base font size */
+    line-height: 1.44;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    text-color: #233255;
+    color: #233255;
 
 }
 
@@ -25,8 +26,12 @@
 }
 
 .circle-progress {
-    width: 74px;
-    height: 74px;
+    width: 5vw;
+    height: 5vw;
+    max-width: 74px; /* Maximum width */
+    max-height: 74px; /* Maximum height */
+    min-width: 50px; /* Minimum width for smaller screens */
+    min-height: 50px; /* Minimum height for smaller screens */
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -35,8 +40,12 @@
 }
 
 .icon-wrapper {
-    width: 57.2px; /* Icon size */
-    height: 57.2px; /* Icon size */
+    width: 4vw;
+    height: 4vw;
+    max-width: 64px;
+    max-height: 64px;
+    min-width: 40px;
+    min-height: 40px;
     background: white;
     border-radius: 50%;
     display: flex;
@@ -44,8 +53,8 @@
     align-items: center;
     box-shadow: 0px 3.12px 7.8px rgba(0, 0, 0, 0.2), inset 0px -3.12px 7.8px rgba(0, 0, 0, 0.1);
     position: absolute;
-    /* Add your icon as a background-image or place an img tag inside */
 }
+
 
 .stat-details {
     display: flex;
@@ -53,19 +62,19 @@
 }
 
 .stat-title {
-    font-size: 1em; /* Adjust size as needed */
+    font-size: 1em;
     opacity: 0.7;
     margin: 0;
 }
 
 .stat-numbers {
-    font-size: 2em; /* Adjust size as needed */
+    font-size: 2em;
     font-weight: bold;
     margin: 0;
 }
 
 .stat-genders {
-    font-size: 0.8em; /* Adjust size as needed */
+    font-size: 0.8em;
     display: flex;
     gap: 10px;
 }
@@ -79,4 +88,15 @@
 
 .stat-female {
     color: #EA7D17;
+}
+
+@media (max-width: 768px) {
+    .stat-card {
+        flex-direction: column; /* Stack elements vertically on small screens */
+        text-align: center; /* Center text for small screens */
+    }
+
+    .stat-details, .stat-title, .stat-numbers, .stat-genders {
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
 }

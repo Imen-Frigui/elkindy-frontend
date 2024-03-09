@@ -1,10 +1,11 @@
-import banner from "../../../assets/img/banner.jpeg";
+import banner1 from "../../../assets/img/banner1.jpg";
+
 
 const TourBanner = ({ onStartTour }) => {
   return (
     <div
-      className="mt-8 flex w-full flex-col rounded-[20px] bg-cover px-[25px] py-[25px] md:px-[25px] md:py-[25px]"
-      style={{ backgroundImage: `url(${banner})` }}
+      className="mt-8 flex w-full flex-col rounded-[20px] bg-cover px-[20px] py-[20px] md:px-[25px] md:py-[25px]"
+      style={{ backgroundImage: `url(${banner1})` }}
     >
       <div className="w-full">
         <h4 className="mb-[14px] max-w-full text-xl font-bold text-white md:w-[64%] md:text-3xl md:leading-[42px] lg:w-[46%] xl:w-[85%] 2xl:w-[75%] 3xl:w-[52%]">
