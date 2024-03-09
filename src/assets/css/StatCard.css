@@ -1,0 +1,82 @@
+.stat-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px; /* Adjust as needed */
+    gap: 20px;
+    width: 293px;
+    height: 118px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
+    font-family: 'Jost', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-color: #233255;
+
+}
+
+.stat-circle {
+    position: relative;
+}
+
+.circle-progress {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+}
+
+.icon-wrapper {
+    width: 57.2px; /* Icon size */
+    height: 57.2px; /* Icon size */
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 3.12px 7.8px rgba(0, 0, 0, 0.2), inset 0px -3.12px 7.8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    /* Add your icon as a background-image or place an img tag inside */
+}
+
+.stat-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-title {
+    font-size: 1em; /* Adjust size as needed */
+    opacity: 0.7;
+    margin: 0;
+}
+
+.stat-numbers {
+    font-size: 2em; /* Adjust size as needed */
+    font-weight: bold;
+    margin: 0;
+}
+
+.stat-genders {
+    font-size: 0.8em; /* Adjust size as needed */
+    display: flex;
+    gap: 10px;
+}
+
+
+
+.stat-male {
+    color: #006BBE;
+}
+
+
+.stat-female {
+    color: #EA7D17;
+}

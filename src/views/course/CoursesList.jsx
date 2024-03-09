@@ -5,12 +5,24 @@ import ButtonComponent from "../../components/button/ButtonComponnent";
 import AddCourse from "./components/AddCourse";
 import ArchivedCourses from "./components/ArchivedCourses";
 import TextField from '@mui/material/TextField';
-import Banner from "./components/Banner"
+import TourBanner from "./components/TourBanner"
 import Joyride from 'react-joyride'
+import StatCard from "./components/StatCard";
 const CoursesList = () => {
-    const [{ run, steps }, setState] = useState({
-        run: true,
-        steps: [
+
+    const [joyrideRun, setJoyrideRun] = useState(false);
+    const [showStatCard, setShowStatCard] = useState(false);
+    const [showTourBanner, setShowTourBanner] = useState(true);
+
+
+    const [steps] = useState([
+        {
+            title: 'Welcome to the Courses Page!',
+            target: '#start',
+            content: 'This is where you can add a new course.',
+            placement: 'bottom',
+        },
+
         {
             title: 'Welcome to the Courses Page!',
             target: '#addd',
@@ -29,19 +41,16 @@ const CoursesList = () => {
             content: 'Click here to edit an existing course.',
             placement: 'bottom',
          }
-        ]
-    });
 
+    ]);
 
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate()
 
 
-
     const [editCourseId, setEditCourseId] = useState(null);
     const [editCourseName, setEditCourseName] = useState('');
 
-    const [joyrideRun, setJoyrideRun] = useState(false);
 
     // Start editing a course name
     const handleEditClick = (course) => {
@@ -74,7 +83,6 @@ const CoursesList = () => {
         };
 
         getCourses();
-        setJoyrideRun(true);
     }, []);
 
     const handleCourseAdded = () => {
@@ -96,18 +104,50 @@ const CoursesList = () => {
         }
     };
 
+    const startTour = () => {
+        if (!joyrideRun) {
+            console.log('Starting tour');
+            setJoyrideRun(true);
+            setShowTourBanner(false);
+        }
+    };
+
+
     return (
         <>
-            <Banner />
-            <div className="flex flex-col mt-6">
-                <div className="overflow-x-auto rounded-lg">
-                    <div className="inline-block min-w-full align-middle" id="addd" >
-                        <AddCourse onCourseAdded={handleCourseAdded}/>
+            {showTourBanner && <TourBanner onStartTour={startTour} />}
+            {joyrideRun && !showStatCard && ( <Joyride
+                continuous
+                run={joyrideRun}
+                steps={steps}
+                callback={(data) => {
+                    console.log('Joyride callback data:', data);
 
-                        <div className="grid grid-cols-12 gap-4">
+                    const { status } = data;
+                    if (status === 'finished' || status === 'skipped') {
+                        setJoyrideRun(false);
+                        setShowStatCard(true);
+                    }
+                }}
+                hideCloseButton
+                scrollToFirstStep
+                showSkipButton
+                showProgress
+            />)}
+
+            <div className="flex flex-col mt-8">
+                {showStatCard && <StatCard />}
+                <div className="overflow-x-auto rounded-lg">
+                    <div className="inline-block min-w-full align-middle"  >
+                        <a href="#!" id="addd"  >
+                            <AddCourse id="start" onCourseAdded={handleCourseAdded}/>
+                        </a>
+
+
+                        <div className="grid grid-cols-12 gap-4 mb-3">
 
                             <div className="col-span-9 overflow-hidden shadow sm:rounded-lg mt-4">
-                                <table id="table" className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                                <table id="table" className="min-w-full min-h-full divide-y divide-gray-200 dark:divide-gray-600">
                                     <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th scope="col"
@@ -189,14 +229,7 @@ const CoursesList = () => {
                 </div>
 
             </div>
-            <Joyride continuous
-                     callback={() => {}}
-                     run={run}
-                     steps={steps}
-                     hideCloseButton
-                     scrollToFirstStep
-                     showSkipButton
-                     showProgress/>
+
         </>
 
     );

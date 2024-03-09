@@ -10,8 +10,8 @@ import RTLDefault from "views/rtl/default";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
+import CoursesList from "views/course/CoursesList";
 
-// Icon Imports
 import {
   MdHome,
   MdOutlineShoppingCart,
@@ -21,6 +21,7 @@ import {
 } from "react-icons/md";
 
 const routes = [
+
   {
     name: "Elkindy Dashboard",
     layout: "/admin",
@@ -69,6 +70,7 @@ const routes = [
     layout: "/admin",
     path: "courses",
     icon: <MdBook className="h-6 w-6" />,
+    component: <CoursesList />,
   },
     /*
   {
