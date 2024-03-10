@@ -5,6 +5,8 @@ const instrumentSchema = Yup.object().shape({
   // brand: Yup.string().required("Brand can't be empty"),
   // condition: Yup.string().required("Condition can't be empty"),
   details: Yup.string().required("Details can't be empty"),
+  price: Yup.number().required("Price can't be empty"),
+
   // postedAt: Yup.date().default(() => new Date()),
 });
 

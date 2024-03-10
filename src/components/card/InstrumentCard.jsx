@@ -15,7 +15,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
   return (
     // <Link to={"/admin/marketplace/instrument/" + instrument._id}>
     <Card
-      extra={`flex flex-col w-full h-full !p-4 3xl:p-![18px] bg-white ${instrument.extra}`}
+      extra={`flex flex-col w-full h-full !p-4 3xl:p-![18px] bg-white  ${instrument.extra}`}
     >
       <div className="h-full w-full">
         <div className="relative w-full">

@@ -13,3 +13,4 @@ export { default as FormLayout } from "./layout/FormLayout";
 export { default as AddIcon } from "./ui/AddIcons";
 export { default as NoData } from "./ui/NoData";
 export { default as SearchBar } from "./ui/SearchBar";
+export { default as AutoCompleteInput } from "./ui/AutoCompleteInput";

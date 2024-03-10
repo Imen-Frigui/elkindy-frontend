@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
@@ -7,18 +7,26 @@ import routes from "routes.js";
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
+import { io } from "socket.io-client";
 
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
+  const [socket, setSocket] = useState(null);
 
   React.useEffect(() => {
     window.addEventListener("resize", () =>
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
+    setSocket(io("http://localhost:5000"));
   }, []);
+
+  useEffect(() => {
+    console.log(socket);
+  }, []);
+
   React.useEffect(() => {
     getActiveRoute(routes);
   }, [location.pathname]);
@@ -77,6 +85,7 @@ export default function Admin(props) {
               logoText={"Horizon UI Tailwind React"}
               brandText={currentRoute}
               secondary={getActiveNavbar(routes)}
+              socket={socket}
               {...rest}
             />
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">

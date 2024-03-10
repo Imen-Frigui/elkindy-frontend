@@ -17,6 +17,7 @@ const Marketplace = ({ location }) => {
   const [status, setStatus] = useState("All");
   const [age, setAge] = useState("3-5");
   const [sort, setSort] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
   const searchQuery = query.get("search") || "";
   const { instruments, loading, fetchInstruments, searchInstruments } =
     useInstrumentStore();
@@ -64,13 +65,15 @@ const Marketplace = ({ location }) => {
     },
     [status]
   );
+  const handleShowFilters = () => {
+    setShowFilter((showFilter) => !showFilter);
+  };
 
   return (
-    <div className=" z-500 mt-3 grid h-full grid-cols-1 gap-5 md:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-3">
-      <div className="col-span-1 h-fit w-full md:col-span-4">
+    <div className=" z-500 mt-2 grid h-full grid-cols-1 gap-5 md:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-3">
+      <div className="col-span-1 h-fit w-full md:col-span-5">
         <Banner />
-
-        <div className=" z-1000 mb-4 mt-5 flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue py-0 px-4 dark:bg-indigo-50 md:flex-row md:items-center">
+        <div className=" mb-2 mt-2  flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue py-0 px-4 dark:bg-indigo-50 md:flex-row md:items-center">
           <h4 className="ml-1 text-2xl font-bold text-white dark:text-navy-700 ">
             Explore Instruments:
           </h4>
@@ -87,16 +90,36 @@ const Marketplace = ({ location }) => {
             </div>
             <SearchBar />
           </div>
-          <Link
-            to="/admin/marketplace/create"
-            className="border-transparent border-1 w-58  rounded-lg bg-kindyorange py-2 px-4 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
+          <button
+            onClick={handleShowFilters}
+            className="border-transparent flex items-center border-1 w-58 mb-3 rounded-lg  bg-kindyorange py-2 px-4 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
           >
-            + Post Instrument
-          </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-5 w-5 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+              />
+            </svg>
+            Filter
+          </button>
         </div>
 
-        <div className=" grid  grid-cols-1 gap-5 md:grid-cols-4">
-          <div className=" grid grid-cols-1 gap-5 md:col-span-3 md:grid-cols-3">
+        <div className=" grid grid-cols-1 gap-3 md:grid-cols-5">
+          <div
+            className={
+              !showFilter
+                ? `grid grid-cols-1 gap-5 md:col-span-5 md:row-span-1 md:grid-cols-4 `
+                : `grid grid-cols-1 gap-5 md:col-span-4 md:row-span-1 md:grid-cols-4 `
+            }
+          >
             {loading ? (
               <>
                 {"123456".split("").map((v) => (
@@ -118,8 +141,12 @@ const Marketplace = ({ location }) => {
               </div>
             )}
           </div>
-          <div className="order-first md:order-last">
-            <div className="grid grid-cols-1 md:grid-rows-1 ">
+
+          <div
+            className="order-first md:order-last md:grid-rows-4"
+            hidden={!showFilter}
+          >
+            <div className="grid grid-cols-1  ">
               <div className=" h-15 md:h20 mb-2 flex items-baseline justify-between space-y-1 overflow-hidden rounded-[20px] bg-kindydarkblue py-5 px-6 dark:bg-indigo-50 md:flex-col  ">
                 <p className=" text-left font-bold text-white  dark:text-navy-800">
                   El Kindy Marketplace

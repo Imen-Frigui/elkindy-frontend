@@ -1,9 +1,9 @@
 import { Field, ErrorMessage, useField } from "formik";
 
-function Input({ label, status, ...props }) {
+function Input({ label, status, className, ...props }) {
   const [field, meta] = useField(props);
   return (
-    <div className={`my-1 w-full  ` }>
+    <div className={`my-1 w-full ${className} `}>
       <label>
         {label ? label : ""}
         <input

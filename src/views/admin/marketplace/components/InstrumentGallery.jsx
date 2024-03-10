@@ -33,54 +33,60 @@ function Gallery() {
   };
 
   let thumbnails = displayed_images.map((image, index) => (
-    <button
-      onClick={() => setCurrentImageIndex(index)}
-      className={
-        (index === CurrentImageIndex ? active_thumbnail_class : "") +
-        "rounded-xl bg-white bg-clip-border"
-      }
-      key={index}
-    >
-      <img
-        src={image.thumbnail}
-        className="rounded-lg hover:opacity-50 "
-        alt="gallery button"
-      />
-    </button>
+    <div className="flex ">
+      <button
+        onClick={() => setCurrentImageIndex(index)}
+        className={
+          (index === CurrentImageIndex ? active_thumbnail_class : "") +
+          "rounded-lg bg-white bg-clip-border"
+        }
+        key={index}
+      >
+        <img
+          src={image.thumbnail}
+          className=" w-10 rounded-lg hover:opacity-50 "
+          alt="gallery button"
+        />
+      </button>
+    </div>
   ));
 
   return (
-    <div>
-      <button
-        onClick={() => SetModalVisiblity(true)}
-        className="hidden md:block"
-      >
-        <img src={image} className="w-70p md:rounded-lg" alt="product" />
-      </button>
+    <aside className=" z-50 h-full items-center md:fixed md:z-10 lg:fixed">
+      {/* <button onClick={() => SetModalVisiblity(true)} className=" w-25 "> */}
+      <div className="flex justify-start md:w-[1050px]">
+        <img
+          src={image}
+          className="mb-5 w-1/4 md:rounded-lg "
+          alt="product"
+        />
+      </div>
 
-      <div className="relative mb-10 block md:mb-0 md:hidden">
+      {/* </button> */}
+
+      {/* <div className="relative mb-10  md:mb-0 md:hidden">
         <img src={image} alt="product" />
         <button
           onClick={goPreviousImage}
           className="absolute left-0 top-1/2 ml-2 h-10 w-10 rounded-full bg-white"
         >
-          <img src={iconPrevious} className="mx-auto" alt="left arrow" />
+          <img src={iconPrevious} className="mx-auto " alt="left arrow" />
         </button>
         <button
           onClick={goNextImage}
           className="absolute right-0 top-1/2 mr-2 h-10 w-10 rounded-full bg-white"
         ></button>
         <img src={iconNext} className="mx-auto" alt="left arrow" />
-      </div>
+      </div> */}
 
-      <div className="mt-10 mb-5 hidden grid-cols-4 gap-4 px-5 md:mb-0 md:grid md:px-0">
+      <div className="flex w-1/2 justify-start space-x-2 md:flex-row ">
         {thumbnails}
       </div>
 
-      <div
+      {/* <div
         className={
           (ModalVisible ? "" : "hidden") +
-          " bg-black/[.8] fixed left-0 top-0 z-20 h-full w-full overflow-auto pt-20"
+          " bg-black/[.8] fixed left-0 top-0 z-20 h-full w-full overflow-auto"
         }
       >
         <div className="mx-auto max-w-screen-sm ">
@@ -100,7 +106,6 @@ function Gallery() {
                 />
               </svg>
             </button>
-            {/* previous button */}
             <button
               onClick={goPreviousImage}
               className="absolute left-0 top-1/2 flex h-14 w-14 items-center justify-center rounded-full bg-white align-middle"
@@ -118,7 +123,6 @@ function Gallery() {
                 />
               </svg>
             </button>
-            {/* Next button */}
             <button
               onClick={goNextImage}
               className="absolute right-0 top-1/2 flex h-14 w-14 items-center justify-center rounded-full bg-white align-middle"
@@ -137,16 +141,14 @@ function Gallery() {
               </svg>
             </button>
 
-            {/* Main Lightbox Image */}
             <img className="mx-auto rounded-xl" src={image} alt="product" />
           </div>
-          {/* Thumbnails in lightbox */}
           <div className="mt-10 mb-5 grid grid-cols-4 gap-4 md:mb-0 md:px-10">
             {thumbnails}
           </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </aside>
   );
 }
 

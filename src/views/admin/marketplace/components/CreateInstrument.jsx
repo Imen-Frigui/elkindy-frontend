@@ -15,16 +15,33 @@ import {
   TextArea,
   Dropdown,
   Button,
+  AutoCompleteInput,
 } from "../../../../components";
 import { useState } from "react";
 import useInstrumentStore from "store/instrumentStore";
-import AutoSuggestComponent from "components/ui/AutoComplete";
 
 function CreateInstrument({ history }) {
   const postInstrument = useInstrumentStore((state) => state.postInstrument);
   const loading = useInstrumentStore((state) => state.loading);
   const [category, setCategory] = useState("Exchange");
-
+  const [brand, setBrand] = useState("");
+  const brands = [
+    { name: "Gibson" },
+    { name: "Steinway & Sons" },
+    { name: "Fender" },
+    { name: "Yamaha" },
+    { name: "Korg" },
+    { name: "Roland" },
+    { name: "Pearl" },
+    { name: "DW Drums" },
+    { name: "Selmer" },
+    { name: "Buffet Crampon" },
+    { name: "Vic Firth" },
+    { name: "Zildjian" },
+    { name: "Taylor" },
+    { name: "Ibanez" },
+    { name: "Casio" },
+  ];
   const options = {
     position: "top-center",
     autoClose: 2000,
@@ -36,9 +53,9 @@ function CreateInstrument({ history }) {
   };
   const initialValues = {
     title: "",
-    // brand: "",
     details: "",
   };
+
   const handleSubmit = async (values, setSubmitting, setStatus) => {
     setSubmitting(true);
     console.log("Form values:", values);
@@ -91,7 +108,9 @@ function CreateInstrument({ history }) {
             initialValues={{
               title: "",
               status: category,
+              brand: brand,
               details: "",
+              price:""
             }}
             validationSchema={instrumentValidation}
             onSubmit={(values, { setSubmitting, setStatus }) => {
@@ -124,10 +143,10 @@ function CreateInstrument({ history }) {
                       subtitle="Select the instrument brand"
                       title="Instrument Brand"
                     />
-                    <AutoSuggestComponent
-                      // form={formikProps}
-                      // validate={true}
-                      name="brand"
+                    <AutoCompleteInput
+                      onChange={setBrand}
+                      value={brand}
+                      options={brands}
                     />
                   </FormControl>
 
@@ -137,16 +156,37 @@ function CreateInstrument({ history }) {
                       title="Category"
                       subtitle="Choose a category that best describes your instrument."
                     />
-                    <Dropdown
-                      onChange={setCategory}
-                      value={category}
-                      options={[
-                        "exchange",
-                        "maintenance",
-                        "available for borrow",
-                        "buy",
-                      ]}
-                    />
+                    <div
+                      className={
+                        category == "buy"
+                          ? "flex flex-row justify-between space-x-2 align-baseline "
+                          : ""
+                      }
+                    >
+                      <Dropdown
+                        className={category == "buy" ? "w-[500px]" : ""}
+                        onChange={setCategory}
+                        value={category}
+                        options={[
+                          "exchange",
+                          "maintenance",
+                          "available for borrow",
+                          "buy",
+                        ]}
+                      />
+                      {category == "buy" ? (
+                        <Input
+                          className={"w-1/2"}
+                          placeholder=" Price"
+                          status={status}
+                          name="price"
+                          id="price"
+                          type="number"
+                        />
+                      ) : (
+                        <div></div>
+                      )}
+                    </div>
                   </FormControl>
                   <FormControl>
                     <Label title="Instrument Detail" subtitle="" id="Details" />
@@ -162,9 +202,9 @@ function CreateInstrument({ history }) {
                       type="button"
                       text="Cancel"
                       className="bg-indigo-200 "
-                      onClick={() => {
-                        history.push("/admin/marketplace");
-                      }}
+                      // onClick={() => {
+                      //   history.push("/admin/marketplace");
+                      // }}
                     />
                     <FormButton
                       disabled={!isValid || isSubmitting}
