@@ -16,7 +16,6 @@ const App = () => {
             <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
         </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
-        {/* <Route path="/assign-teachers/:courseId" element={<AssignTeachers />} /> */}
     </Routes>
   );
 };

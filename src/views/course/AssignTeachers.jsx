@@ -31,7 +31,7 @@ const AssignTeachers = () => {
 
     const handleAssignTeachers = async () => {
         await updateCourse(courseId, { teacher: selectedTeacherIds });
-        navigate('/courses');
+        navigate('/admin/courses');
     };
 
     return (

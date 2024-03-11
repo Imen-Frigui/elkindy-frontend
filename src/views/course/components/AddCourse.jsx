@@ -8,6 +8,8 @@ const AddCourse = ({ onCourseAdded }) => {
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+    const [isInternship, setIsInternship] = useState(false);
+
     const [inputValues, setInputValues] = useState({
         courseName: '',
         courseDescription: '',
@@ -15,6 +17,7 @@ const AddCourse = ({ onCourseAdded }) => {
         price: 0,
         startDate: '',
         endDate: '',
+        isInternship: isInternship,
     });
 
 
@@ -31,11 +34,33 @@ const AddCourse = ({ onCourseAdded }) => {
             ...prevState,
             [name]: value,
         }));
+        if (name === 'startDate' || name === 'endDate') {
+            const isInternship = inputValues.startDate && inputValues.endDate;
+            setIsInternship(isInternship);
+            handleInternshipChange({ target: { checked: true } })// Set the checkbox state
+            if (isInternship) {
+                alert('Setting both start and end dates will categorize this course as an internship.');
+
+            }
+        }
+    };
+
+    const handleInternshipChange = (e) => {
+        setIsInternship(e.target.checked);
     };
 
     useEffect(() => {
         console.log(errors);
-    }, [errors]);
+        const { startDate, endDate } = inputValues
+        if (startDate && endDate) {
+            setIsInternship(true);
+            alert('Setting both start and end dates will categorize this course as an internship.');
+            handleInternshipChange({ target: { checked: true } })
+        } else {
+            setIsInternship(false);
+            handleInternshipChange({ target: { checked: false } })
+        }
+    }, [errors, inputValues.startDate, inputValues.endDate, inputValues]);
 
 
     const handleDrawerClose = () => setIsDrawerOpen(false);
@@ -75,7 +100,9 @@ const AddCourse = ({ onCourseAdded }) => {
             startDate: inputValues.startDate,
             endDate: inputValues.endDate,
             isArchived: false,
+            isInternship:isInternship
         };
+        console.log(courseData)
         if (validateForm()){
             console.log('Form is valid and can be submitted.');
             try{
@@ -120,9 +147,10 @@ const AddCourse = ({ onCourseAdded }) => {
 
                         </div>
                         <div>
-                        <label htmlFor="description"
+                            <label htmlFor="description"
                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                            <textarea id="courseDescription" rows="4" name="courseDescription" placeholder="Enter course description"
+                            <textarea id="courseDescription" rows="4" name="courseDescription"
+                                      placeholder="Enter course description"
                                       value={inputValues.courseDescription}
                                       onChange={handleOnChange}
                                       className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -153,11 +181,12 @@ const AddCourse = ({ onCourseAdded }) => {
                             )}
                         </div>
                         <div>
-                            <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
+                            <label htmlFor="price"
+                                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
                             <input type="number" id="price" name="price" placeholder="Enter course price"
                                    value={inputValues.price}
                                    onChange={handleOnChange}
-                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"  />
+                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
                             {errors.price && (
                                 <div className="error-message text-red-500 text-sm mt-1">
                                     {errors.price}
@@ -165,27 +194,50 @@ const AddCourse = ({ onCourseAdded }) => {
                             )}
                         </div>
 
+                        <div>
+                            <label htmlFor="internshipCheckbox" className="flex items-center space-x-3">
+                                <input
+                                    type="checkbox"
+                                    id="internshipCheckbox"
+                                    checked={isInternship}
+                                    onChange={handleInternshipChange}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300"
+                                />
+                                <span
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300">Is Internship</span>
+                            </label>
+                        </div>
+
                         {/* Start Date Input */}
                         <div>
-                            <label htmlFor="startDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start Date</label>
+                            <label htmlFor="startDate"
+                                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start
+                                Date</label>
                             <input type="date" id="startDate" name="startDate"
                                    value={inputValues.startDate}
                                    onChange={handleOnChange}
-                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"  />
+                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
                         </div>
 
                         {/* End Date Input */}
                         <div>
-                            <label htmlFor="endDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End Date</label>
+                            <label htmlFor="endDate"
+                                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End
+                                Date</label>
                             <input type="date" id="endDate" name="endDate"
                                    value={inputValues.endDate}
                                    onChange={handleOnChange}
-                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"  />
+                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
                         </div>
 
 
-                        <button type="submit"  className="w-full mt-3 mb-3 text-sm font-medium text-white justify-center bg-[#006BBE] border border-gray-200 rounded-lg px-5 py-2.5 hover:text-white focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 hover:bg-[#0C4B65] dark:hover:text-white dark:hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-600">Add Course</button>
-                        <button onClick={handleDrawerClose} className="w-full text-sm font-medium text-gray-500 justify-center bg-white border border-gray-200 rounded-lg px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-600">Cancel</button>
+                        <button type="submit"
+                                className="w-full mt-3 mb-3 text-sm font-medium text-white justify-center bg-[#006BBE] border border-gray-200 rounded-lg px-5 py-2.5 hover:text-white focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 hover:bg-[#0C4B65] dark:hover:text-white dark:hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-600">Add
+                            Course
+                        </button>
+                        <button onClick={handleDrawerClose}
+                                className="w-full text-sm font-medium text-gray-500 justify-center bg-white border border-gray-200 rounded-lg px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-600">Cancel
+                        </button>
                     </form>
                 </div>
             )}

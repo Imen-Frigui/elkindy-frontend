@@ -5,6 +5,8 @@ import Navbar from "components/navbar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
 import Sidebarr from "../../components/sidebarr";
+import CoursesList from "../../views/course/CoursesList";
+import AssignTeachers from "../../views/course/AssignTeachers";
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
@@ -79,11 +81,13 @@ export default function Admin(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
-
+                <Route path="/courses" element={<CoursesList />}/>
+                <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
                 <Route
                     path="/"
                     element={<Navigate to="/admin/default" replace/>}
                 />
+
               </Routes>
             </div>
             <div className="p-3">

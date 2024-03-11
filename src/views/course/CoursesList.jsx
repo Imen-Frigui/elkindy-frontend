@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { fetchCourses, archiveCourse, updateCourse } from '../../services/course/courseService';
-import {useNavigate} from "react-router-dom";
-import ButtonComponent from "../../components/button/ButtonComponnent";
+import { useNavigate} from "react-router-dom";
 import AddCourse from "./components/AddCourse";
 import ArchivedCourses from "./components/ArchivedCourses";
 import TextField from '@mui/material/TextField';
 import TourBanner from "./components/TourBanner"
 import Joyride from 'react-joyride'
 import StatCard from "./components/StatCard";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faArchive, faCheck, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+
+
 const CoursesList = () => {
 
     const [joyrideRun, setJoyrideRun] = useState(false);
@@ -163,6 +167,10 @@ const CoursesList = () => {
                                         </th>
                                         <th scope="col"
                                             className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                            isInternship
+                                        </th>
+                                        <th scope="col"
+                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                             Actions
                                         </th>
                                     </tr>
@@ -200,17 +208,27 @@ const CoursesList = () => {
                                                 className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                                 <p>{course.description}</p>
                                             </td>
+                                            <td role="cell"
+                                                className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                                {course.isInternship ? (
+                                                    <FontAwesomeIcon icon={faCheck} style={{fontSize:'20px'}} className="text-green-500" />
+                                                ) : (
+                                                    <span>---</span>
+                                                )}
+                                            </td>
                                             <td id="archive" className="p-4 whitespace-nowrap">
-                                                <ButtonComponent
-                                                    text="Details"
-                                                    onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
-                                                    color="#FB9D37"
-                                                />
-                                                <ButtonComponent
-                                                    text="Archive"
-                                                    onClick={() => handleArchiveCourse(course._id)}
-                                                    color="red"
-                                                />
+                                                <button onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)} className="button-with-tooltip">
+                                                    <FontAwesomeIcon icon={faInfoCircle} style={{color: '#FB9D37', fontSize:'20px'}} className="mr-6"/>
+                                                    <span className="tooltip-text">
+                                                        Details
+                                                    </span>
+                                                </button>
+                                                <button onClick={() => handleArchiveCourse(course._id)} className="button-with-tooltip">
+                                                    <FontAwesomeIcon icon={faArchive} style={{color: 'red', fontSize:'20px'}}/>
+                                                    <span className="tooltip-text">
+                                                        Archive
+                                                    </span>
+                                                </button>
 
                                             </td>
                                         </tr>
