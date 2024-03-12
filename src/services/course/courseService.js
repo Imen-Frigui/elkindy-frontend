@@ -41,9 +41,6 @@ export const updateCourse = async (courseId, courseData) => {
     }
 };
 
-
-// In your frontend service file where fetchCourses is defined
-
 export const addCourse = async (courseData) => {
     try {
         const response = await fetch(`${API_BASE_URL}/courses`, {
@@ -112,4 +109,24 @@ export const fetchArchivedCourses = async () => {
     }
 };
 
+export const updateCourseTeachers = async (courseId, teacherIds) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/${courseId}/teachers`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                teacherIds: teacherIds,
+            }),
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("Failed to fetch archived courses:", error);
+    }
+};
 
