@@ -20,14 +20,17 @@ function useOutsideAlerter(ref, setX) {
 }
 
 const Dropdown = (props) => {
-  const { button, children, classNames, animation } = props;
+  const { button, children, classNames, animation, show } = props;
   const wrapperRef = React.useRef(null);
   const [openWrapper, setOpenWrapper] = React.useState(false);
   useOutsideAlerter(wrapperRef, setOpenWrapper);
-
+  React.useEffect(() => {
+    // Update the state if the 'show' prop changes
+    setOpenWrapper(show || false);
+  }, [show]);
   return (
     <div ref={wrapperRef} className="relative flex">
-      <div className="flex" onMouseDown={() => setOpenWrapper(!openWrapper)}>
+       <div className="flex" onMouseDown={() => setOpenWrapper(!openWrapper)}>
         {button}
       </div>
       <div

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -13,8 +13,28 @@ import {
 import avatar from "assets/img/avatars/avatar4.png";
 
 const Navbar = (props) => {
-  const { onOpenSidenav, brandText } = props;
+  const [notifications, setNotifications] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { onOpenSidenav, brandText, socket } = props;
   const [darkmode, setDarkmode] = React.useState(false);
+  console.log(props);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getNotification", (data) => {
+        console.log("Notification received:", data);
+        setNotifications((prev) => [...prev, data]);
+        setShowDropdown(true);
+      });
+      return () => {
+        socket.off("getNotification");
+      };
+    }
+  }, [socket]);
+  const markAllRead = () => {
+    setNotifications([]);
+    setShowDropdown(false);
+  };
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
@@ -64,7 +84,7 @@ const Navbar = (props) => {
         >
           <FiAlignJustify className="h-5 w-5" />
         </span>
-        {/* start Notification */}
+
         <Dropdown
           button={
             <p className="cursor-pointer">
@@ -83,19 +103,29 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-              <button className="flex w-full items-center">
-                <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                  <BsArrowBarUp />
-                </div>
-                <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                  <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                    New Update: Horizon UI Dashboard PRO
-                  </p>
-                  <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                    A new update for your downloaded item is available!
-                  </p>
-                </div>
-              </button>
+              {notifications.map((notification, index) => (
+                <button
+                  key={index}
+                  className="flex w-full items-center"
+                  onClick={() => {}}
+                >
+                  <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
+                    <BsArrowBarUp />
+                  </div>
+                  <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
+                    <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
+                      <p>
+                        {notification.senderName} sent an exchange request for
+                        {notification.instrument.title}
+                      </p>
+                      {/* <p>{notification.message}</p>{" "} */}
+                    </p>
+                    <p className="font-base text-left text-xs text-gray-900 dark:text-white">
+                      {/* {notification.message} */}
+                    </p>
+                  </div>
+                </button>
+              ))}
 
               <button className="flex w-full items-center">
                 <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
@@ -113,6 +143,7 @@ const Navbar = (props) => {
             </div>
           }
           classNames={"py-2 top-4 -left-[230px] md:-left-[440px] w-max"}
+          show={showDropdown}
         />
         {/* start Horizon PRO */}
         <Dropdown
@@ -208,9 +239,10 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   href=" "
-                  className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
+                  className="mt-3 text-sm font-medium text-red-500 transition duration-150 ease-out hover:text-red-500 hover:ease-in"
                 >
                   Log Out
                 </a>
