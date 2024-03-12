@@ -4,17 +4,13 @@ import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
-<<<<<<< HEAD
-import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
-=======
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import { io } from "socket.io-client";
 
->>>>>>> upstream/master
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
@@ -97,11 +93,8 @@ export default function Admin(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
-<<<<<<< HEAD
                 <Route path="/courses" element={<CoursesList />}/>
                 <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
-=======
->>>>>>> upstream/master
                 <Route
                   path="/marketplace/create"
                   element={<CreateInstrument />}

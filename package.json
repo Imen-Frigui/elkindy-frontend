@@ -10,7 +10,6 @@
     "@chakra-ui/portal": "^2.0.15",
     "@chakra-ui/system": "^2.3.5",
     "@chakra-ui/tooltip": "^2.2.6",
-<<<<<<< HEAD
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -18,12 +17,8 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "^5.15.11",
     "@mui/material": "^5.15.11",
-=======
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^1.0.6",
->>>>>>> upstream/master
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -32,30 +27,19 @@
     "formik": "^2.4.5",
     "framer-motion": "^7.10.2",
     "react-apexcharts": "1.4.0",
-<<<<<<< HEAD
-    "react-beautiful-dnd": "^13.1.1",
-=======
     "react-autosuggest": "^10.1.0",
->>>>>>> upstream/master
     "react-calendar": "^3.9.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
-<<<<<<< HEAD
     "react-joyride": "^2.7.4",
     "react-router-dom": "^6.22.1",
     "react-scripts": "5.0.1",
     "react-table": "^7.8.0",
     "react-toastify": "^10.0.4",
     "reactour": "^1.19.2",
-=======
-    "react-router-dom": "^6.4.0",
-    "react-scripts": "5.0.1",
-    "react-table": "^7.8.0",
-    "react-toastify": "^10.0.4",
     "socket.io-client": "^4.7.4",
->>>>>>> upstream/master
     "tailwindcss-rtl": "^0.9.0",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.3",

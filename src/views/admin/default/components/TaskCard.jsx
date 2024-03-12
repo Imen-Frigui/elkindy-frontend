@@ -1,15 +1,11 @@
 import CardMenu from "components/card/CardMenu";
 import React from "react";
 import Checkbox from "components/checkbox";
-<<<<<<< HEAD
-import { MdDragIndicator } from "react-icons/md";
-=======
+
 import { MdDragIndicator, MdCheckCircle } from "react-icons/md";
 import { FaCalendarCheck } from "react-icons/fa";
 
->>>>>>> upstream/master
 import Card from "components/card";
-import { FaCalendarCheck } from "react-icons/fa";
 
 const TaskCard = () => {
   return (
