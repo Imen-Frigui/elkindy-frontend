@@ -1,17 +1,30 @@
-const StatCard = ({ title, total, breakdown }) => {
+import React from 'react';
+import '../../../assets/css/StatCard.css'
+import courses from '../../../assets/svg/courses.svg';
+
+const StatCard = () => {
+    const malePercentage = 61;
+    const femalePercentage = 39;
     return (
-        <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
-            <div className="text-2xl font-bold">{total}</div>
-            <div className="text-lg">{title}</div>
-            <div className="w-full mt-2">
-                {breakdown.map((item, index) => (
-                    <div key={index} className="flex justify-between">
-                        <span className="text-sm text-gray-600">{item.label}</span>
-                        <span className="text-sm font-semibold">{item.value}%</span>
+        <div className="stat-card mb-8">
+            <div className="stat-circle">
+                <div className="circle-progress"
+                     style={{background: `conic-gradient(#006BBE 0% ${malePercentage}%, #EA7D17 ${femalePercentage}% 100%)`}}>
+                    <div className="icon-wrapper">
+                        <img src={courses} alt="courses" className="icon"/>
+
                     </div>
-                ))}
+                </div>
             </div>
-        </div>
-    );
+            <div className="stat-details">
+                <h3 className="stat-title">STUDENTS</h3>
+                <div className="stat-numbers">308</div>
+                <div className="stat-genders">
+                    <span className="stat-male">MALE (61%)</span>
+                    <span className="stat-female">FEMALE (39%)</span>
+                </div>
+            </div>
+        </div>);
 };
+
 export default StatCard;

@@ -2,7 +2,25 @@ import InputField from "components/fields/InputField";
 import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 
+
+import authImg from "assets/img/auth/auth1.png";
+import React, { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function SignIn() {
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+  });
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+
   return (
     <div className=" mt-16 mb-16 flex h-full w-full items-center justify-center rounded-3xl bg-bluebg  p-10 shadow-lg md:mx-0 md:px-10 lg:mb-10 lg:items-center lg:justify-start">
       {/* Sign in section */}
