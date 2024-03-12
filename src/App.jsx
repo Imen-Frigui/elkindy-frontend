@@ -18,9 +18,9 @@ const App = () => {
         <Route path="admin/*" element={<AdminLayout />} >
             <Route path="courses"  element={<CoursesList />}/>
             <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+            <Route path="events" element={< EventsList />} />
             <Route path="events/details/:eventId" element={<EventDetails />} />
             <Route path="events/edit/:eventId" element={< UpdateEvent />} />
-            <Route path="events" element={< EventsList />} />
             <Route path="tickets" element={< TicketsList />} />
 
         </Route>
