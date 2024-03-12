@@ -2,6 +2,11 @@
 import InputField from "components/fields/InputField";
 import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c54041064cbb937d61f944b7b578a6a40a1e1894
 import authImg from "assets/img/auth/auth1.png";
 import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,9 +25,12 @@ export default function SignIn() {
   };
 
 
+<<<<<<< HEAD
 
 export default function SignIn() {
 
+=======
+>>>>>>> c54041064cbb937d61f944b7b578a6a40a1e1894
   return (
     <div className=" mt-16 mb-16 flex h-full w-full items-center justify-center rounded-3xl bg-bluebg  p-10 shadow-lg md:mx-0 md:px-10 lg:mb-10 lg:items-center lg:justify-start">
       {/* Sign in section
