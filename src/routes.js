@@ -101,5 +101,5 @@ const routes = [
     hide: true,
   },*/
 
-];
+]
 export default routes;
