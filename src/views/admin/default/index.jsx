@@ -21,11 +21,19 @@ const Dashboard = () => {
     <div>
       {/* Card widget */}
 
+<<<<<<< HEAD
       <div className="mt-3 grid grid-cols-1 gap-5 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-6">
         <Widget
           icon={<FaUserGraduate className="h-7 w-7 text-kindydarkblue" />}
           title={"Students"}
           subtitle={"$340.5"}
+=======
+      <div className="mt-3 grid  grid-cols-1 gap-5 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-4 ">
+        <Widget
+          icon={<FaUserGraduate className="h-7 w-7 text-kindydarkblue" />}
+          title={"Students"}
+          subtitle={"340"}
+>>>>>>> upstream/master
         />
         <Widget
           icon={<FaUserTie className="h-6 w-6 text-kindydarkblue" />}
@@ -35,64 +43,27 @@ const Dashboard = () => {
         <Widget
           icon={<MdBarChart className="h-7 w-7 text-kindydarkblue" />}
           title={"Instruments"}
+<<<<<<< HEAD
           subtitle={"55"}
+=======
+          subtitle={"50"}
+>>>>>>> upstream/master
         />
-        <Widget
-          icon={<MdDashboard className="h-6 w-6" />}
-          title={"Your Balance"}
-          subtitle={"$1,000"}
-        />
-        <Widget
-          icon={<MdBarChart className="h-7 w-7" />}
-          title={"New Tasks"}
-          subtitle={"145"}
-        />
-        <Widget
-          icon={<IoMdHome className="h-6 w-6" />}
-          title={"Total Projects"}
-          subtitle={"$2433"}
-        />
-      </div>
-
-      {/* Charts */}
-
-      <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
-        <TotalSpent />
-        <WeeklyRevenue />
-      </div>
-
-      {/* Tables & Charts */}
-
-      <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
-        {/* Check Table */}
-        <div>
+        <div className="space-y-5 md:row-span-3 ">
+          <MiniCalendar />
+          <TaskCard />
+        </div>
+        <div className="md:col-span-3">
           <CheckTable
             columnsData={columnsDataCheck}
             tableData={tableDataCheck}
           />
         </div>
-
-        {/* Traffic chart & Pie Chart */}
-
-        <div className="grid grid-cols-1 gap-5 rounded-[20px] md:grid-cols-2">
-          <DailyTraffic />
-          <PieChartCard />
+        <div className="md:col-span-2">
+          <TotalSpent />
         </div>
-
-        {/* Complex Table , Task & Calendar */}
-
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
-        />
-
-        {/* Task chart & Calendar */}
-
-        <div className="grid grid-cols-1 gap-5 rounded-[20px] md:grid-cols-2">
-          <TaskCard />
-          <div className="grid grid-cols-1 rounded-[20px]">
-            <MiniCalendar />
-          </div>
+        <div>
+          <WeeklyRevenue />
         </div>
       </div>
     </div>

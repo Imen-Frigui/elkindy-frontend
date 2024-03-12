@@ -3,10 +3,10 @@ import React from "react";
 // Admin Imports
 import MainDashboard from "views/admin/default";
 import NFTMarketplace from "views/admin/marketplace";
-import { MdBook } from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
 import RTLDefault from "views/rtl/default";
+import { FaUserTie, FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
@@ -23,24 +23,24 @@ import {
 const routes = [
 
   {
-    name: "Elkindy Dashboard",
+    name: "ElKindy Dashboard",
     layout: "/admin",
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
   },
   {
-    name: "NFT Marketplace",
+    name: "ElKindy Marketplace",
     layout: "/admin",
-    path: "nft-marketplace",
-    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    path: "marketplace",
+    icon: <FaShoppingBasket className="h-6 w-6" />,
     component: <NFTMarketplace />,
     secondary: true,
   },
   {
-    name: "Data Tables",
+    name: "ElKindy Users",
     layout: "/admin",
-    icon: <MdBarChart className="h-6 w-6" />,
+    icon: <FaCalendarAlt className="h-6 w-6" />,
     path: "data-tables",
     component: <DataTables />,
   },
@@ -65,6 +65,7 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />,
     component: <RTLDefault />,
   },
+<<<<<<< HEAD
   {
     name: "Courses List",
     layout: "/admin",
@@ -72,5 +73,7 @@ const routes = [
     icon: <MdBook className="h-6 w-6" />,
     component: <CoursesList />,
   }
+=======
+>>>>>>> upstream/master
 ];
 export default routes;
