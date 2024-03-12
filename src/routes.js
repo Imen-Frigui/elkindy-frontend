@@ -17,7 +17,8 @@ import {
   MdOutlineShoppingCart,
   MdBarChart,
   MdPerson,
-  MdLock, MdBook,
+  MdLock,
+  MdBook,
 } from "react-icons/md";
 
 const routes = [
@@ -72,6 +73,7 @@ const routes = [
     path: "courses",
     icon: <MdBook className="h-6 w-6" />,
     component: <CoursesList />,
-  },
+  }
+
 ]
 export default routes;

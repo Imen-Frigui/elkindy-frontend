@@ -4,12 +4,18 @@ import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
+
+
+import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
+
+
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import { io } from "socket.io-client";
+
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -93,8 +99,27 @@ export default function Admin(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
+
                 <Route path="/courses" element={<CoursesList />}/>
                 <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+
+                <Route
+                  path="/marketplace/create"
+                  element={<CreateInstrument />}
+                />
+                <Route
+                  path="/marketplace/instrument/:id"
+                  element={<InstrumentDetail />}
+                />
+                <Route
+                  path="/"
+                  element={<Navigate to="/admin/default" replace />} />
+
+                <Route
+                    path="/courses" element={<CoursesList />}/>
+                <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+
+
                 <Route
                   path="/marketplace/create"
                   element={<CreateInstrument />}
@@ -107,7 +132,6 @@ export default function Admin(props) {
                   path="/"
                   element={<Navigate to="/admin/default" replace />}
                 />
-
               </Routes>
             </div>
             <div className="p-3">
