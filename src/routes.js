@@ -3,9 +3,11 @@ import React from "react";
 // Admin Imports
 import MainDashboard from "views/admin/default";
 import NFTMarketplace from "views/admin/marketplace";
+import { MdBook ,MdEventNote} from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
 import RTLDefault from "views/rtl/default";
+import { GiTicket } from "react-icons/gi";
 import { FaUserTie, FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
@@ -66,6 +68,18 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />,
     component: <RTLDefault />,
   },
+  {
+    name: "Events List",
+    layout: "/admin",
+    path: "events",
+    icon: <MdEventNote className="h-6 w-6" />,
+  },
+  {
+    name: "Tickets List",
+    layout: "/admin",
+    path: "tickets",
+    icon: <GiTicket className="h-6 w-6" />,
+  },
 
   {
     name: "Courses List",
@@ -73,7 +87,15 @@ const routes = [
     path: "courses",
     icon: <MdBook className="h-6 w-6" />,
     component: <CoursesList />,
-  }
+  },
+
+    /*
+  {
+    layout: "/admin",
+    path: "/assign-teachers/:courseId",
+    component: <AssignTeachers />,
+    hide: true,
+  },*/
 
 ]
 export default routes;
