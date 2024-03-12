@@ -18,6 +18,7 @@ import {
   MdBarChart,
   MdPerson,
   MdLock,
+  MdBook
 } from "react-icons/md";
 
 const routes = [
@@ -65,7 +66,7 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />,
     component: <RTLDefault />,
   },
-<<<<<<< HEAD
+
   {
     name: "Courses List",
     layout: "/admin",
@@ -73,7 +74,6 @@ const routes = [
     icon: <MdBook className="h-6 w-6" />,
     component: <CoursesList />,
   }
-=======
->>>>>>> upstream/master
+
 ];
 export default routes;
