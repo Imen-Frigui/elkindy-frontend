@@ -6,6 +6,7 @@ import navbarimage from "assets/img/layout/Navbar.png";
 import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
+import axios from "axios";
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
@@ -15,7 +16,16 @@ import avatar from "assets/img/avatars/avatar4.png";
 const Navbar = (props) => {
   const { onOpenSidenav, brandText } = props;
   const [darkmode, setDarkmode] = React.useState(false);
-
+  const handleLogout = async () => {
+    try {
+      await axios.get("http://localhost:3000/api/users/login");
+      window.location.href = "/auth/sign-in";
+    } catch (error) {
+      console.error("Error logging out:", error);
+      // Handle error if needed
+    }
+  };
+  
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
       <div className="ml-[6px]">
@@ -208,10 +218,12 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
-                  href=" "
-                  className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
-                >
+      href="#"
+      className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
+      onClick={handleLogout}
+    >
                   Log Out
                 </a>
               </div>
