@@ -1,23 +1,24 @@
 // PrivateRoute.js
 import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useRoleValidation from './useAuthValidation';
+import { logout } from 'slices/authSlice';
 
 const PrivateRoute = ({ allowedRoles }) => {
   const { userInfo } = useSelector((state) => state.auth);
   const { userRole, isLoading } = useRoleValidation();
-
+const dispatch = useDispatch();
   if (isLoading) {
-    return <div>Loading...</div>; // Show loading while the role is being validated
+    return <div>Loading...</div>; 
   }
   const token = localStorage.getItem('token');
-  if (!userInfo || token=="") {
-    // Redirect to sign-in if no userInfo or token; redirect to sign-up if you prefer that
+  if (!token) {
     return <Navigate to="/auth/sign-in" replace />;
   }
   const isAuthorized = allowedRoles.includes(userRole);
 
-  return isAuthorized ? <Outlet /> : <Navigate to="/unauthorized" replace />;
+  
+  return isAuthorized ? <Outlet /> : <Navigate to="/auth/unauthorized" replace />;
 };
 
 export default PrivateRoute;

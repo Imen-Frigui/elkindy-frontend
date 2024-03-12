@@ -15,12 +15,10 @@ const authSlice = createSlice({
       state.userInfo = user;
       localStorage.setItem('token', user.token); // Directly store the token in localStorage
     },
-    updateRegistrationData: (state, action) => {
-      state.registrationData = { ...state.registrationData, ...action.payload };
-    },
+   
     logout: (state, action) => {
       state.userInfo = null;
-      localStorage.removeItem('userInfo');
+      localStorage.removeItem('token');
     },
   },
 });

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { setCredentials } from 'slices/authSlice';
+import { setCredentialsRegistration } from 'slices/registrationSlice';
 import { useRegisterMutation } from 'slices/userApiSlice';
 
 const TeacherFormStep3 = ({ onBack, onConfirm }) => {
@@ -11,7 +11,8 @@ const TeacherFormStep3 = ({ onBack, onConfirm }) => {
     const [register, { isLoading }] = useRegisterMutation();
 
     // Fetch the accumulated registration data from the Redux state
-    const registrationData = useSelector((state) => state.auth.registrationData);
+    const formData = useSelector(state => state.registration.formData);
+
     const { userInfo } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -24,8 +25,8 @@ const TeacherFormStep3 = ({ onBack, onConfirm }) => {
         e.preventDefault();
      
             try {
-                const result = await register(registrationData).unwrap();
-                dispatch(setCredentials({ ...result }));
+                const result = await register(formData).unwrap();
+                dispatch(setCredentialsRegistration({ ...result }));
                 console.log(result);
                 navigate('/admin/default');
             } catch (err) {

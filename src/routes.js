@@ -20,6 +20,7 @@ import {
   MdLock,
 } from "react-icons/md";
 import Register from "views/auth/register";
+import UnauthorizedPage from "views/auth/unauthorized";
 
 
 const routes = [
@@ -67,6 +68,14 @@ const routes = [
     component: <Register />,
   },
   
+
+  {
+    name: "unauthorized",
+    layout: "/auth",
+    path: "unauthorized",
+    icon: <MdLock className="h-6 w-6" />,
+    component: <UnauthorizedPage />,
+  },
   
   {
     name: "RTL Admin",

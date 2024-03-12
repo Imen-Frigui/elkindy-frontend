@@ -1,16 +1,21 @@
 import authImg from "assets/img/auth/auth1.png";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { updateRegistrationData } from 'slices/authSlice';
+import { updateFormData } from "slices/registrationSlice";
 
 const TeacherFormStep2 = ({ onBack, onNext }) => {
     const dispatch = useDispatch();
-    const formData = useSelector(state => state.auth.registrationData);
+    const formData = useSelector(state => state.registration.formData);
 
-
-      const handleChange = (e) => {
-        const updatedData = { ...formData, [e.target.name]: e.target.value };
-        dispatch(updateRegistrationData(updatedData));
+    const handleChange = (e) => {
+        // Dispatch the updated value for the specific field that changed.
+        dispatch(updateFormData({ field: e.target.name, value: e.target.value }));
     };
+
+    useEffect(() => {
+        console.log(formData);
+      }, [formData]);
+
 
     return (
         <div className="flex flex-col lg:flex-row w-full">

@@ -8,6 +8,10 @@ const RegisterPage = () => {
     const [activeTab, setActiveTab] = useState('teacher');
     const [activeStep, setActiveStep] = useState(0);
 
+   
+  
+    
+    
     const handleNext = () => setActiveStep((prev) => prev + 1);
     const handleBack = () => setActiveStep((prev) => prev - 1);
     const handleSubmit = () => console.log('Submit form data here');
