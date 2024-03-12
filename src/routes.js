@@ -20,7 +20,7 @@ import {
   MdBarChart,
   MdPerson,
   MdLock,
-  MdBook
+  MdBook,
 } from "react-icons/md";
 
 const routes = [
@@ -97,5 +97,5 @@ const routes = [
     hide: true,
   },*/
 
-];
+]
 export default routes;

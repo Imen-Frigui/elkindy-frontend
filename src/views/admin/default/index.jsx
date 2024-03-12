@@ -22,6 +22,7 @@ const Dashboard = () => {
       {/* Card widget */}
 
 
+
       <div className="mt-3 grid  grid-cols-1 gap-5 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-4 ">
         <Widget
           icon={<FaUserGraduate className="h-7 w-7 text-kindydarkblue" />}
@@ -51,7 +52,7 @@ const Dashboard = () => {
         <Widget
           icon={<MdBarChart className="h-7 w-7 text-kindydarkblue" />}
           title={"Instruments"}
-
+          
           subtitle={"55"}
 
         />

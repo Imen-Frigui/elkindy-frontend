@@ -5,9 +5,11 @@ import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
 
+
 import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
+
 
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
@@ -97,6 +99,10 @@ export default function Admin(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
+
+                <Route path="/courses" element={<CoursesList />}/>
+                <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+
                 <Route
                   path="/marketplace/create"
                   element={<CreateInstrument />}
@@ -112,6 +118,7 @@ export default function Admin(props) {
                 <Route
                     path="/courses" element={<CoursesList />}/>
                 <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+
 
                 <Route
                   path="/marketplace/create"
