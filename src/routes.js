@@ -12,17 +12,19 @@ import { FaUserTie, FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
+import CoursesList from "views/course/CoursesList";
 
-// Icon Imports
 import {
   MdHome,
   MdOutlineShoppingCart,
   MdBarChart,
   MdPerson,
   MdLock,
+  MdBook
 } from "react-icons/md";
 
 const routes = [
+
   {
     name: "ElKindy Dashboard",
     layout: "/admin",
@@ -78,11 +80,13 @@ const routes = [
     path: "tickets",
     icon: <GiTicket className="h-6 w-6" />,
   },
+
   {
     name: "Courses List",
     layout: "/admin",
     path: "courses",
     icon: <MdBook className="h-6 w-6" />,
+    component: <CoursesList />,
   },
 
     /*

@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/" element={<Navigate to="/admin" replace />} />
         <Route path="auth/*" element={<AuthLayout />} />
         <Route path="admin/*" element={<AdminLayout />} >
-            <Route path="courses" element={<CoursesList />} />
+            <Route path="courses"  element={<CoursesList />}/>
             <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
             <Route path="events/details/:eventId" element={<EventDetails />} />
             <Route path="events/edit/:eventId" element={< UpdateEvent />} />
@@ -25,7 +25,6 @@ const App = () => {
 
         </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
-        {/* <Route path="/assign-teachers/:courseId" element={<AssignTeachers />} /> */}
     </Routes>
   );
 };

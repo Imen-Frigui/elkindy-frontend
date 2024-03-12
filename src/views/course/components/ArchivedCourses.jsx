@@ -18,7 +18,7 @@ const ArchivedCourses = () => {
             const fetchedCourses = await fetchArchivedCourses();
             setArchivedCourses(fetchedCourses);
         };
-        getCourses().then(r => console.log(r));
+        getCourses();
     }, []);
 
     return (
@@ -46,8 +46,6 @@ const ArchivedCourses = () => {
                                 </div>
                             </div>
                         ))}
-
-
                     </div>
                 </div>
             </div>
