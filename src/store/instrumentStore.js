@@ -9,6 +9,7 @@ const useInstrumentStore = create((set) => ({
     try {
       set({ loading: true });
       const { data } = await DataService.getPublicContent(status, sort);
+      console.log(data)
       set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {
@@ -16,13 +17,14 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  postInstrument: async (data, status) => {
+  postInstrument: async (postData) => {
     try {
       set({ loading: true });
-      const { response } = await DataService.addInstrument(data, status);
+      const { data } = await DataService.addInstrument(postData);
+      console.log(data)
       set({ loading: false });
+      return data;
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -30,7 +32,7 @@ const useInstrumentStore = create((set) => ({
     try {
       set({ loading: true });
       const { data } = await DataService.getInstrument(id);
-      console.log("data");
+      console.log(data);
       set({ instrument: data.instrument });
       set({ loading: false });
     } catch (error) {

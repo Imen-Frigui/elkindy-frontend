@@ -10,10 +10,13 @@ import { Link, useParams } from "react-router-dom";
 import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
 import { useQuery } from "../../../hooks/useQuery";
+// import useShowToast from "../../../hooks/useShowToast";
 
 const Marketplace = ({ location }) => {
   const { type } = useParams();
   const query = useQuery();
+  // const showToast = useShowToast();
+
   const [status, setStatus] = useState("All");
   const [age, setAge] = useState("3-5");
   const [sort, setSort] = useState("");
@@ -24,6 +27,8 @@ const Marketplace = ({ location }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // showToast("Success", "Post added", "success");
+
       if (searchQuery) {
         await searchInstruments(
           status.toLocaleLowerCase() !== "all"
@@ -92,7 +97,7 @@ const Marketplace = ({ location }) => {
           </div>
           <button
             onClick={handleShowFilters}
-            className="border-transparent flex items-center border-1 w-58 mb-3 rounded-lg  bg-kindyorange py-2 px-4 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
+            className="border-transparent border-1 w-58 mb-3 flex items-center rounded-lg  bg-kindyorange py-2 px-4 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +105,7 @@ const Marketplace = ({ location }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="h-5 w-5 mr-2"
+              className="mr-2 h-5 w-5"
             >
               <path
                 strokeLinecap="round"

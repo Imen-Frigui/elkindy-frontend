@@ -1,7 +1,8 @@
 import instrumentValidation from "validations/instrumentValidation";
 import { ToastContainer, toast } from "react-toastify";
 import { Formik, Form } from "formik";
-
+import { useNavigate } from "react-router-dom";
+// import useShowToast from "../../../../hooks/useShowToast";
 import {
   Input,
   FormLayout,
@@ -20,11 +21,13 @@ import {
 import { useState } from "react";
 import useInstrumentStore from "store/instrumentStore";
 
-function CreateInstrument({ history }) {
-  const postInstrument = useInstrumentStore((state) => state.postInstrument);
-  const loading = useInstrumentStore((state) => state.loading);
+function CreateInstrument() {
+  const { postInstrument, loading } = useInstrumentStore();
   const [category, setCategory] = useState("Exchange");
   const [brand, setBrand] = useState("");
+  const navigate = useNavigate();
+  // const showToast = useShowToast();
+
   const brands = [
     { name: "Gibson" },
     { name: "Steinway & Sons" },
@@ -57,28 +60,29 @@ function CreateInstrument({ history }) {
   };
 
   const handleSubmit = async (values, setSubmitting, setStatus) => {
+    let postData = {
+      title: values.title,
+      details: values.details,
+      status: category.toLowerCase(),
+      brand: brand,
+    };
+    if (category.toLowerCase() === "buy") {
+      postData.price = values.price;
+    }
     setSubmitting(true);
-    console.log("Form values:", values);
-    console.log(category);
-
-    // const statusToast = toast.loading("Please wait...", options);
     try {
-      const response = await postInstrument(values, category.toLowerCase());
+      const response = await postInstrument(postData);
+      console.log(response);
+
       if (response.success) {
+        // showToast("Success", "Post added", "success");
+
         // setTimeout(() => {
-        //   toast.update(statusToast, {
-        //     render: "All is good",
-        //     autoClose: 1000,
-        //     type: "success",
-        //     closeButton: true,
-        //     isLoading: false,
-        //   });
-        // }, 1000);
+        //   navigate("/admin/marketplace");
+        // }, 500);
       }
     } catch (err) {
-      setStatus({
-        error: err.response?.data?.error || "Error occurred, please try again",
-      });
+      // showToast("Error", err, "error");
       toast({
         render: err.response?.data?.error || "Error occurred, please try again",
         type: "error",
@@ -110,21 +114,21 @@ function CreateInstrument({ history }) {
               status: category,
               brand: brand,
               details: "",
-              price:""
+              price: 0,
             }}
             validationSchema={instrumentValidation}
             onSubmit={(values, { setSubmitting, setStatus }) => {
               handleSubmit(values, setSubmitting, setStatus);
             }}
           >
-            {({ isSubmitting, isValid, status, ...formikProps }) => (
+            {({ isSubmitting, isValid, status }) => (
               <>
                 <FormTitle text="Share Your Musical Gear with the Community">
                   <p className="font-jost text-lg text-gray-600">
                     Welcome to El Kindy Music School's Marketplace! We're
                     excited for you to share your musical gear with the
                     community.
-                  </p>{" "}
+                  </p>
                 </FormTitle>
 
                 <Form>
@@ -177,7 +181,7 @@ function CreateInstrument({ history }) {
                       {category == "buy" ? (
                         <Input
                           className={"w-1/2"}
-                          placeholder=" Price"
+                          placeholder="Price"
                           status={status}
                           name="price"
                           id="price"
@@ -211,7 +215,9 @@ function CreateInstrument({ history }) {
                       className="flex items-center  bg-kindyblue hover:bg-kindydarkblue"
                     >
                       {loading ? (
-                        <span className="mr-2 h-5 w-5 animate-spin rounded-full border-b-2 border-gray-50"></span>
+                        <span className="mr-2 h-5 w-5 animate-spin rounded-full border-b-2 border-gray-50">
+                          +
+                        </span>
                       ) : (
                         <span className="mr-2 w-5 rounded-full border-gray-50 font-semibold">
                           +

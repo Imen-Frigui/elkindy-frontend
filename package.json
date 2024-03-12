@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/close-button": "^2.1.1",
     "@chakra-ui/hooks": "^2.1.4",
     "@chakra-ui/modal": "^2.2.9",
     "@chakra-ui/popover": "^2.1.8",
