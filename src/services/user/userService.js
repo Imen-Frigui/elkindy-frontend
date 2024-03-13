@@ -27,7 +27,7 @@ export const fetchTeachers = async () => {
 export const validateSession = async () => {
     
     try {
-      const response = await axios.get('http://localhost:3030/api/auth/validate-session', {
+      const response = await axios.get('http://localhost:3000/api/auth/validate-session', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming the token is stored in localStorage
         }

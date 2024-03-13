@@ -107,9 +107,7 @@ module.exports = withMT({
         "99p": "99%",
       },
       fontFamily: {
-        jost: ["Jost", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-        dm: ["DM Sans", "sans-serif"],
+        body: ["Jost"]
       },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
@@ -137,8 +135,6 @@ module.exports = withMT({
       "4xl-max": { max: "1850px" },
     },
     colors: () => ({
-      pageBackground: "#f7f5ef",
-      customBackground: "#F7F8FD",
       white: "#ffffff",
       lightPrimary: "#F4F7FE",
       blueSecondary: "#4318FF",
@@ -338,6 +334,8 @@ module.exports = withMT({
         800: "#190793",
         900: "#11047A",
       },
+      black: '#000000',
+      blackOpacity: 'rgba(0, 0, 0, 0.7)',
       shadow: {
         500: "rgba(112, 144, 176, 0.08)",
       },
