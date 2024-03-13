@@ -1,3 +1,6 @@
+import axios from "axios";
+import { useSelector } from "react-redux";
+
 const API_BASE_URL = 'http://localhost:3000/api';
 export const fetchTeachers = async () => {
     try {
@@ -19,4 +22,22 @@ export const fetchTeachers = async () => {
         return [];
     }
 };
+
+
+export const validateSession = async () => {
+    
+    try {
+      const response = await axios.get('http://localhost:3000/api/auth/validate-session', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming the token is stored in localStorage
+        }
+      });
+      return response;
+    } catch (error) {
+      console.error('Error validating session:', error);
+      throw error;
+    }
+  };
+
+
 
