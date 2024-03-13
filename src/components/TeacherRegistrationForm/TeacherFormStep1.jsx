@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import authImg from "assets/img/auth/auth1.png";
+import authImg from "assets/img/auth/register1.jpg";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import{updateRegistrationData} from 'slices/authSlice';
@@ -21,6 +21,7 @@ const TeacherFormStep1 = ({ onNext }) => {
         firstName: Yup.string().required('First Name is required'),
         lastName: Yup.string().required('Last Name is required'),
         email: Yup.string().email('Invalid email').required('Email is required'),
+        dateOfBirth: Yup.date().required('Date of Birth is required'),
         phoneNumber: Yup.string()
         .required('Phone number is required')
         .matches(/^[0-9]{2}[0-9]{3}[0-9]{3}$/,"Invalid phone number" ),
@@ -36,6 +37,8 @@ const TeacherFormStep1 = ({ onNext }) => {
     });
     useEffect(() => {
         console.log(formData);
+        dispatch(setRole('teacher'))
+
       }, [formData]);
 
     const handleChange = (e) => {
@@ -45,26 +48,58 @@ const TeacherFormStep1 = ({ onNext }) => {
         dispatch(setRole('teacher'))
             // Automatically update the username when first or last name changes
           console.log(formData);
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: null // or null, or ''
+          }));
       };
       const handleNext = async (e) => {
-        
-        console.log(formData);
         e.preventDefault();
         try {
-          await schema.validate(formData, { abortEarly: false });
-        
-          // Handle next steps, like navigation or API calls
-          onNext();
+            await schema.validate(formData, { abortEarly: false });
+    
+            // Check email existence
+            const emailExistsResponse = await fetch(`http://localhost:3030/api/auth/check-email/${formData.email}`);
+            if (emailExistsResponse.ok) {
+                const data = await emailExistsResponse.json();
+                if (data.exists) {
+                    setErrors(prevErrors => ({
+                        ...prevErrors,
+                        email: 'Email already exists'
+                    }));
+                    return;
+                }
+            } else {
+                console.error('Failed to fetch email existence:', emailExistsResponse.statusText);
+            }
+    
+            // Check phone number existence
+            const phoneExistsResponse = await fetch(`http://localhost:3030/api/auth/check-phone/${formData.phoneNumber}`);
+            if (phoneExistsResponse.ok) {
+                const data = await phoneExistsResponse.json();
+                if (data.exists) {
+                    setErrors(prevErrors => ({
+                        ...prevErrors,
+                        phoneNumber: 'Phone number already exists'
+                    }));
+                    return;
+                }
+            } else {
+                console.error('Failed to fetch phone number existence:', phoneExistsResponse.statusText);
+            }
+    
+            // If validations pass and no errors found, proceed to the next step
+            onNext();
         } catch (err) {
-          // Handle validation errors
-          const newErrors = err.inner.reduce((acc, error) => ({
-            ...acc,
-            [error.path]: error.message,
-        }), {});
-        setErrors(newErrors);
+            // Handle validation errors
+            const newErrors = err.inner.reduce((acc, error) => ({
+                ...acc,
+                [error.path]: error.message,
+            }), {});
+            setErrors(newErrors);
         }
-      };
-
+    };
+    
     return (
         <div className="flex flex-col lg:grid lg:grid-cols-2 items-center">
                     <div className="bg-customBackground ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full"
@@ -117,6 +152,19 @@ const TeacherFormStep1 = ({ onNext }) => {
                         onChange={handleChange}
                         error={Boolean(errors.email)}
                         helperText={errors.email}
+                    />
+
+                      <Input 
+                        type="date" 
+                        label='Birth Date'
+                        placeholder="12-345-678" 
+                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        value={formData.dateOfBirth || ''}
+                        onChange={handleChange}
+                        name="dateOfBirth"
+                      
+                        error={Boolean(errors.dateOfBirth)}
+                        helperText={errors.dateOfBirth}
                     />
        
                     
@@ -179,7 +227,8 @@ const TeacherFormStep1 = ({ onNext }) => {
                     />
 
 
-                    <button type="submit"  className="mt-2 w-full bg-blue-700 py-[12px] text-base font-medium text-white">
+                    <button type="submit"      className="mt-2 w-full bg-kindyorange py-[12px] text-base font-medium text-white rounded-tl-3xl rounded-br-3xl hover:bg-transparent hover:border-kindyorange hover:border-2 hover:text-blue-700 border-2 border-white/0 hover:bg-white/0 hover:text-kindyorange"
+>
                         Next
                     </button>
                 </form>
