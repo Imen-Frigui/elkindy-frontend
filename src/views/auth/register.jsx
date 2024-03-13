@@ -5,7 +5,7 @@ import TeacherFormStep3 from 'components/TeacherRegistrationForm/TeacherFormStep
 import StudentFormStep1 from 'components/StudentRegistrationForm/StudentStep1';
 
 const RegisterPage = () => {
-    const [activeTab, setActiveTab] = useState('teacher');
+    const [activeTab, setActiveTab] = useState('student');
     const [activeStep, setActiveStep] = useState(0);
 
    

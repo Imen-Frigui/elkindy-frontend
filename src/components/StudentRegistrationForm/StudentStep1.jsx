@@ -39,7 +39,7 @@ const StudentFormStep1 = ({ onNext }) => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
             .required('Confirm password is required'),
-            preferedInstrument: Yup.array().min(1, 'preferedInstrument is required').required('preferedInstrument is required'),
+            preferedInstrument: Yup.array().min(1, 'prefered Instrumens is required').required('prefered Instruments is required'),
     });
 
     useEffect(() => {
@@ -127,7 +127,7 @@ const StudentFormStep1 = ({ onNext }) => {
                 <form onSubmit={submitHandler}>
                     <div className="flex mt-7 flex-col md:flex-row md:space-x-4">
                         <Input 
-                            className='flex-1  rounded-xl border-none  bg-white/0 p-3 text-sm '
+                            className='flex-1  dark:text-gray-500  text-gray-800  rounded-xl border-none  bg-white/0 p-3 text-lg '
                             icon={<FontAwesomeIcon icon={faUser} />}
                             label='First Name'
                             variant='outlined'
@@ -140,7 +140,7 @@ const StudentFormStep1 = ({ onNext }) => {
                             helpertext= {errors.firstName}
                         />
                         <Input
-                            className='flex-1  rounded-xl border-none mb-3 bg-white/0 p-3 text-sm '
+                            className='flex-1   dark:text-gray-500  text-gray-800 rounded-xl border-none mb-3 bg-white/0 p-3 text-lg '
                             icon={<FontAwesomeIcon icon={faUser} />}
                             label="Last Name" 
                             variant='outlined'
@@ -158,7 +158,7 @@ const StudentFormStep1 = ({ onNext }) => {
                         label="Email Address"
                         placeholder="Email"
                         name='email'
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 "
                         value={formData.email || ''}
                         onChange={handleChange}
                         error={Boolean(errors.email)}
@@ -169,7 +169,7 @@ const StudentFormStep1 = ({ onNext }) => {
                         type="date" 
                         label='Birth Date'
                         placeholder="Birth Date" 
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center justify-center dark:text-gray-500  text-gray-800 rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 "
                         value={formData.dateOfBirth || ''}
                         onChange={handleChange}
                         name="dateOfBirth"
@@ -182,7 +182,7 @@ const StudentFormStep1 = ({ onNext }) => {
                         name='password'
                         icon={<FontAwesomeIcon icon={faLock} />}
                         label="Password" 
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3"
+                        className="mt-7 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3"
                         value={formData.password || ''}
                         onChange={handleChange}
                         error={Boolean(errors.password)}
@@ -212,7 +212,7 @@ const StudentFormStep1 = ({ onNext }) => {
                         type="password"
                         icon={<FontAwesomeIcon icon={faCheck} />}
                         label="Confirm Password"
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 "
                         name='confirmPassword'
                         value={formData.confirmPassword}
                         onChange={handleChange}
@@ -224,7 +224,7 @@ const StudentFormStep1 = ({ onNext }) => {
                         type="text" 
                         label='Phone Number'
                         placeholder="Phone Number" 
-                        className="mt-7 mb-3 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 mb-3 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 "
                         value={formData.phoneNumber || ''}
                         onChange={handleChange}
                         name="phoneNumber"
@@ -234,9 +234,11 @@ const StudentFormStep1 = ({ onNext }) => {
                     />
 
                     {/* New input for preferred instrument */}
-                
+                 
+   
                     <div
-      className="bg-gray-50 mt-7 ">
+      className="bg-gray-50 mt-7  dark:bg-gray-800 ">
+           <label htmlFor="Prefered Instrument" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Prefered Instrument:</label>
                 <TagsInput
                 
                 beforeAddValidate={(tag) => {
@@ -250,7 +252,7 @@ const StudentFormStep1 = ({ onNext }) => {
                
                 classNames={{
                     container: ".rti--container",
-                    tag: "bg-blue-500 text-blue rounded-lg px-2 py-1 mr-2 dark:text-gray-300 dark:bg-gray-700",
+                    tag: "bg-blue-500 text-blue text-lg border border-gray-800 rounded-lg px-2 py-1 mr-2 dark:text-white dark:bg-gray-800",
                     input: "border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring focus:border-blue-500"
                 }}
                 value={selected}
