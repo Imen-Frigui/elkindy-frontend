@@ -98,7 +98,7 @@ export const archiveCourse = async (courseId) => {
 
 export const fetchArchivedCourses = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/courses/courses/archived`);
+        const response = await fetch(`${API_BASE_URL}/courses/arch/archived`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -110,23 +110,24 @@ export const fetchArchivedCourses = async () => {
 };
 
 export const updateCourseTeachers = async (courseId, teacherIds) => {
+    const stringifiedTeacherIds = JSON.stringify({ teacherIds });
+    console.log('Stringified Teacher Ids:', stringifiedTeacherIds);
     try {
-        const response = await fetch(`${API_BASE_URL}/courses/${courseId}/teachers`, {
+        const response = await fetch(`${API_BASE_URL}/courses/details/${courseId}/teachers`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                teacherIds: teacherIds,
-            }),
+            body: JSON.stringify(teacherIds),
         });
-        if (response.ok) {
-            return await response.json();
-        } else {
-            throw new Error('Network response was not ok.');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok. Status: ${response.status}`);
         }
+        return await response.json();
     } catch (error) {
-        console.error("Failed to fetch archived courses:", error);
+        console.error("Failed to update course teachers:", error);
+        throw error;
     }
 };
+
 
