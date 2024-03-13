@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
-import Banner from "./components/Banner";
+// import Banner from "./components/Banner";
 
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);
@@ -98,7 +98,7 @@ console.log("fetching")
 
   return (
     <>
-      <Banner />
+      {/* <Banner /> */}
       <div className="mt-6 flex flex-col">
         <div className="overflow-x-auto rounded-lg">
           <div className="inline-block min-w-full align-middle">

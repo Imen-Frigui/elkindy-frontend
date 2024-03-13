@@ -2,7 +2,7 @@ import instrumentValidation from "validations/instrumentValidation";
 import { ToastContainer, toast } from "react-toastify";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-// import useShowToast from "../../../../hooks/useShowToast";
+import useShowToast from "../../../../hooks/useShowToast";
 import {
   Input,
   FormLayout,
@@ -26,7 +26,7 @@ function CreateInstrument() {
   const [category, setCategory] = useState("Exchange");
   const [brand, setBrand] = useState("");
   const navigate = useNavigate();
-  // const showToast = useShowToast();
+  const showToast = useShowToast();
 
   const brands = [
     { name: "Gibson" },
@@ -73,23 +73,14 @@ function CreateInstrument() {
     try {
       const response = await postInstrument(postData);
       console.log(response);
-
+      showToast("Post added", "success");
       if (response.success) {
-        // showToast("Success", "Post added", "success");
-
-        // setTimeout(() => {
-        //   navigate("/admin/marketplace");
-        // }, 500);
+        setTimeout(() => {
+          navigate("/admin/marketplace");
+        }, 800);
       }
     } catch (err) {
-      // showToast("Error", err, "error");
-      toast({
-        render: err.response?.data?.error || "Error occurred, please try again",
-        type: "error",
-        autoClose: 2000,
-        closeButton: true,
-        isLoading: false,
-      });
+      showToast("Error occurred, please try again", "error");
     } finally {
       setSubmitting(false);
     }

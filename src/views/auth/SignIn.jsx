@@ -1,11 +1,39 @@
+/*
 import InputField from "components/fields/InputField";
 import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c54041064cbb937d61f944b7b578a6a40a1e1894
+import authImg from "assets/img/auth/auth1.png";
+import React, { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignIn() {
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+  });
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+
+<<<<<<< HEAD
+
+export default function SignIn() {
+
+=======
+>>>>>>> c54041064cbb937d61f944b7b578a6a40a1e1894
   return (
     <div className=" mt-16 mb-16 flex h-full w-full items-center justify-center rounded-3xl bg-bluebg  p-10 shadow-lg md:mx-0 md:px-10 lg:mb-10 lg:items-center lg:justify-start">
-      {/* Sign in section */}
+      {/* Sign in section
       <div className="mt-[5vh] w-full max-w-full flex-col items-center md:pl-4 lg:pl-0 xl:max-w-[420px]">
         <h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white">
           Sign In
@@ -26,7 +54,7 @@ export default function SignIn() {
           <p className="text-base text-gray-600 dark:text-white"> or </p>
           <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
         </div>
-        {/* Email */}
+        {/* Email
         <InputField
           variant="auth"
           extra="mb-3"
@@ -36,7 +64,7 @@ export default function SignIn() {
           type="text"
         />
 
-        {/* Password */}
+        {/* Password
         <InputField
           variant="auth"
           extra="mb-3"
@@ -45,7 +73,7 @@ export default function SignIn() {
           id="password"
           type="password"
         />
-        {/* Checkbox */}
+        /* Checkbox
         <div className="mb-4 flex items-center justify-between px-2">
           <div className="flex items-center">
             <Checkbox />
@@ -78,3 +106,4 @@ export default function SignIn() {
     </div>
   );
 }
+*/

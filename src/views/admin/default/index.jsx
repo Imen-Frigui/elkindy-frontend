@@ -3,7 +3,6 @@ import WeeklyRevenue from "views/admin/default/components/WeeklyRevenue";
 import TotalSpent from "views/admin/default/components/TotalSpent";
 import PieChartCard from "views/admin/default/components/PieChartCard";
 import { IoMdHome } from "react-icons/io";
-import { IoDocuments } from "react-icons/io5";
 import { MdBarChart, MdDashboard } from "react-icons/md";
 import { FaUserGraduate,FaUserTie  } from "react-icons/fa";
 
@@ -21,12 +20,12 @@ const Dashboard = () => {
   return (
     <div>
       {/* Card widget */}
-
       <div className="mt-3 grid  grid-cols-1 gap-5 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-4 ">
         <Widget
           icon={<FaUserGraduate className="h-7 w-7 text-kindydarkblue" />}
           title={"Students"}
           subtitle={"340"}
+
         />
         <Widget
           icon={<FaUserTie className="h-6 w-6 text-kindydarkblue" />}
@@ -36,7 +35,9 @@ const Dashboard = () => {
         <Widget
           icon={<MdBarChart className="h-7 w-7 text-kindydarkblue" />}
           title={"Instruments"}
-          subtitle={"50"}
+          
+          subtitle={"55"}
+
         />
         <div className="space-y-5 md:row-span-3 ">
           <MiniCalendar />

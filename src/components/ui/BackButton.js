@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ChevronLeftIcon } from "@heroicons/react/solid";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 export default function BackButton({ className, iconColor }) {
   return (
     <Link
