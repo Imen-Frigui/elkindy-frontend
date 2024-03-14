@@ -25,6 +25,9 @@ import {
   MdPerson,
   MdLock
 } from "react-icons/md";
+
+import AssignTeachers from "./views/course/AssignTeachers";
+
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 
@@ -90,6 +93,7 @@ const routes = [
     icon: <MdBook className="h-6 w-6" />,
     component: <CoursesList />,
   },
+
   {
     name: "All Exams",
     layout: "/admin",
@@ -137,6 +141,8 @@ const routes = [
     component: <AssignTeachers />,
     hide: true,
   },*/
+
 ];
+
 export default routes;
 
