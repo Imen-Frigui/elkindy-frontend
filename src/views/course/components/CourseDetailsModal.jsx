@@ -2,6 +2,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { deleteCourse } from '../../../services/course/courseService';
+
 
 const style = {
     position: 'absolute',
@@ -14,8 +16,22 @@ const style = {
     p: 4,
 };
 
-function CourseDetailsModal({ course, isOpen, onClose }) {
+function CourseDetailsModal({ course, isOpen, onClose, onCourseDeleted }) {
     if (!isOpen) return null;
+
+    const handleDelete = async () => {
+        if(window.confirm("Are you sure you want to delete this course?")) {
+            try {
+                await deleteCourse(course._id);
+                alert("Course deleted successfully!");
+                onCourseDeleted();
+                onClose();
+            } catch (error) {
+                console.error("Failed to delete course:", error);
+                alert("Failed to delete the course.");
+            }
+        }
+    };
 
     return (
         <Modal
@@ -34,6 +50,7 @@ function CourseDetailsModal({ course, isOpen, onClose }) {
                 <p><strong>Price:</strong> ${course.price}</p>
                 <p><strong>Start Date:</strong> {new Date(course.startDate).toLocaleDateString()}</p>
                 <p><strong>End Date:</strong> {new Date(course.endDate).toLocaleDateString()}</p>
+                <Button onClick={handleDelete} color="error">Delete</Button>
                 <Button onClick={onClose}>Close</Button>
             </Box>
         </Modal>
