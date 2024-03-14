@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/solid";
 
 function AutoCompleteInput({ options, onChange, value }) {
   const [selected, setSelected] = useState(options[0]);
@@ -25,7 +25,7 @@ function AutoCompleteInput({ options, onChange, value }) {
             onChange={(event) => setQuery(event.target.value)}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex cursor-pointer  items-center rounded-lg pr-2">
-            <SelectorIcon
+            <ChevronUpDownIcon
               className="h-5 w-5 text-gray-400"
               aria-hidden="true"
             />

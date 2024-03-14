@@ -4,7 +4,9 @@ export const fetchEvents = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/events`);
         if (response.ok) {
-            return await response.json();
+            const events = await response.json();
+            // Filter out archived events here if needed
+            return events.filter(event => !event.isArchived); 
         } else {
             throw new Error('Network response was not ok.');
         }
@@ -79,4 +81,50 @@ export const deleteEvent = async (eventId) => {
 };
 
 
+export const archiveEvent = async (eventId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/events/archiveEvent/${eventId}`, {
+            method: 'PATCH' 
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("Failed to archive event:", error);
+    }
+};
 
+
+export const fetchArchivedEvents = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/events/archived`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+
+export const restoreEvent = async (eventId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/events/restoreEvent/${eventId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Network response was not ok.');
+      }
+    } catch (error) {
+      console.error("Failed to restore event:", error);
+    }
+  };
