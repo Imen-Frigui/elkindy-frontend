@@ -466,7 +466,7 @@ const ExamsList = () => {
                                                     Update
                                                 </ButtonComponent>
                                                 {/* <button onClick={handleDrawerClose} className="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button> */}
-                                                <div class="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl bg-black p-2 hover:bg-slate-200">
+                                                <div class="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl  p-2 hover:bg-slate-200">
 
                                                     <button onClick={handleDrawerClose} className="ml-4 inline-flex justify-center items-center text-gray-500 bg-kindyyellowlight hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-navy-900 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
                                                 </div>
@@ -510,7 +510,7 @@ const ExamsList = () => {
                                             ))}
                                         </div>
 
-                                        <div class="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl bg-black p-2 hover:bg-slate-200">
+                                        <div class="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200">
 
                                             <button onClick={handleDrawerClose4} className="ml-4 inline-flex justify-center items-center text-kindydarkblue bg-kindyyellowlight hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-kindydarkblue dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
                                         </div>
