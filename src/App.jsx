@@ -24,8 +24,6 @@ const App = () => {
       <Route path="sign-in" element={<SignIn />} />
         <Route path="register" element={<RegisterPage/>}/>
           
-     
-      
       <Route element={<PrivateRoute allowedRoles={['admin',"student"]} />}>
         <Route path="admin/*" element={<AdminLayout />}>
         </Route>
