@@ -34,8 +34,6 @@ function CourseDetailsModal({ course, isOpen, onClose }) {
                 <p><strong>Price:</strong> ${course.price}</p>
                 <p><strong>Start Date:</strong> {new Date(course.startDate).toLocaleDateString()}</p>
                 <p><strong>End Date:</strong> {new Date(course.endDate).toLocaleDateString()}</p>
-                <p><strong>Maximum Students:</strong> {course.maxStudents}</p>
-                <p><strong>Teacher:</strong> {course.teacher.map(teacher => teacher.name).join(', ')}</p>
                 <Button onClick={onClose}>Close</Button>
             </Box>
         </Modal>

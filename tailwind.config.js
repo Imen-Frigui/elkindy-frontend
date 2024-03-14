@@ -151,9 +151,10 @@ module.exports = withMT({
       kindyyellow: '#FCCB67',
       kindygray: '#F7F5EF',
       fontcolor: '#3A4374',
+      lightblue :'#f4fbff',
       bluebg: '#F7F8FD',
-
-
+      lightkindydarkblue :'#2f82a4',
+      kindyyellowlight :'#ffd26d',
       gray: {
         50: "#f8f9fa",
         100: "#edf2f7",

@@ -5,6 +5,7 @@ import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import CoursesList from "./views/course/CoursesList";
+import EvaluationList from "./views/teacherExam/evaluation";
 import EventsList from "./views/events/EventsList";
 import TicketsList from "./views/tickets/TicketsList";
 import AssignTeachers from "./views/course/AssignTeachers";
@@ -36,6 +37,8 @@ const App = () => {
 
         </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
+        <Route path="evaluations" element={<EvaluationList />} />
+
         {/* <Route path="/assign-teachers/:courseId" element={<AssignTeachers />} /> */}
     </Routes>
   );
