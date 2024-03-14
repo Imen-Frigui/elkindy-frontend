@@ -35,7 +35,7 @@ const Dashboard = () => {
         <Widget
           icon={<MdBarChart className="h-7 w-7 text-kindydarkblue" />}
           title={"Instruments"}
-          
+
           subtitle={"55"}
 
         />

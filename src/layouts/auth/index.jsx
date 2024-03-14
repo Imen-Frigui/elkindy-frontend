@@ -50,13 +50,10 @@ export default function Auth() {
                     path="/"
                     element={<Navigate to="/auth/sign-in" replace />}
                   />
+                  
                 </Routes>
-                <div className="absolute right-0 hidden h-full min-h-screen md:block lg:w-[40vw] 2xl:w-[44vw]">
-                  <div
-                    className="absolute flex h-full w-full items-end justify-center bg-cover bg-center lg:rounded-bl-[90px] lg:rounded-tl-[90px]  xl:rounded-bl-[90px] "
-                    style={{ backgroundImage: `url(${authImg})` }}
-                  />
-                </div>
+              
+                  
               </div>
               {/* <Footer /> */}
             </div>
