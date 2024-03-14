@@ -127,6 +127,8 @@ const EventsList = () => {
     toast.success("Event deleted successfully!");
   };
   const handleDetailsClick = () => {
+    console.log(selectedEvent);
+
     if (selectedEvent) {
       console.log("Selected Event:", selectedEvent);
       navigate(`/admin/events/details/${selectedEvent._id}`);

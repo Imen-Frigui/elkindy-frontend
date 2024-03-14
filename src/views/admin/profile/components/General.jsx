@@ -2,6 +2,15 @@ import Card from "components/card";
 import React from "react";
 
 const General = () => {
+
+
+
+
+
+
+
+
+  
   return (
     <Card extra={"w-full h-full p-3"}>
       {/* Header */}

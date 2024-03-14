@@ -96,6 +96,7 @@ const routes = [
     component: <EventsList />,
 
   },
+  
   {
     name: "Tickets List",
     layout: "/admin",
