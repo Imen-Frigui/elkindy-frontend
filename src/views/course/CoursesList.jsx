@@ -206,10 +206,12 @@ const CoursesList = () => {
     const handleArchiveCourse = async (courseId) => {
         try {
             // Directly call the archiveCourse function imported from courseService
+
             const response = await archiveCourse(courseId);
             if (response) {
                 // Refresh the courses list or update the state to reflect the change
-                fetchCourses().then(setCourses);
+                const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+                setCourses(updatedCourses.data);
             } else {
                 throw new Error('Failed to archive the course');
             }
