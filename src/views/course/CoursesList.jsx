@@ -1,28 +1,74 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchCourses, archiveCourse, updateCourse } from '../../services/course/courseService';
-import {useNavigate} from "react-router-dom";
-import ButtonComponent from "../../components/button/ButtonComponnent";
+import { useNavigate} from "react-router-dom";
 import AddCourse from "./components/AddCourse";
 import ArchivedCourses from "./components/ArchivedCourses";
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import Button from "@mui/material/Button";
-import Banner from "./components/Banner"
+import TourBanner from "./components/TourBanner"
+import Joyride from 'react-joyride'
+import StatCard from "./components/StatCard";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faArchive, faCheck, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+
 
 const CoursesList = () => {
+
+    const [joyrideRun, setJoyrideRun] = useState(false);
+    const [showStatCard, setShowStatCard] = useState(false);
+    const [showTourBanner, setShowTourBanner] = useState(true);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [pageSize] = useState(10);
+
+
+
+    const [steps] = useState([
+        {
+            title: 'Welcome to the Courses Page!',
+            target: '#start',
+            content: 'This is where you can add a new course.',
+            placement: 'bottom',
+        },
+
+        {
+            title: 'Welcome to the Courses Page!',
+            target: '#addd',
+            content: 'This is where you can add a new course.',
+            placement: 'bottom',
+        },
+        {
+            title: 'Add a Course',
+            target: '#archive',
+            content: 'Use this to archive a course.',
+            placement: 'bottom',
+        },
+        {
+            title: 'Edit a Course',
+            target: '#table',
+            content: 'Click here to edit an existing course.',
+            placement: 'bottom',
+         }
+
+    ]);
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+        //
+        //
+        //
+    };
+
+    const [searchQuery, setSearchQuery] = useState('');
 
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate()
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [newName, setNewName] = useState('');
-
 
     const [editCourseId, setEditCourseId] = useState(null);
     const [editCourseName, setEditCourseName] = useState('');
+
+
 
     // Start editing a course name
     const handleEditClick = (course) => {
@@ -30,13 +76,6 @@ const CoursesList = () => {
         setEditCourseName(course.title);
     };
 
-
-    const updateCourseName = async (courseId, newName) => {
-        // Assuming you have a service function to update the course
-        await updateCourse(courseId, { name: newName });
-        // Refresh course list
-        fetchCourses().then(setCourses);
-    };
 
     const handleSaveClick = async (courseId, newName) => {
         await updateCourse(courseId, { title: newName });
@@ -51,21 +90,25 @@ const CoursesList = () => {
     useEffect(() => {
         const getCourses = async () => {
             try {
-                const fetchedCourses = await fetchCourses();
+                const fetchedCourses = await fetchCourses(currentPage, pageSize);
                 if (fetchedCourses) {
-                    setCourses(fetchedCourses);
-                    console.log(fetchedCourses);
+                    setCourses(fetchedCourses.data);
+                    setTotalPages(fetchedCourses.totalPages);
                 }
             } catch (error) {
                 console.error("Failed to fetch courses:", error);
             }
         };
 
-        getCourses().then(r => console.log(r));
-    }, []);
+        getCourses();
+    }, [courses, currentPage, pageSize]);
 
     const handleCourseAdded = () => {
         fetchCourses().then(setCourses);
+    };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
     };
 
     const handleArchiveCourse = async (courseId) => {
@@ -83,204 +126,186 @@ const CoursesList = () => {
         }
     };
 
-    const handlePopoverOpen = (event, currentName) => {
-        setNewName(currentName); // Set the current name of the course to edit
-        setAnchorEl(event.currentTarget);
+    const startTour = () => {
+        if (!joyrideRun) {
+            console.log('Starting tour');
+            setJoyrideRun(true);
+            setShowTourBanner(false);
+        }
     };
-
-    const handlePopoverClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
 
     return (
         <>
-            <Banner />
-            <div className="flex flex-col mt-6">
-                <div className="overflow-x-auto rounded-lg">
-                    <div className="inline-block min-w-full align-middle">
-                        <AddCourse onCourseAdded={handleCourseAdded}/>
+            {showTourBanner && <TourBanner onStartTour={startTour} />}
+            {joyrideRun && !showStatCard && ( <Joyride
+                continuous
+                run={joyrideRun}
+                steps={steps}
+                callback={(data) => {
+                    console.log('Joyride callback data:', data);
 
-                        <div className="grid grid-cols-12 gap-4">
+                    const { status } = data;
+                    if (status === 'finished' || status === 'skipped') {
+                        setJoyrideRun(false);
+                        setShowStatCard(true);
+                    }
+                }}
+                hideCloseButton
+                scrollToFirstStep
+                showSkipButton
+                showProgress
+            />)}
 
-                            <div className="col-span-9 overflow-hidden shadow sm:rounded-lg mt-4">
-                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                                    <thead className="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col"
-                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                            Title
-                                        </th>
-                                        <th scope="col"
-                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                            Category
-                                        </th>
-                                        <th scope="col"
-                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                            Description
-                                        </th>
-                                        <th scope="col"
-                                            className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                            Actions
-                                        </th>
-                                        <th>d</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody className="bg-white dark:bg-gray-800">
-                                    {courses.map(course => (
-                                        <tr key={course._id} role="row">
-                                            <td role="cell"
-                                                className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                                <p className="font-bold">{course.title}</p>
-                                                <IconButton
-                                                    aria-describedby={id}
-                                                    variant="contained"
-                                                    onClick={(e) => handlePopoverOpen(e, course.name)}
-                                                >
-                                                    <EditIcon/>
-                                                </IconButton>
-                                                <Popover
-                                                    id={id}
-                                                    open={open}
-                                                    anchorEl={anchorEl}
-                                                    onClose={handlePopoverClose}
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'left',
-                                                    }}
-                                                >
-                                                    <Typography sx={{p: 2}}>
-                                                        Change Course Name
-                                                        <TextField
-                                                            value={newName}
-                                                            onChange={(e) => setNewName(e.target.value)}
-                                                            margin="normal"
-                                                        />
-                                                        <Button onClick={() => {
-                                                            updateCourseName(course._id, newName);
-                                                            handlePopoverClose();
-                                                        }}>
-                                                            Update
-                                                        </Button>
-                                                    </Typography>
-                                                </Popover>
-
-
-                                            </td>
-                                            <td role="cell"
-                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                                <p>{course.category}</p>
-                                            </td>
-                                            <td role="cell"
-                                                className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                                <p>{course.description}</p>
-                                            </td>
-                                            <td className="p-4 whitespace-nowrap">
-                                                <ButtonComponent
-                                                    text="Details"
-                                                    onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
-                                                    color="#FB9D37"
-                                                />
-                                                <ButtonComponent
-                                                    text="Archive"
-                                                    onClick={() => handleArchiveCourse(course._id)}
-                                                    color="red"
-                                                />
-
-                                            </td>
-                                            <td className="p-4 whitespace-nowrap">
-                                                {editCourseId === course._id ? (
-                                                    <TextField
-                                                        fullWidth
-                                                        variant="outlined"
-                                                        defaultValue={course.title}
-                                                        value={editCourseName}
-                                                        onChange={(e) => setEditCourseName(e.target.value)}
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                e.preventDefault();
-                                                                handleSaveClick(course._id, e.target.value).then(r => console.log(r));
-                                                            }
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <span
-                                                        onDoubleClick={() => handleEditClick(course)}>{course.title}</span>
-                                                )}
-                                            </td>
+            <div className="flex flex-col mt-8">
+                {showStatCard && <StatCard/>}
+                <div className="flex justify-between items-center">
+                    {/* Search bar TextField */}
+                    <TextField
+                        id="search-courses"
+                        label="Search Courses"
+                        variant="outlined"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        className="mb-4"
+                    />
+                    <a href="#!" id="addd">
+                        <AddCourse id="start" onCourseAdded={handleCourseAdded}/>
+                    </a>
+                </div>
+                <div className="grid grid-cols-12 gap-4 mt-8">
+                    <div className="col-span-9 bg-white mt-4 shadow-md rounded-lg flex flex-col justify-between">
+                                <div className=" overflow-auto  sm:rounded-lg">
+                                    <table id="table" className="p-4 w-full min-w-full min-h-full divide-y divide-gray-200 dark:divide-gray-600">
+                                        <thead className="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th scope="col"
+                                                className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                Title
+                                            </th>
+                                            <th scope="col"
+                                                className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                Category
+                                            </th>
+                                            <th scope="col"
+                                                className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                Description
+                                            </th>
+                                            <th scope="col"
+                                                className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                isInternship
+                                            </th>
+                                            <th scope="col"
+                                                className=" text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                Actions
+                                            </th>
                                         </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody className="bg-white dark:bg-gray-800">
+                                        {Array.isArray(courses) && courses.map(course => (
+                                            <tr key={course._id} role="row">
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                                    {editCourseId === course._id ? (
+                                                        <TextField
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            defaultValue={course.title}
+                                                            value={editCourseName}
+                                                            onChange={(e) => setEditCourseName(e.target.value)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    e.preventDefault();
+                                                                    handleSaveClick(course._id, e.target.value).then(r => console.log(r));
+                                                                }
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <p className="font-bold"
+                                                           onDoubleClick={() => handleEditClick(course)}>{course.title}</p>
+                                                    )}
+                                                </td>
 
-                            <div className="col-span-3 mt-4"> {/* Archived courses container */}
-                                <ArchivedCourses/> {/* Render ArchivedCourses component */}
-                            </div>
-                        </div>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                    <p>{course.category}</p>
+                                                </td>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                    <p>{course.description}</p>
+                                                </td>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                                    {course.isInternship ? (
+                                                        <FontAwesomeIcon icon={faCheck} style={{fontSize: '20px'}}
+                                                                         className="text-green-500"/>
+                                                    ) : (
+                                                        <span>---</span>
+                                                    )}
+                                                </td>
+                                                <td id="archive" className="p-4 whitespace-nowrap">
+                                                    <button
+                                                        onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
+                                                        className="button-with-tooltip">
+                                                        <FontAwesomeIcon icon={faInfoCircle}
+                                                                         style={{
+                                                                             color: '#FB9D37',
+                                                                             fontSize: '20px'
+                                                                         }}
+                                                                         className="mr-6"/>
+                                                        <span className="tooltip-text">
+                                                        Details
+                                                    </span>
+                                                    </button>
+                                                    <button onClick={() => handleArchiveCourse(course._id)}
+                                                            className="button-with-tooltip">
+                                                        <FontAwesomeIcon icon={faArchive}
+                                                                         style={{color: 'red', fontSize: '20px'}}/>
+                                                        <span className="tooltip-text">
+                                                        Archive
+                                                    </span>
+                                                    </button>
 
-                    </div>
-                </div>
-            </div>
-
-
-            {/*
-            <div
-                className="!z-5 relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:shadow-none w-full h-full px-6 pb-6 sm:overflow-x-auto">
-                <div className="relative flex items-center justify-between pt-4">
-                    <div className="text-xl font-bold text-navy-700 dark:text-white">Course Tables
-                        <div className="mt-8 overflow-x-scroll xl:overflow-hidden">
-                            <table role="table" className="w-full">
-                                <thead>
-                                <tr role="row">
-                                    <th role="columnheader"
-                                        className="border-b border-gray-200 pr-28 pb-[10px] text-start dark:!border-navy-700">
-                                        <p className="text-xs tracking-wide text-gray-600">Name</p>
-                                    </th>
-                                    <th role="columnheader"
-                                        className="border-b border-gray-200 pr-28 pb-[10px] text-start dark:!border-navy-700">
-                                        <p className="text-xs tracking-wide text-gray-600">Category</p>
-                                    </th>
-                                    <th role="columnheader"
-                                        className="border-b border-gray-200 pr-28 pb-[10px] text-start dark:!border-navy-700">
-                                        <p className="text-xs tracking-wide text-gray-600">description</p>
-                                    </th>
-                                    <th>
-
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {courses.map(course => (
-                                    <tr key={course._id} role="row">
-                                        <td role="cell" className="pt-[14px] pb-[18px] sm:text-[14px]">
-                                            <p className="text-sm font-bold text-navy-700 dark:text-white">{course.title}</p>
-                                        </td>
-                                        <td role="cell" className="pt-[14px] pb-[18px] sm:text-[14px]">
-                                            <p className="text-sm font-bold text-navy-700 dark:text-white">{course.category}</p>
-                                        </td>
-                                        <td role="cell" className="pt-[14px] pb-[18px] sm:text-[14px]">
-                                            <p className="text-sm font-bold text-navy-700 dark:text-white">{course.description}</p>
-                                        </td>
-                                        <td>
-                                            <ButtonComponent
-                                                text="Assign Teachers"
-                                                onClick={() => navigate(`/admin/courses/assign-teachers/${course._id}`)}
-                                            />
-
-                                        </td>
-                                    </tr>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <div className="flex justify-center items-center mb-4 mt-4">
+                                <button
+                                    disabled={currentPage === 1}
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                                >
+                                    <span aria-hidden="true">&laquo;</span>
+                                </button>
+                                {[...Array(totalPages)].map((_, index) => (
+                                    <button
+                                        key={index}
+                                        className={`px-3 py-1 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-gray-800'}`}
+                                        onClick={() => handlePageChange(index + 1)}
+                                    >
+                                        {index + 1}
+                                    </button>
                                 ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                <button
+                                    disabled={currentPage === totalPages}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                                >
+                                    <span aria-hidden="true">&raquo;</span>
+                                </button>
+                            </div>
+                    </div>
+                    <div className="col-span-3 mt-4">
+                        <ArchivedCourses/>
                     </div>
                 </div>
+
+
             </div>
-            */}
+
         </>
 
     );

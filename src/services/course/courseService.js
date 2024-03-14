@@ -1,8 +1,8 @@
 const API_BASE_URL = 'http://localhost:3000/api';
 
-export const fetchCourses = async () => {
+export const fetchCourses = async (page = 1, pageSize = 10) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/courses`);
+        const response = await fetch(`${API_BASE_URL}/courses?page=${page}&pageSize=${pageSize}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -40,9 +40,6 @@ export const updateCourse = async (courseId, courseData) => {
         console.error("Failed to update course:", error);
     }
 };
-
-
-// In your frontend service file where fetchCourses is defined
 
 export const addCourse = async (courseData) => {
     try {
@@ -99,9 +96,9 @@ export const archiveCourse = async (courseId) => {
     }
 };
 
-export const fetchArchivedCourses = async () => {
+export const fetchArchivedCourses = async (page = 1, pageSize = 10) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/courses/courses/archived`);
+        const response = await fetch(`${API_BASE_URL}/courses/arch/archived?page=${page}&pageSize=${pageSize}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -112,4 +109,34 @@ export const fetchArchivedCourses = async () => {
     }
 };
 
+export const updateCourseTeachers = async (courseId, teacherIds) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/details/${courseId}/teachers`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(teacherIds),
+        });
+        if (!response.ok) {
+            throw new Error(`Network response was not ok. Status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to update course teachers:", error);
+        throw error;
+    }
+};
 
+export const fetchAssignedTeachers = async (courseId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/details/${courseId}/teachers`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.assignedTeachers;
+    } catch (error) {
+        console.error("Failed to fetch assigned teachers:", error);
+    }
+};

@@ -1,0 +1,20 @@
+/* styles.css */
+.rti--container {
+    --rti-bg: #fff;
+    --rti-border: #ccc;
+    --rti-main: #3182ce;
+    --rti-radius: .375rem;
+    --rti-s: .4rem;
+    --rti-tag: #edf2f7;
+    --rti-tag-remove: #e53e3e;
+    --rti-tag-padding: .15rem .25rem;
+    align-items: center;
+    background: #f7f8fd; /* Custom background color */
+    border: 0.5px solid var(--rti-border);
+    border-radius: var(--rti-radius);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rti-s);
+    line-height: 1;
+    padding: var(--rti-s);
+  }

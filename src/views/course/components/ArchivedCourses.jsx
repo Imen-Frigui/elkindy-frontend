@@ -4,6 +4,9 @@ import CourseDetailsModal from "./CourseDetailsModal";
 
 const ArchivedCourses = () => {
     const [archivedCourses, setArchivedCourses] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [pageSize] = useState(10);
 
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
@@ -15,11 +18,17 @@ const ArchivedCourses = () => {
 
     useEffect(() => {
         const getCourses = async () => {
-            const fetchedCourses = await fetchArchivedCourses();
-            setArchivedCourses(fetchedCourses);
+            const fetchedCourses = await fetchArchivedCourses(currentPage, pageSize);
+            console.log(fetchedCourses);
+            setArchivedCourses(fetchedCourses.data);
+            setTotalPages(fetchedCourses.totalPages);
         };
-        getCourses().then(r => console.log(r));
-    }, []);
+        getCourses();
+    }, [currentPage, pageSize]);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
     return (
         <>
@@ -46,8 +55,33 @@ const ArchivedCourses = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
 
 
+                    <div className="flex justify-center items-center mt-4">
+                        <button
+                            disabled={currentPage === 1}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                        >
+                            <span aria-hidden="true">&laquo;</span>
+                        </button>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <button
+                                key={index}
+                                className={`px-3 py-1 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-gray-800'}`}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                        <button
+                            disabled={currentPage === totalPages}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                        >
+                            <span aria-hidden="true">&raquo;</span>
+                        </button>
                     </div>
                 </div>
             </div>
