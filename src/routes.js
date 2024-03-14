@@ -110,7 +110,7 @@ const routes = [
     name: "Courses List",
     layout: "/admin",
     path: "courses",
-    icon: <MdBook className="h-6 w-6" />,
+    icon: <MdBook className="h-6 w-6 " />,
     component: <CoursesList />,
   },
 

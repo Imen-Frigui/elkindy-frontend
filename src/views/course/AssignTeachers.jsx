@@ -43,9 +43,15 @@ const AssignTeachers = () => {
     };
 
     const handleSave = async () => {
-        await updateCourseTeachers(courseId, { teachers: assignedTeacherIds });
-        navigate(`/admin/courses`);
+        try {
+            await updateCourseTeachers(courseId, assignedTeacherIds);
+            navigate(`/admin/courses`);
+        } catch (error) {
+            console.error('Failed to update course teachers:', error);
+        }
     };
+
+
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: 'teacher',
@@ -59,30 +65,32 @@ const AssignTeachers = () => {
 
 
     return (
-        <DndProvider backend={HTML5Backend}>
-        <div className="flex">
-            <div className="w-1/2">
-                <h2>Available Teachers</h2>
-                {teachers.map(teacher => (
-                    <DraggableTeacher key={teacher._id} teacher={teacher} handleAssignTeacher={handleAssignTeacher} />
-                ))}
-            </div>
-            <div className="w-1/2" ref={drop}
-                 style={{minHeight: '100px', backgroundColor: isOver ? 'lightgreen' : 'lightgrey'}}>
-                <h2>Assigned Teachers</h2>
-                {assignedTeacherIds.map(id => {
-                    const teacher = teachers.find(t => t._id === id);
-                    return teacher ? (
-                        <div className="text-kindyorange bg-fontcolor" key={id}>
-                            {teacher.username}
-                            <button onClick={() => handleUnassignTeacher(id)}>Unassign</button>
+            <div className="flex">
+                <div className="w-1/3 p-4 mr-6 bg-gray-500 rounded-xl flex flex-col gap-y-4">
+                    <h2 className="text-gray-800 text-xl">Available Teachers</h2>
+                    {teachers.map(teacher => (
+                        <div className="flex items-center justify-between" key={teacher.username} >
+                            <DraggableTeacher key={teacher._id} teacher={teacher}
+                                          handleAssignTeacher={handleAssignTeacher}/>
+                            <button  className=" w-1/12 p-2 text-xs rounded-xl hover:shadow-xl"></button>
                         </div>
-                    ) : null;
-                })}
+                    ))}
+                </div>
+                <div className="w-1/3 p-4 mr-6 bg-gray-500 rounded-xl flex flex-col gap-y-4 " ref={drop}
+                     style={{minHeight: '100px', backgroundColor: isOver ? 'lightgreen' : 'lightgrey'}}>
+                    <h2>Assigned Teachers</h2>
+                    {assignedTeacherIds.map(id => {
+                        const teacher = teachers.find(t => t._id === id);
+                        return teacher ? (
+                            <div className="px-2 py-4 bg-white flex items-center justify-between shadow-md rounded-xl w-full border border-transparent hover:border-gray-200 cursor-pointer" key={id}>
+                                {teacher.username}
+                                <button className="border p-2 text-xs rounded-xl shadow-lg hover:shadow-xl" onClick={() => handleUnassignTeacher(id)}>Unassign</button>
+                            </div>
+                        ) : null;
+                    })}
+                </div>
+                <button className="w-1/3 border p-2 text-xs rounded-xl shadow-lg hover:shadow-xl" onClick={handleSave}>Save Assignments</button>
             </div>
-            <button onClick={handleSave}>Save Assignments</button>
-        </div>
-        </DndProvider>
     );
 };
 
