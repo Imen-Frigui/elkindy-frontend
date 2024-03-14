@@ -33,7 +33,7 @@ const TaskCard = () => {
           <div className="flex items-center justify-center gap-2">
             <Checkbox />
             <p className="text-base font-bold text-navy-700 dark:text-white">
-              Landing Page Design
+            Final Year Event
             </p>
           </div>
           <div>
@@ -45,7 +45,7 @@ const TaskCard = () => {
           <div className="flex items-center justify-center gap-2">
             <Checkbox />
             <p className="text-base font-bold text-navy-700 dark:text-white">
-              Mobile App Design
+            Charity Event
             </p>
           </div>
           <div>
@@ -57,7 +57,7 @@ const TaskCard = () => {
           <div className="flex items-center justify-center gap-2">
             <Checkbox />
             <p className="text-base font-bold text-navy-700 dark:text-white">
-              Dashboard Builder
+            Summer Jam
             </p>
           </div>
           <div>
@@ -69,7 +69,7 @@ const TaskCard = () => {
           <div className="flex items-center justify-center gap-2">
             <Checkbox />
             <p className="text-base font-bold text-navy-700 dark:text-white">
-              Landing Page Design
+            Final Year Party
             </p>
           </div>
           <div>
@@ -81,7 +81,7 @@ const TaskCard = () => {
           <div className="flex items-center justify-center gap-2">
             <Checkbox />
             <p className="text-base font-bold text-navy-700 dark:text-white">
-              Dashboard Builder
+            Palestine event
             </p>
           </div>
           <div>
