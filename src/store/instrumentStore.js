@@ -7,16 +7,14 @@ const useInstrumentStore = create((set) => ({
   loading: false,
   hasMorePages: true,
   setHasMorePages: (hasMore) => set({ hasMorePages: hasMore }),
-  fetchInstruments: async (status, sort, page) => {
+  fetchInstruments: async (status, sort, page, accessToken) => {
     try {
       set({ loading: true });
-      console.log(sort);
-      console.log(status);
       if (sort !== "" || status !== "") {
-        console.log("ture");
         page = 1;
         set({ instruments: [] });
         const { data } = await DataService.getPublicContent(
+          accessToken,
           status,
           sort,
           "",
@@ -32,9 +30,9 @@ const useInstrumentStore = create((set) => ({
 
         return;
       }
-      console.log("no");
 
       const { data } = await DataService.getPublicContent(
+        accessToken,
         status,
         sort,
         "",
@@ -52,10 +50,10 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  postInstrument: async (postData) => {
+  postInstrument: async (postData, accessToken) => {
     try {
       set({ loading: true });
-      const { data } = await DataService.addInstrument(postData);
+      const { data } = await DataService.addInstrument(postData, accessToken);
       set({ loading: false });
       return data;
     } catch (error) {
@@ -75,14 +73,26 @@ const useInstrumentStore = create((set) => ({
     }
   },
 
-  likePost: async (id) => {
+  likePost: async (id, accessToken) => {
     try {
       // set({ loading: true });
-      const { response } = await DataService.likePost(id);
+      const { response } = await DataService.likePost(id, accessToken);
+      return response;
       // set({ loading: false });
     } catch (error) {
       console.error(error);
       // set({ loading: false });
+    }
+  },
+  fetchUserInstruments: async (accessToken) => {
+    try {
+      set({ loading: true });
+      const { data } = await DataService.getUserInstruments(accessToken);
+      set({ instruments: data.instruments });
+      set({ loading: false });
+    } catch (error) {
+      console.error(error);
+      set({ loading: false });
     }
   },
   searchInstruments: async (status, sort, searchQuery) => {
