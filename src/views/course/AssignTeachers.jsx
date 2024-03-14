@@ -69,6 +69,7 @@ const AssignTeachers = () => {
 
 
     return (
+      <DndProvider backend={HTML5Backend}>
             <div className="flex flex-col md:flex-row sm:flex-row mt-8  ">
                     <div className="scrollbar-styled flex flex-col mr-6 md:mr-6 mb-4 sm:mb-0 w-1/4 p-4 bg-gray-500 rounded-xl gap-y-4 overflow-y-auto max-h-96 ">
                         <h2 className="text-gray-800 text-xl">Available Teachers</h2>
@@ -129,7 +130,9 @@ const AssignTeachers = () => {
                 </div>
 
             </div>
+        </DndProvider>
         
+
     );
 };
 
