@@ -5,49 +5,58 @@ import avatar1 from "assets/img/avatars/avatar1.png";
 import InstrumentCard from "components/card/InstrumentCard";
 
 import useInstrumentStore from "store/instrumentStore";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
 import { useQuery } from "../../../hooks/useQuery";
-// import useShowToast from "../../../hooks/useShowToast";
+import useShowToast from "../../../hooks/useShowToast";
 
 const Marketplace = ({ location }) => {
   const { type } = useParams();
   const query = useQuery();
-  // const showToast = useShowToast();
+  const showToast = useShowToast();
 
   const [status, setStatus] = useState("All");
   const [age, setAge] = useState("3-5");
+  const [page, setPage] = useState(1);
+
   const [sort, setSort] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const searchQuery = query.get("search") || "";
-  const { instruments, loading, fetchInstruments, searchInstruments } =
-    useInstrumentStore();
+  const {
+    instruments,
+    loading,
+    fetchInstruments,
+    searchInstruments,
+    hasMorePages,
+  } = useInstrumentStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      // showToast("Success", "Post added", "success");
-
-      if (searchQuery) {
-        await searchInstruments(
-          status.toLocaleLowerCase() !== "all"
-            ? status.toLocaleLowerCase()
-            : "",
-          sort,
-          searchQuery
-        );
-      } else {
-        await fetchInstruments(
-          status.toLocaleLowerCase() !== "all"
-            ? status.toLocaleLowerCase()
-            : "",
-          sort
-        );
+      if (hasMorePages) {
+        if (searchQuery) {
+          await searchInstruments(
+            status.toLocaleLowerCase() !== "all"
+              ? status.toLocaleLowerCase()
+              : "",
+            sort,
+            searchQuery,
+            page
+          );
+        } else {
+          await fetchInstruments(
+            status.toLocaleLowerCase() !== "all"
+              ? status.toLocaleLowerCase()
+              : "",
+            sort,
+            page
+          );
+        }
       }
     };
     fetchData();
-  }, [age, status, sort, searchQuery]);
+  }, [page, age, status, sort, searchQuery, hasMorePages]);
 
   const isActiveAge = useCallback(
     (elem) => {
@@ -70,9 +79,30 @@ const Marketplace = ({ location }) => {
     },
     [status]
   );
+
   const handleShowFilters = () => {
     setShowFilter((showFilter) => !showFilter);
   };
+  const observer = useRef(null);
+
+  const lastInstrument = useCallback(
+    (node) => {
+      if (!node) return;
+      const options = {
+        threshold: 1,
+        rootMargin: "0px",
+      };
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPage(page + 1);
+        }
+      }, options);
+      observer.current.observe(node);
+    },
+    [page, hasMorePages, status, searchQuery]
+  );
 
   return (
     <div className=" z-500 mt-2 grid h-full grid-cols-1 gap-5 md:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-3">
@@ -132,13 +162,17 @@ const Marketplace = ({ location }) => {
                 ))}
               </>
             ) : instruments.length > 0 ? (
-              instruments.map((i) => (
-                <InstrumentCard
-                  bidders={[avatar1]}
-                  image={guitar}
-                  instrument={i}
-                  key={i._id}
-                />
+              instruments.map((data, index) => (
+                <div
+                  ref={index === instruments.length - 1 ? lastInstrument : null}
+                >
+                  <InstrumentCard
+                    bidders={[avatar1]}
+                    image={guitar}
+                    instrument={data}
+                    key={index}
+                  />
+                </div>
               ))
             ) : (
               <div className="md:col-span-3">
@@ -185,7 +219,7 @@ const Marketplace = ({ location }) => {
                 </div>
               </div>
               <div className="flex flex-wrap items-center rounded-[20px]  bg-white p-4">
-                <p className=" text-black mr-3 text-left opacity-80 dark:text-navy-800">
+                <p className=" mr-3 text-left text-black opacity-80 dark:text-navy-800">
                   Filter by category:
                 </p>
                 <div className="flex flex-wrap rounded-lg bg-white ">
