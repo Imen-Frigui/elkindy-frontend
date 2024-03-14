@@ -57,29 +57,7 @@ const routes = [
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
   },
-  {
-    name: "Sign In",
-    layout: "/auth",
-    path: "sign-in",
-    icon: <MdLock className="h-6 w-6" />,
-    component: <SignIn />,
-  },
-  {
-    name: "registration",
-    layout: "/auth",
-    path: "Register",
-    icon: <MdLock className="h-6 w-6" />,
-    component: <Register />,
-  },
-  
-
-  {
-    name: "unauthorized",
-    layout: "/auth",
-    path: "unauthorized",
-    icon: <MdLock className="h-6 w-6" />,
-    component: <UnauthorizedPage />,
-  },
+ 
   
   {
     name: "RTL Admin",
@@ -113,6 +91,35 @@ const routes = [
     component: <CoursesList />,
   },
 
+{
+    name: "Sign In",
+    layout: "/auth",
+    path: "sign-in",
+    icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        component: <SignIn />,
+    hide: true,
+  },
+  {
+    name: "registration",
+    layout: "/auth",
+    path: "Register",
+    icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+
+    component: <Register />,
+    hide: true,
+
+  },
+  
+
+  {
+    name: "unauthorized",
+    layout: "/auth",
+    path: "unauthorized",
+    icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+
+    hide: true,
+       component: <UnauthorizedPage />,
+  },
     /*
   {
     layout: "/admin",

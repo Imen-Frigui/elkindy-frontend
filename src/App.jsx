@@ -12,14 +12,21 @@ import PrivateRoute from "views/auth/PrivateRoute";
 
 import EventDetails from "./views/events/components/EventDetails"
 import UpdateEvent from "./views/events/components/UpdateEvent"
+import SignIn from "views/auth/SignIn";
+import RegisterPage from "views/auth/register";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/admin" replace />} />
-      <Route path="auth/*" element={<AuthLayout />} />
+      <Route path="auth/*" element={<AuthLayout />} >
+      </Route>
+      <Route path="sign-in" element={<SignIn />} />
+        <Route path="register" element={<RegisterPage/>}/>
+          
+     
       
-      <Route element={<PrivateRoute allowedRoles={['admin']} />}>
+      <Route element={<PrivateRoute allowedRoles={['admin',"student"]} />}>
         <Route path="admin/*" element={<AdminLayout />}>
         </Route>
           <Route path="courses"  element={<CoursesList />}/>

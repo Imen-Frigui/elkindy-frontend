@@ -3,7 +3,8 @@ import authImg from "assets/img/auth/blog12.jpg";
 import { Link, Routes, Route, Navigate } from "react-router-dom";
 import routes from "routes.js";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
-
+import RegisterPage from "views/auth/register";
+import SignIn from "views/auth/SignIn";
 export default function Auth() {
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
@@ -48,10 +49,12 @@ export default function Auth() {
                   {getRoutes(routes)}
                   <Route
                     path="/"
-                    element={<Navigate to="/auth/sign-in" replace />}
-                  />
+                    element={<Navigate to="/auth" replace />}/>
+                  <Route path="/auth/sign-in" element={<SignIn />} />
+                  <Route path="/auth/register" element={<RegisterPage />} />
                   
                 </Routes>
+              
               
                   
               </div>
