@@ -1,25 +1,89 @@
 
+import React, { useEffect, useState } from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import navbarimage from "assets/img/layout/Navbar.png";
 import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
-import React, {  useState } from 'react'; // Importer React
+import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
+
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
 } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar4.png";
+import messageSound from "assets/sound/message.mp3";
 
+import { useDispatch, useSelector } from "react-redux";
+import { useLogoutMutation } from '../../slices/userApiSlice';
+
+import { logout } from "../../slices/authSlice";
 const Navbar = (props) => {
-  const { onOpenSidenav, brandText ,onSearch  } = props;
+  const [notifications, setNotifications] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { onOpenSidenav, brandText, socket } = props;
   const [darkmode, setDarkmode] = React.useState(false);
 
+  const navigate = useNavigate();
 
+/*  useEffect(() => {
+    const verifyCookie = async () => {
+      if (!cookies.refreshToken) {
+        navigate("/auth/sign-in");
+      }
+      const { data } = await axios.post(
+        "http://localhost:3030",
+        {},
+        { withCredentials: true }
+      );
+      const { status, user } = data;
+      setUsername(user);
+      return status
+        ? toast(`Hello ${user}`, {
+            position: "top-right",
+          })
+        : (removeCookie("refreshToken"), navigate("/login"));
+    };
+    verifyCookie();
+  }, 
+  
+  [cookies, navigate, removeCookie]);*/
+  const { userInfo } = useSelector((state) => state.auth);
 
+  const dispatch = useDispatch();
 
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+     
+      dispatch(logout());
+      navigate('/auth/sign-in');
+    } catch (err) {
+      console.error(err);
+  console.log(props);
+    }
+  };
+  useEffect(() => {
+    if (socket) {
+      socket.on("getNotification", (data) => {
+        console.log("Notification received:", data);
+        setNotifications((prev) => [...prev, data]);
+        const sound = new Audio(messageSound);
+        sound.play();
+        setShowDropdown(true);
+      });
+      return () => {
+        socket.off("getNotification");
+      };
+    }
+  }, [socket]);
+  const markAllRead = () => {
+    setNotifications([]);
+    setShowDropdown(false);
+  };
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
@@ -72,7 +136,7 @@ const Navbar = (props) => {
         >
           <FiAlignJustify className="h-5 w-5" />
         </span>
-        {/* start Notification */}
+
         <Dropdown
           button={
             <p className="cursor-pointer">
@@ -91,21 +155,32 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-              <button className="flex w-full items-center">
-                <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                  <BsArrowBarUp />
-                </div>
-                <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                  <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                    New Update: Horizon UI Dashboard PRO
-                  </p>
-                  <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                    A new update for your downloaded item is available!
-                  </p>
-                </div>
-              </button>
+              {notifications.map((notification, index) => (
+                <button
+                  key={index}
+                  className="flex w-full items-center bg-indigo-50 px-3 rounded-lg"
+                  onClick={() => {}}
+                >
+                  <div className="flex h-full w-[55px] items-center justify-center rounded-xl   py-4 text-2xl text-white">
+                    {/* <BsArrowBarUp /> */}
+                    <img src={guitar} alt="" />
+                  </div>
+                  <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
+                    <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
+                      <p>
+                        {notification.senderName} sent an exchange request for{" "}
+                        {notification.instrument.title}
+                      </p>
+                      <a>See more details</a>{" "}
+                    </p>
+                    <p className="font-base text-left text-xs text-gray-900 dark:text-white">
+                      {/* {notification.message} */}
+                    </p>
+                  </div>
+                </button>
+              ))}
 
-              <button className="flex w-full items-center">
+              {/* <button className="flex w-full items-center">
                 <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
                   <BsArrowBarUp />
                 </div>
@@ -117,10 +192,11 @@ const Navbar = (props) => {
                     A new update for your downloaded item is available!
                   </p>
                 </div>
-              </button>
+              </button> */}
             </div>
           }
           classNames={"py-2 top-4 -left-[230px] md:-left-[440px] w-max"}
+          show={showDropdown}
         />
         {/* start Horizon PRO */}
         <Dropdown
@@ -156,7 +232,7 @@ const Navbar = (props) => {
               <a
                 target="blank"
                 href="https://horizon-ui.com/?ref=live-free-tailwind-react"
-                className="hover:bg-black px-full linear flex cursor-pointer items-center justify-center rounded-xl py-[11px] font-bold text-navy-700 transition duration-200 hover:text-navy-700 dark:text-white dark:hover:text-white"
+                className="px-full linear flex cursor-pointer items-center justify-center rounded-xl py-[11px] font-bold text-navy-700 transition duration-200 hover:bg-black hover:text-navy-700 dark:text-white dark:hover:text-white"
               >
                 Try Horizon Free
               </a>
@@ -197,7 +273,7 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey, Adela
+                    👋 Hey,
                   </p>{" "}
                 </div>
               </div>
@@ -216,9 +292,9 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
-                <a
-                  href=" "
-                  className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
+                 <a href=" "
+                   className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
+                onClick={logoutHandler}
                 >
                   Log Out
                 </a>

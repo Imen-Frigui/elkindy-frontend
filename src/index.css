@@ -1,12 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&family=Dancing+Script:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
 	html {
-		font-family: 'DM Sans', sans-serif !important;
+		font-family: 'jost', sans-serif !important;
 		font-feature-settings: 'kern' !important;
 		-webkit-font-smoothing: antialiased;
 		letter-spacing: -0.5px;
@@ -28,71 +30,51 @@ input:checked.defaultCheckbox::before {
 	opacity: 1;
 }
 
-.button {
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	background-color: rgb(20, 20, 20);
-	border: none;
-	font-weight: 600;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
-	cursor: pointer;
-	transition-duration: 0.3s;
-	overflow: hidden;
+.table-responsive {
+	display: block;
+	width: 100%;
+	overflow-x: auto; /* Enable horizontal scrolling */
+	-webkit-overflow-scrolling: touch; /*Scrolling on touch devices */
+}
+
+
+
+@media (max-width: 768px) {
+	.grid-cols-12 {
+		grid-template-columns: 1fr; /* Makes everything stack vertically */
+	}
+
+	.col-span-9, .col-span-3 {
+		col-span: 12; /* Makes both the table and the ArchivedCourses component take up all 12 columns */
+	}
+}
+
+.button-with-tooltip {
 	position: relative;
-	gap: 1px;
-  }
-  
-  .svgIcon {
-	width: 12px;
-	transition-duration: 0.3s;
-  }
-  
-  .svgIcon path {
-	fill: white;
-  }
-  
-  .button:hover {
-	width: 140px;
-	border-radius: 50px;
-	transition-duration: 0.3s;
-	background-color: rgb(255, 69, 69);
-	align-items: center;
-	gap: 0;
-  }
-  
-  .button:hover .bin-bottom {
-	width: 50px;
-	transition-duration: 0.3s;
-	transform: translateY(60%);
-  }
-  .bin-top {
-	transform-origin: bottom right;
-  }
-  .button:hover .bin-top {
-	width: 50px;
-	transition-duration: 0.3s;
-	transform: translateY(60%) rotate(160deg);
-  }
-  .button::before {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+}
+
+.button-with-tooltip .tooltip-text {
+	visibility: hidden;
+	opacity: 0;
+	width: max-content;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 10px;
 	position: absolute;
-	top: -20px;
-	content: "Delete";
-	color: white;
-	transition-duration: 0.3s;
-	font-size: 2px;
-  }
-  
-  .button:hover::before {
-	font-size: 13px;
+	z-index: 1;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	transition: opacity 0.3s ease;
+}
+
+.button-with-tooltip:hover .tooltip-text {
+	visibility: visible;
 	opacity: 1;
-	transform: translateY(35px);
-	transition-duration: 0.3s;
-  }
+}
 
-
-  

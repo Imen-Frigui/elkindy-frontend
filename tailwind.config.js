@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const withMT = require("@material-tailwind/react/utils/withMT");
+module.exports = withMT({
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -106,9 +107,7 @@ module.exports = {
         "99p": "99%",
       },
       fontFamily: {
-        jost: ["Jost", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-        dm: ["DM Sans", "sans-serif"],
+        body: ["Jost"]
       },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
@@ -136,6 +135,11 @@ module.exports = {
       "4xl-max": { max: "1850px" },
     },
     colors: () => ({
+      white: "#ffffff",
+      lightPrimary: "#F4F7FE",
+      blueSecondary: "#4318FF",
+      brandLinear: "#868CFF",
+      customOrange: '#F98100',
       baground: '#F7F5EF',
       white: '#ffffff',
       lightPrimary: '#F4F7FE',
@@ -331,10 +335,12 @@ module.exports = {
         800: "#190793",
         900: "#11047A",
       },
+      black: '#000000',
+      blackOpacity: 'rgba(0, 0, 0, 0.7)',
       shadow: {
         500: "rgba(112, 144, 176, 0.08)",
       },
     }),
   },
   plugins: [require("tailwindcss-rtl")],
-};
+});
