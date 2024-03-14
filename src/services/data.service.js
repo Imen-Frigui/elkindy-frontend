@@ -2,14 +2,14 @@ import { apiRoutes } from "../config/api";
 import apiHeader from "../utils/apiHeader";
 
 export default class DataService {
-  static async getPublicContent(status = "", sort = "", search = "") {
+  static async getPublicContent(status = "", sort = "", search = "", page) {
     if (search.length) {
       return apiRoutes.get(
-        `/instruments/search/?status=${status}&sort=${sort}&query=${search}`
+        `/instruments/search/?status=${status}&sort=${sort}&query=${search}&pageNumber=${page}`
       );
     }
     return apiRoutes.get(
-      `/instruments/?status=${status}&sort=${sort}&query=${search}`
+      `/instruments/?status=${status}&sort=${sort}&query=${search}&pageNumber=${page}`
     );
   }
 

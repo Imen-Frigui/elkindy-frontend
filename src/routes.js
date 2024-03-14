@@ -3,7 +3,7 @@ import React from "react";
 // Admin Imports
 import MainDashboard from "views/admin/default";
 import NFTMarketplace from "views/admin/marketplace";
-import { MdBook ,MdEventNote} from "react-icons/md";
+import { MdBook, MdEventNote } from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
 import RTLDefault from "views/rtl/default";
@@ -17,6 +17,7 @@ import EventsList from "views/events/EventsList";
 import TicketsList from "views/tickets/TicketsList";
 import EventDetails from "views/events/components/EventDetails";
 
+
 import {
   MdHome,
   MdPerson,
@@ -27,7 +28,6 @@ import UnauthorizedPage from "views/auth/unauthorized";
 
 
 const routes = [
-
   {
     name: "ElKindy Dashboard",
     layout: "/admin",
@@ -72,7 +72,6 @@ const routes = [
     path: "events",
     icon: <MdEventNote className="h-6 w-6" />,
     component: <EventsList />,
-
   },
   {
     name: "Tickets List",
@@ -80,7 +79,6 @@ const routes = [
     path: "tickets",
     icon: <GiTicket className="h-6 w-6" />,
     component: <TicketsList />,
-
   },
 
   {
@@ -127,6 +125,5 @@ const routes = [
     component: <AssignTeachers />,
     hide: true,
   },*/
-
-]
+];
 export default routes;
