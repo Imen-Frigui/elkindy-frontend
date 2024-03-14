@@ -11,17 +11,12 @@ import { GiTicket } from "react-icons/gi";
 import {  FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
-
-
-    import CoursesList from "views/course/CoursesList";
 import EventsList from "views/events/EventsList";
-import TicketsList from "views/tickets/TicketsList";
 
 import SignIn from "views/auth/SignIn";
 import ExamsList from "views/exams/exam.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
-import EventsList from "views/events/EventsList";
 import TicketsList from "views/tickets/TicketsList";
 import EventDetails from "views/events/components/EventDetails";
 import { GiPapers } from "react-icons/gi";
