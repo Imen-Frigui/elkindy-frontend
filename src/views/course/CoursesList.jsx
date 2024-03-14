@@ -31,7 +31,6 @@ const CoursesList = () => {
             content: 'This is where you can add a new course.',
             placement: 'bottom',
         },
-
         {
             title: 'Welcome to the Courses Page!',
             target: '#addd',
@@ -39,15 +38,15 @@ const CoursesList = () => {
             placement: 'bottom',
         },
         {
-            title: 'Add a Course',
+            title: 'Archive & Edit Course',
             target: '#archive',
-            content: 'Use this to archive a course.',
+            content: 'Use the red icon to archive ot the orange icon to assign teachers to a course.',
             placement: 'bottom',
         },
         {
             title: 'Edit a Course',
             target: '#table',
-            content: 'Click here to edit an existing course.',
+            content: 'Feel free to double click on any filed in the table to edit information.',
             placement: 'bottom',
          }
 
@@ -66,6 +65,19 @@ const CoursesList = () => {
     const [editCourseId, setEditCourseId] = useState(null);
     const [editCourseName, setEditCourseName] = useState('');
 
+    const [editDescId, setEditDescId] = useState(null);
+    const [editDesc, setEditDesc] = useState('');
+
+    const [editPriceId, setEditPriceId] = useState(null);
+    const [editPrice, setEditPrice] = useState(0);
+
+    const [editInternshipId, setEditInternshipId] = useState(null);
+    const [tempInternshipStatus, setTempInternshipStatus] = useState(false);
+
+    const [editCategoryId, setEditCategoryId] = useState(null);
+    const [tempCategory, setTempCategory] = useState('');
+
+
 
 
     // Start editing a course name
@@ -76,15 +88,86 @@ const CoursesList = () => {
 
 
     const handleSaveClick = async (courseId, newName) => {
-        await updateCourse(courseId, { title: newName });
-        // Refresh course list
-        fetchCourses().then(setCourses);
-
-        // Reset editing state
+        try {
+            await updateCourse(courseId, { title: newName });
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
+        } catch (error) {
+            console.error("Error updating course Title:", error);
+        }
         setEditCourseId(null);
         setEditCourseName('');
     };
 
+    const handleEditDescClick = (course) => {
+        setEditDescId(course._id);
+        setEditDesc(course.description);
+    };
+
+    const handleEditPriceClick = (course) => {
+        setEditPriceId(course._id);
+        setEditPrice(course.price);
+    };
+
+
+    const handleSaveDescClick = async (courseId, newDesc) => {
+        try {
+            await updateCourse(courseId, { description: newDesc });
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
+        } catch (error) {
+            console.error("Error updating course description:", error);
+        }
+        setEditDescId(null);
+        setEditDesc('');
+    };
+
+    const handleSavePriceClick = async (courseId, newPrice) => {
+        try {
+            await updateCourse(courseId, { price: newPrice });
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
+        } catch (error) {
+            console.error("Error updating course price:", error);
+        }
+        setEditPriceId(null);
+        setEditPrice('');
+    };
+
+
+    const handleCategoryChange = (e) => {
+        setTempCategory(e.target.value);
+    };
+
+    const handleSaveCategory = async (courseId) => {
+        try {
+            await updateCourse(courseId, { category: tempCategory });
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
+        } catch (error) {
+            console.error("Error updating course category:", error);
+        }
+        setEditCategoryId(null);
+        setTempCategory('');
+    };
+
+    const categories = ['Violon Ori', 'Initiation', 'Prep', '1er', '2eme', '3eme', '4eme', '5eme', '6eme', 'Diplome', '1ere Adult','2eme Adult','3eme Adult', 'Instrument', 'Peinture', 'Danse', 'Robotique', 'Théâtre'];
+
+    const handleInternshipStatusChange = async (e, course) => {
+        setTempInternshipStatus(e.target.checked);
+        await handleSaveInternshipStatus(course._id, e.target.checked);
+    };
+
+    const handleSaveInternshipStatus = async (courseId, newStatus) => {
+        try {
+            await updateCourse(courseId, { isInternship: newStatus });
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
+        } catch (error) {
+            console.error("Error updating course internship status:", error);
+        }
+        setEditInternshipId(null);
+    };
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
@@ -94,6 +177,7 @@ const CoursesList = () => {
             setCurrentPage(1); // Reset to first page to see initial results
         });
     };
+
 
     useEffect(() => {
         const getCourses = async () => {
@@ -109,7 +193,7 @@ const CoursesList = () => {
         };
 
         getCourses();
-    }, [currentPage, pageSize, searchQuery]);
+    }, [ currentPage, pageSize, searchQuery]);
 
     const handleCourseAdded = () => {
         fetchCourses().then(setCourses);
@@ -167,17 +251,21 @@ const CoursesList = () => {
 
             <div className="flex flex-col mt-8">
                 {showStatCard &&
-                    <StatCard title="Students" totalCount={308} stats={{malePercentage: 61, femalePercentage: 39}}/>
+                    <div className="flex flex-row space-x-6 items-center">
+                        <StatCard title="Students" totalCount={308} stats={{malePercentage: 61, femalePercentage: 39}}/>
+                        <StatCard title="Teachers" totalCount={24} stats={{malePercentage: 80, femalePercentage: 20}}/>
+                    </div>
+
                 }
                 <div className="flex justify-between items-center">
                     {/* Search bar TextField */}
-                    <div style={{ backgroundColor: "white", borderRadius: '22px 0px' }} className=" dark:!bg-gray-700 sm:w-fit">
+                    <div style={{ backgroundColor: "white", borderRadius: '22px 0px' }} className="shadow-xl bg-white dark:!bg-gray-700 sm:w-fit">
                         <FontAwesomeIcon icon={faMagnifyingGlass}
                                          style={{
                                              color: '#FB9D37',
-                                             fontSize: '20px'
+                                             fontSize: '20px',
                                          }}
-                                         className="mr-6 ml-4 "/>
+                                         className="mr-6 ml-4"/>
                     <input type="text"
                         style={{ backgroundColor: "white", borderRadius: '22px 0px' }}
                         id="search-courses"
@@ -250,24 +338,74 @@ const CoursesList = () => {
                                                 </td>
 
                                                 <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
-                                                    <p>{course.category}</p>
-                                                </td>
-                                                <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
-                                                    <p>{course.description}</p>
-                                                </td>
-                                                <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
-                                                    <p>{course.price}</p>
-                                                </td>
-                                                <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-white">
-                                                    {course.isInternship ? (
-                                                        <FontAwesomeIcon icon={faCheck} style={{fontSize: '20px'}}
-                                                                         className="text-green-500"/>
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400"
+                                                    onDoubleClick={() => {
+                                                        setEditCategoryId(course._id);
+                                                        setTempCategory(course.category);
+                                                    }}>
+                                                    {editCategoryId === course._id ? (
+                                                        <select value={tempCategory} onChange={handleCategoryChange} onBlur={() => handleSaveCategory(course._id)}>
+                                                            {categories.map((category, index) => (
+                                                                <option key={index} value={category}>{category}</option>
+                                                            ))}
+                                                        </select>
                                                     ) : (
-                                                        <span>---</span>
+                                                        <p>{course.category}</p>
+                                                    )}
+
+                                                </td>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
+                                                    {editDescId === course._id ? (
+                                                        <TextField
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={editDesc}
+                                                            onChange={(e) => setEditDesc(e.target.value)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    e.preventDefault();
+                                                                    handleSaveDescClick(course._id, e.target.value);
+                                                                }
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <p onDoubleClick={() => handleEditDescClick(course)}>{course.description}</p>
+                                                    )}
+                                                </td>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
+                                                    {editPriceId === course._id ? (
+                                                        <TextField
+                                                            fullWidth
+                                                            variant="outlined"
+                                                            value={editPrice}
+                                                            onChange={(e) => setEditPrice(e.target.value)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    e.preventDefault();
+                                                                    handleSavePriceClick(course._id, e.target.value);
+                                                                }
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <p onDoubleClick={() => handleEditPriceClick(course)}>{course.price}</p>
+                                                    )}
+                                                </td>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-white" onDoubleClick={() => setEditInternshipId(course._id)} >
+                                                    {editInternshipId === course._id ? (
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={tempInternshipStatus}
+                                                            onChange={(e) => handleInternshipStatusChange(e, course)}
+                                                        />
+                                                    ) : (
+                                                        course.isInternship ? (
+                                                            <FontAwesomeIcon icon={faCheck} style={{fontSize: '20px'}} className="text-green-500"/>
+                                                        ) : (
+                                                            <span>---</span>
+                                                        )
                                                     )}
                                                 </td>
                                                 <td id="archive" className="p-4 whitespace-nowrap">
