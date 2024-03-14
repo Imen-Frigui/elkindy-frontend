@@ -23,7 +23,8 @@ const AddEvent = ({ onEventAdded }) => {
   const [startDateError, setStartDateError] = useState("");
   const [endDateError, setEndDateError] = useState("");
   const [formValid, setFormValid] = useState(false);
-
+  const [startTimeError, setStartTimeError] = useState("");
+  const [endTimeError, setEndTimeError] = useState("");
   // const [successMessage, setSuccessMessage] = useState("");
 
   const handleDrawerClose = () => setIsDrawerOpen(false);
@@ -36,7 +37,9 @@ const AddEvent = ({ onEventAdded }) => {
       !eventLocation ||
       !eventDescription ||
       !startDate ||
-      !endDate
+      !endDate ||
+      !startTime ||
+      !endTime
     ) {
       setTitleError(eventName ? "" : "Title is required");
       setLocationError(eventLocation ? "" : "Location is required");
@@ -156,8 +159,11 @@ const AddEvent = ({ onEventAdded }) => {
     }
   };
   const validateStartDate = () => {
-    const today = new Date().setHours(0, 0, 0, 0);
-    const selectedStartDate = new Date(startDate).setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset hours to start of the day
+    const selectedStartDate = new Date(startDate);
+    selectedStartDate.setHours(0, 0, 0, 0);
+  
     if (selectedStartDate < today) {
       setStartDateError("Start date must be today or in the future");
       setFormValid(false);
@@ -166,10 +172,13 @@ const AddEvent = ({ onEventAdded }) => {
       setFormValid(true);
     }
   };
-  
+
   const validateEndDate = () => {
-    const selectedStartDate = new Date(startDate).setHours(0, 0, 0, 0);
-    const selectedEndDate = new Date(endDate).setHours(0, 0, 0, 0);
+    const selectedStartDate = new Date(startDate);
+    selectedStartDate.setHours(0, 0, 0, 0);
+    const selectedEndDate = new Date(endDate);
+    selectedEndDate.setHours(0, 0, 0, 0);
+  
     if (selectedEndDate < selectedStartDate) {
       setEndDateError("End date cannot be before start date");
       setFormValid(false);
@@ -177,7 +186,29 @@ const AddEvent = ({ onEventAdded }) => {
       setEndDateError("");
       setFormValid(true);
     }
-};
+  };
+  const validateStartTime = () => {
+    if (!startTime) {
+      setStartTimeError("Start time is required");
+      setFormValid(false);
+    } else {
+      setStartTimeError("");
+      setFormValid(true);
+    }
+  };
+
+  const validateEndTime = () => {
+    if (!endTime) {
+      setEndTimeError("End time is required");
+      setFormValid(false);
+    } else if (endTime <= startTime) {
+      setEndTimeError("End time must be after start time");
+      setFormValid(false);
+    } else {
+      setEndTimeError("");
+      setFormValid(true);
+    }
+  };
   return (
     <>
       <ButtonComponent
@@ -220,6 +251,7 @@ const AddEvent = ({ onEventAdded }) => {
                 <input
                   type="text"
                   id="name"
+                  placeholder="Enter your Event title"
                   value={eventName}
                   onChange={(e) => {
                     setEventName(e.target.value);
@@ -263,6 +295,7 @@ const AddEvent = ({ onEventAdded }) => {
                 <textarea
                   id="description"
                   rows="4"
+                  placeholder="write your description here ..."
                   value={eventDescription}
                   onChange={(e) => {
                     setEventDescription(e.target.value);
@@ -309,6 +342,7 @@ const AddEvent = ({ onEventAdded }) => {
                 <input
                   type="text"
                   id="location"
+                  placeholder="Enter your location"
                   value={eventLocation}
                   onChange={(e) => {
                     setEventLocation(e.target.value);
@@ -382,10 +416,18 @@ const AddEvent = ({ onEventAdded }) => {
                   type="time"
                   id="startTime"
                   value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  onChange={(e) => {
+                    setStartTime(e.target.value);
+                    validateStartTime();
+                  }}
+                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                    startTimeError ? "border-red-500" : ""
+                  }`}
                   required
                 />
+                {startTimeError && (
+                  <p className="text-sm text-red-500">{startTimeError}</p>
+                )}
               </div>
               <div>
                 <label
@@ -398,10 +440,18 @@ const AddEvent = ({ onEventAdded }) => {
                   type="time"
                   id="endTime"
                   value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  onChange={(e) => {
+                    setEndTime(e.target.value);
+                    validateEndTime();
+                  }}
+                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                    endTimeError ? "border-red-500" : ""
+                  }`}
                   required
                 />
+                {endTimeError && (
+                  <p className="text-sm text-red-500">{endTimeError}</p>
+                )}
               </div>
               <div>
                 <label
@@ -413,6 +463,7 @@ const AddEvent = ({ onEventAdded }) => {
                 <input
                   type="number"
                   id="capacity"
+                  placeholder="capacity"
                   value={capacity}
                   onChange={(e) => {
                     setCapacity(e.target.value);

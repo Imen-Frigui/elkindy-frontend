@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "components/card";
+import nft7 from "assets/img/nfts/Nft7.jpg";
 
 const HistoryCard = ({ event }) => {
   // Function to format date in the format MM/DD/YYYY
@@ -33,7 +34,8 @@ const HistoryCard = ({ event }) => {
             <div className="h-16 w-16">
               <img
                 className="h-full w-full rounded-xl"
-                src={event.image}
+                // src={event.image}
+                src={nft7}
                 alt=""
               />
             </div>
