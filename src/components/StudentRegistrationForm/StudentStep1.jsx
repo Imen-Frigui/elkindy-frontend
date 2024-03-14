@@ -68,7 +68,7 @@ const StudentFormStep1 = ({ onNext }) => {
             await schema.validate(formData, { abortEarly: false });
     
             // Check email existence
-            const emailExistsResponse = await fetch(`http://localhost:3030/api/auth/check-email/${formData.email}`);
+            const emailExistsResponse = await fetch(`http://localhost:3000/api/auth/check-email/${formData.email}`);
             if (emailExistsResponse.ok) {
                 const data = await emailExistsResponse.json();
                 console.log(data.exists);
@@ -84,7 +84,7 @@ const StudentFormStep1 = ({ onNext }) => {
             }
     
             // Check phone number existence
-            const phoneExistsResponse = await fetch(`http://localhost:3030/api/auth/check-phone/${formData.phoneNumber}`);
+            const phoneExistsResponse = await fetch(`http://localhost:3000/api/auth/check-phone/${formData.phoneNumber}`);
             if (phoneExistsResponse.ok) {
                 const data = await phoneExistsResponse.json();
                 console.log(data.exists);

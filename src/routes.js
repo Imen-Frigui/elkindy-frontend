@@ -62,7 +62,7 @@ const routes = [
     layout: "/auth",
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
-    //component: <SignIn />,
+    component: <SignIn />,
   },
   {
     name: "registration",
