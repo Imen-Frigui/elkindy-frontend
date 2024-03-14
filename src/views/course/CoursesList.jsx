@@ -8,8 +8,9 @@ import TourBanner from "./components/TourBanner"
 import Joyride from 'react-joyride'
 import StatCard from "./components/StatCard";
 
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faArchive, faCheck, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+import {faArchive, faCheck, faInfoCircle, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 
 
 const CoursesList = () => {
@@ -21,7 +22,6 @@ const CoursesList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [pageSize] = useState(10);
-
 
 
     const [steps] = useState([
@@ -52,12 +52,10 @@ const CoursesList = () => {
          }
 
     ]);
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-        //
-        //
-        //
-    };
+
+
+
+
 
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -87,10 +85,20 @@ const CoursesList = () => {
         setEditCourseName('');
     };
 
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+        fetchCourses(1, pageSize, event.target.value).then(data => {
+            setCourses(data.data);
+            setTotalPages(data.totalPages);
+            setCurrentPage(1); // Reset to first page to see initial results
+        });
+    };
+
     useEffect(() => {
         const getCourses = async () => {
             try {
-                const fetchedCourses = await fetchCourses(currentPage, pageSize);
+                const fetchedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
                 if (fetchedCourses) {
                     setCourses(fetchedCourses.data);
                     setTotalPages(fetchedCourses.totalPages);
@@ -101,7 +109,7 @@ const CoursesList = () => {
         };
 
         getCourses();
-    }, [courses, currentPage, pageSize]);
+    }, [currentPage, pageSize, searchQuery]);
 
     const handleCourseAdded = () => {
         fetchCourses().then(setCourses);
@@ -158,25 +166,36 @@ const CoursesList = () => {
             />)}
 
             <div className="flex flex-col mt-8">
-                {showStatCard && <StatCard/>}
+                {showStatCard &&
+                    <StatCard title="Students" totalCount={308} stats={{malePercentage: 61, femalePercentage: 39}}/>
+                }
                 <div className="flex justify-between items-center">
                     {/* Search bar TextField */}
-                    <TextField
+                    <div style={{ backgroundColor: "white", borderRadius: '22px 0px' }} className=" dark:!bg-gray-700 sm:w-fit">
+                        <FontAwesomeIcon icon={faMagnifyingGlass}
+                                         style={{
+                                             color: '#FB9D37',
+                                             fontSize: '20px'
+                                         }}
+                                         className="mr-6 ml-4 "/>
+                    <input type="text"
+                        style={{ backgroundColor: "white", borderRadius: '22px 0px' }}
                         id="search-courses"
-                        label="Search Courses"
-                        variant="outlined"
+                        placeholder="Search courses ..."
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        className="mb-4"
+                        className="py-3 px-4 bg-white text-navy-700 shadow-xl ring-kindydarkblue dark:!bg-gray-700 dark:text-white dark:placeholder:!text-white sm:w-fit"
                     />
+                    </div>
+
                     <a href="#!" id="addd">
                         <AddCourse id="start" onCourseAdded={handleCourseAdded}/>
                     </a>
                 </div>
                 <div className="grid grid-cols-12 gap-4 mt-8">
-                    <div className="col-span-9 bg-white mt-4 shadow-md rounded-lg flex flex-col justify-between">
-                                <div className=" overflow-auto  sm:rounded-lg">
-                                    <table id="table" className="p-4 w-full min-w-full min-h-full divide-y divide-gray-200 dark:divide-gray-600">
+                    <div className="col-span-9 bg-white mt-4 shadow-md rounded-lg flex flex-col justify-between dark:bg-gray-800">
+                        <div className=" overflow-auto  sm:rounded-lg bg-white dark:bg-gray-800">
+                        <table id="table" className="p-4 w-full min-w-full min-h-full divide-y divide-gray-200 dark:divide-gray-600">
                                         <thead className="bg-gray-50 dark:bg-gray-700">
                                         <tr>
                                             <th scope="col"
@@ -193,6 +212,10 @@ const CoursesList = () => {
                                             </th>
                                             <th scope="col"
                                                 className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                Price
+                                            </th>
+                                            <th scope="col"
+                                                className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                                 isInternship
                                             </th>
                                             <th scope="col"
@@ -204,7 +227,7 @@ const CoursesList = () => {
                                         <tbody className="bg-white dark:bg-gray-800">
                                         {Array.isArray(courses) && courses.map(course => (
                                             <tr key={course._id} role="row">
-                                                <td role="cell"
+                                            <td role="cell"
                                                     className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
                                                     {editCourseId === course._id ? (
                                                         <TextField
@@ -227,15 +250,19 @@ const CoursesList = () => {
                                                 </td>
 
                                                 <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
                                                     <p>{course.category}</p>
                                                 </td>
                                                 <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
                                                     <p>{course.description}</p>
                                                 </td>
                                                 <td role="cell"
-                                                    className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-gray-400">
+                                                    <p>{course.price}</p>
+                                                </td>
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-700 whitespace-nowrap dark:text-white">
                                                     {course.isInternship ? (
                                                         <FontAwesomeIcon icon={faCheck} style={{fontSize: '20px'}}
                                                                          className="text-green-500"/>
@@ -272,11 +299,11 @@ const CoursesList = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                            <div className="flex justify-center items-center mb-4 mt-4">
-                                <button
-                                    disabled={currentPage === 1}
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                        <div className="flex justify-center items-center mb-4 mt-4 bg-white dark:bg-gray-800">
+                            <button
+                                disabled={currentPage === 1}
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50 dark:text-gray-200 dark:hover:bg-gray-600"
                                 >
                                     <span aria-hidden="true">&laquo;</span>
                                 </button>
@@ -292,7 +319,7 @@ const CoursesList = () => {
                                 <button
                                     disabled={currentPage === totalPages}
                                     onClick={() => handlePageChange(currentPage + 1)}
-                                    className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                                    className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50 dark:text-gray-200 dark:hover:bg-gray-600"
                                 >
                                     <span aria-hidden="true">&raquo;</span>
                                 </button>

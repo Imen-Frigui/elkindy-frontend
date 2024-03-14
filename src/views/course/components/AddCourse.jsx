@@ -96,7 +96,7 @@ const AddCourse = ({ onCourseAdded }) => {
             title: inputValues.courseName,
             description: inputValues.courseDescription,
             category: inputValues.courseCategory,
-            price: inputValues.price, // Ensure price is a number
+            price: inputValues.price,
             startDate: inputValues.startDate,
             endDate: inputValues.endDate,
             isArchived: false,
@@ -121,7 +121,7 @@ const AddCourse = ({ onCourseAdded }) => {
 
     return (
         <>
-            <ButtonComponent className="mb-3" text="Add Course" color="#0C4B65" onClick={() => setIsDrawerOpen(true)}>
+            <ButtonComponent className="mb-3 shadow-shadow-900" text="Add Course" color="#0C4B65" onClick={() => setIsDrawerOpen(true)}>
                 Add course
             </ButtonComponent>
             {isDrawerOpen && (
