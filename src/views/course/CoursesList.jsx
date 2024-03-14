@@ -141,6 +141,7 @@ const CoursesList = () => {
 
             <div className="flex flex-col mt-8">
                 {showStatCard && <StatCard />}
+
                 <div className="table-responsive overflow-x-auto rounded-lg">
                     <div className="inline-block min-w-full align-middle">
                         <a href="#!" id="addd"  >
