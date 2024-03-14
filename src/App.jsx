@@ -5,6 +5,7 @@ import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import CoursesList from "./views/course/CoursesList";
+import EvaluationList from "./views/teacherExam/evaluation";
 import EventsList from "./views/events/EventsList";
 import TicketsList from "./views/tickets/TicketsList";
 import AssignTeachers from "./views/course/AssignTeachers"
@@ -12,14 +13,21 @@ import PrivateRoute from "views/auth/PrivateRoute";
 
 import EventDetails from "./views/events/components/EventDetails"
 import UpdateEvent from "./views/events/components/UpdateEvent"
+import SignIn from "views/auth/SignIn";
+import RegisterPage from "views/auth/register";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/admin" replace />} />
-      <Route path="auth/*" element={<AuthLayout />} />
+      <Route path="auth/*" element={<AuthLayout />} >
+      </Route>
+      <Route path="sign-in" element={<SignIn />} />
+        <Route path="register" element={<RegisterPage/>}/>
+          
+     
       
-      <Route element={<PrivateRoute allowedRoles={['admin']} />}>
+      <Route element={<PrivateRoute allowedRoles={['admin',"student"]} />}>
         <Route path="admin/*" element={<AdminLayout />}>
         </Route>
           <Route path="courses"  element={<CoursesList />}/>
@@ -31,6 +39,8 @@ const App = () => {
 
         </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
+        <Route path="evaluations" element={<EvaluationList />} />
+
         {/* <Route path="/assign-teachers/:courseId" element={<AssignTeachers />} /> */}
     </Routes>
   );
