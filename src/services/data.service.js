@@ -11,22 +11,24 @@ export default class DataService {
   ) {
     if (search.length) {
       return apiRoutes.get(
-        `/instruments/search/?status=${status}&sort=${sort}&query=${search}&pageNumber=${page}`,
+        `/instruments/search/?status=${status}&sort=${sort}&query=${search}`,
         apiHeader(accessToken)
       );
     }
     return apiRoutes.get(
-      `/instruments/?status=${status}&sort=${sort}&query=${search}&pageNumber=${page}`,
+      `/instruments/?status=${status}&sort=${sort}`,
       apiHeader(accessToken)
     );
   }
 
   static async getUserInstruments(accessToken) {
-    apiRoutes.get(`/user/instruments`, apiHeader(accessToken));
+    return apiRoutes.get(
+      `/instruments/user/instruments`,
+      apiHeader(accessToken)
+    );
   }
 
   static async getInstrument(id) {
-    console.log("printing values");
     return apiRoutes.get(`/instruments/${id}`);
   }
 
@@ -53,6 +55,12 @@ export default class DataService {
     return apiRoutes.patch(
       `/instruments/${id}/like`,
       {},
+      apiHeader(accessToken)
+    );
+  }
+  static async deleteInstrument(instrumentId, accessToken) {
+    return apiRoutes.delete(
+      `/instruments/${instrumentId}`,
       apiHeader(accessToken)
     );
   }
