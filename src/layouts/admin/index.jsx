@@ -17,6 +17,8 @@ import CreateInstrument from "views/admin/marketplace/components/CreateInstrumen
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import { io } from "socket.io-client";
 import EventsList from "views/events/EventsList";
+import ExamsList from "views/exams/exam";
+
 
 
 export default function Admin(props) {
@@ -127,7 +129,7 @@ export default function Admin(props) {
 
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
 
-
+              <Route path={"/exams"} element={<ExamsList/>}/>
 
                 <Route
                   path="/marketplace/create"
