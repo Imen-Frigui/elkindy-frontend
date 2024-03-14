@@ -9,6 +9,7 @@ import TicketsList from "./views/tickets/TicketsList";
 import AssignTeachers from "./views/course/AssignTeachers"
 import EventDetails from "./views/events/components/EventDetails"
 import UpdateEvent from "./views/events/components/UpdateEvent"
+import ArchivedEventsList  from "./views/events/components/ArchivedEventsList"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="events/details/:eventId" element={<EventDetails />} />
             <Route path="events/edit/:eventId" element={< UpdateEvent />} />
             <Route path="events" element={< EventsList />} />
+            <Route path="events/archived" element={<ArchivedEventsList />} />
             <Route path="tickets" element={< TicketsList />} />
 
         </Route>
