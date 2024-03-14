@@ -22,6 +22,7 @@ import {
   MdPerson,
   MdLock,
 } from "react-icons/md";
+import AssignTeachers from "./views/course/AssignTeachers";
 
 const routes = [
 
@@ -92,14 +93,15 @@ const routes = [
     icon: <MdBook className="h-6 w-6" />,
     component: <CoursesList />,
   },
-
     /*
   {
     layout: "/admin",
     path: "/assign-teachers/:courseId",
     component: <AssignTeachers />,
     hide: true,
-  },*/
+  },
+
+     */
 
 ]
 export default routes;
