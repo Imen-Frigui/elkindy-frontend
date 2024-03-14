@@ -30,6 +30,13 @@ const ArchivedCourses = () => {
         setCurrentPage(newPage);
     };
 
+    const handleCourseDeleted = async () => {
+        const fetchedCourses = await fetchArchivedCourses(currentPage, pageSize);
+        setArchivedCourses(fetchedCourses.data);
+        setTotalPages(fetchedCourses.totalPages);
+    };
+
+
     return (
         <>
             {selectedCourse && (
@@ -37,20 +44,21 @@ const ArchivedCourses = () => {
                     course={selectedCourse}
                     isOpen={isModalOpen}
                     onClose={() => setModalOpen(false)}
+                    onCourseDeleted={handleCourseDeleted}
                 />
             )}
 
-            <div className="bg-white shadow-md rounded-lg">
+            <div className="bg-white shadow-md rounded-lg dark:bg-gray-800">
                 <div className="p-4">
-                    <h2 className="font-semibold text-xl mb-4 text-gray-800">Archived Courses</h2>
+                    <h2 className="font-semibold text-xl mb-4 text-gray-800 dark:text-gray-200">Archived Courses</h2>
                     <div className="space-y-3">
                         {Array.isArray(archivedCourses) && archivedCourses.map((course, index) => (
-                            <div key={index} className="p-3 bg-gray-100 rounded-lg">
-                                <h3 className="font-semibold text-lg">{course.title}</h3>
+                            <div key={index} className="p-3 bg-gray-100 rounded-lg dark:bg-gray-700">
+                                <h3 className="font-semibold text-lg dark:bg-gray-700">{course.title}</h3>
                                 {/*<p className="text-sm text-gray-600">{course.description}</p>*/}
                                 <div className="text-right">
-                                    <button className="text-blue-500 hover:text-blue-600" key={course.id}
-                                            onClick={() => handleDetailsClick(course)}>Details
+                                    <button className="text-blue-500 hover:text-blue-600 dark:text-white" key={course.id}
+                                            onClick={() => handleDetailsClick(course)}  >Details
                                     </button>
                                 </div>
                             </div>
@@ -62,7 +70,7 @@ const ArchivedCourses = () => {
                         <button
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
-                            className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
+                            className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50 dark:text-gray-200 dark:hover:bg-gray-600"
                         >
                             <span aria-hidden="true">&laquo;</span>
                         </button>
@@ -78,8 +86,7 @@ const ArchivedCourses = () => {
                         <button
                             disabled={currentPage === totalPages}
                             onClick={() => handlePageChange(currentPage + 1)}
-                            className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50"
-                        >
+                            className="px-3 py-1 mx-1 rounded text-gray-800 hover:bg-gray-200 disabled:opacity-50 dark:text-gray-200 dark:hover:bg-gray-600"                        >
                             <span aria-hidden="true">&raquo;</span>
                         </button>
                     </div>

@@ -1,8 +1,9 @@
 const API_BASE_URL = 'http://localhost:3000/api';
 
-export const fetchCourses = async (page = 1, pageSize = 10) => {
+export const fetchCourses = async (page = 1, pageSize = 10, searchQuery = '', isInternship ='false') => {
+    const query = new URLSearchParams({ page, pageSize, searchQuery, isInternship }).toString();
     try {
-        const response = await fetch(`${API_BASE_URL}/courses?page=${page}&pageSize=${pageSize}`);
+        const response = await fetch(`${API_BASE_URL}/courses?${query}`);
         if (response.ok) {
             return await response.json();
         } else {
