@@ -11,17 +11,26 @@ import AssignTeachers from "./views/course/AssignTeachers"
 import PrivateRoute from "views/auth/PrivateRoute";
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
+import RegisterPage from "views/auth/register";
+import SignIn from "views/auth/SignIn";
 
 
 
 const App = () => {
   return (
     <Routes>
-     <Route path="/" element={<Navigate to="/admin" replace />} />
-      <Route path="auth/*" element={<AuthLayout />} />
+      <Route path="/" element={<Navigate to="/admin" replace />} />
+      <Route path="auth/*" element={<AuthLayout />} >
+      </Route>
+      <Route path="sign-in" element={<SignIn />} />
+        <Route path="register" element={<RegisterPage/>}/>
+          
+     
       
-     {/*<Route element={<PrivateRoute allowedRoles={['admin']} />}>*/}
+      <Route element={<PrivateRoute allowedRoles={['admin',"student"]} />}>
+        
         <Route path="admin/*" element={<AdminLayout />}>
+          </Route>
           <Route path="courses"  element={<CoursesList />}/>
           <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
             <Route path="events" element={< EventsList />} />

@@ -5,15 +5,50 @@ const useInstrumentStore = create((set) => ({
   instruments: [],
   instrument: {},
   loading: false,
-  fetchInstruments: async (status, sort) => {
+  hasMorePages: true,
+  setHasMorePages: (hasMore) => set({ hasMorePages: hasMore }),
+  fetchInstruments: async (status, sort, page) => {
     try {
       set({ loading: true });
-      const { data } = await DataService.getPublicContent(status, sort);
-      console.log(data)
-      set({ instruments: data.instruments });
+      console.log(sort);
+      console.log(status);
+      if (sort !== "" || status !== "") {
+        console.log("ture");
+        page = 1;
+        set({ instruments: [] });
+        const { data } = await DataService.getPublicContent(
+          status,
+          sort,
+          "",
+          page
+        );
+        if (data.instruments.length === 0) {
+          set({ hasMorePages: false });
+        }
+        set((state) => ({
+          instruments: [...data.instruments],
+        }));
+        set({ loading: false });
+
+        return;
+      }
+      console.log("no");
+
+      const { data } = await DataService.getPublicContent(
+        status,
+        sort,
+        "",
+        page
+      );
+      if (data.instruments.length === 0) {
+        set({ hasMorePages: false });
+      }
+      set((state) => ({
+        instruments: [...state.instruments, ...data.instruments],
+      }));
       set({ loading: false });
+      return;
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -21,7 +56,6 @@ const useInstrumentStore = create((set) => ({
     try {
       set({ loading: true });
       const { data } = await DataService.addInstrument(postData);
-      console.log(data)
       set({ loading: false });
       return data;
     } catch (error) {
@@ -59,6 +93,9 @@ const useInstrumentStore = create((set) => ({
         sort,
         searchQuery
       );
+      if (data.instruments.length === 0) {
+        set({ hasMorePages: false });
+      }
       set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {

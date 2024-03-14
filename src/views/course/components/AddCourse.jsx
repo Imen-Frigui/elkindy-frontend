@@ -121,7 +121,7 @@ const AddCourse = ({ onCourseAdded }) => {
 
     return (
         <>
-            <ButtonComponent className="mb-3" text="Add Course" color="#006BBE" onClick={() => setIsDrawerOpen(true)}>
+            <ButtonComponent className="mb-3" text="Add Course" color="#0C4B65" onClick={() => setIsDrawerOpen(true)}>
                 Add course
             </ButtonComponent>
             {isDrawerOpen && (
