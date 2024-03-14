@@ -24,7 +24,6 @@ const AddCourse = ({ onCourseAdded }) => {
     const [errors, setErrors] = useState({
         courseName: '',
         courseDescription: '',
-        courseCategory: '',
         price: ''
     });
 
@@ -72,10 +71,6 @@ const AddCourse = ({ onCourseAdded }) => {
         if (!inputValues.courseName) {
             formIsValid = false;
             newErrors["courseName"] = "Course name is required.";
-        }
-        if (!inputValues.courseCategory) {
-            formIsValid = false;
-            newErrors["courseCategory"] = "Category is required.";
         }
         if (!inputValues.courseDescription) {
             formIsValid = false;
@@ -153,7 +148,7 @@ const AddCourse = ({ onCourseAdded }) => {
                                       placeholder="Enter course description"
                                       value={inputValues.courseDescription}
                                       onChange={handleOnChange}
-                                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                      className={`bg-gray-50 border ${errors.courseDescription ? 'border-red-500' : 'border-gray-300'} block p-2.5 w-full text-sm text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
                             ></textarea>
                             {errors.courseDescription && (
                                 <div className="error-message text-red-500 text-sm mt-1">
@@ -174,11 +169,7 @@ const AddCourse = ({ onCourseAdded }) => {
                                 <option value="Pinture">Pinture</option>
                                 <option value="Danse">Danse</option>
                             </select>
-                            {errors.courseCategory && (
-                                <div className="error-message text-red-500 text-sm mt-1">
-                                    {errors.courseCategory}
-                                </div>
-                            )}
+
                         </div>
                         <div>
                             <label htmlFor="price"
@@ -186,7 +177,7 @@ const AddCourse = ({ onCourseAdded }) => {
                             <input type="number" id="price" name="price" placeholder="Enter course price"
                                    value={inputValues.price}
                                    onChange={handleOnChange}
-                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
+                                   className={`bg-gray-50 border ${errors.price ? 'border-red-500' : 'border-gray-300'} w-full p-2.5 text-sm text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600`} />
                             {errors.price && (
                                 <div className="error-message text-red-500 text-sm mt-1">
                                     {errors.price}
