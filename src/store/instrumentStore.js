@@ -10,26 +10,26 @@ const useInstrumentStore = create((set) => ({
   fetchInstruments: async (status, sort, page, accessToken) => {
     try {
       set({ loading: true });
-      if (sort !== "" || status !== "") {
-        page = 1;
-        set({ instruments: [] });
-        const { data } = await DataService.getPublicContent(
-          accessToken,
-          status,
-          sort,
-          "",
-          page
-        );
-        if (data.instruments.length === 0) {
-          set({ hasMorePages: false });
-        }
-        set((state) => ({
-          instruments: [...data.instruments],
-        }));
-        set({ loading: false });
+      // if (sort !== "" || status !== "") {
+      //   page = 1;
+      //   set({ instruments: [] });
+      //   const { data } = await DataService.getPublicContent(
+      //     accessToken,
+      //     status,
+      //     sort,
+      //     "",
+      //     page
+      //   );
+      //   if (data.instruments.length === 0) {
+      //     set({ hasMorePages: false });
+      //   }
+      //   set((state) => ({
+      //     instruments: [...data.instruments],
+      //   }));
+      //   set({ loading: false });
 
-        return;
-      }
+      //   return;
+      // }
 
       const { data } = await DataService.getPublicContent(
         accessToken,
@@ -38,14 +38,13 @@ const useInstrumentStore = create((set) => ({
         "",
         page
       );
-      if (data.instruments.length === 0) {
-        set({ hasMorePages: false });
-      }
-      set((state) => ({
-        instruments: [...state.instruments, ...data.instruments],
-      }));
+      console.log(data.instruments);
+      // if (data.instruments.length === 0) {
+      //   set({ hasMorePages: false });
+      // }
+      set({ instruments: data.instruments });
+
       set({ loading: false });
-      return;
     } catch (error) {
       set({ loading: false });
     }
@@ -95,10 +94,11 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  searchInstruments: async (status, sort, searchQuery) => {
+  searchInstruments: async (status, sort, searchQuery, page, accessToken) => {
     try {
       set({ loading: true });
       const { data } = await DataService.getPublicContent(
+        accessToken,
         status,
         sort,
         searchQuery
@@ -108,6 +108,17 @@ const useInstrumentStore = create((set) => ({
       }
       set({ instruments: data.instruments });
       set({ loading: false });
+    } catch (error) {
+      console.error(error);
+      set({ loading: false });
+    }
+  },
+  deleteInstrument: async (instrumentId) => {
+    try {
+      set({ loading: true });
+     const {data} = await DataService.deleteInstrument(instrumentId);
+      set({ loading: false });
+      return data;
     } catch (error) {
       console.error(error);
       set({ loading: false });

@@ -42,33 +42,33 @@ const Marketplace = ({ location }) => {
     } else {
       navigate("/auth/sign-in");
     }
-    console.log(token);
     const fetchData = async () => {
-      if (hasMorePages) {
-        if (searchQuery) {
-          await searchInstruments(
-            status.toLocaleLowerCase() !== "all"
-              ? status.toLocaleLowerCase()
-              : "",
-            sort,
-            searchQuery,
-            page,
-            token
-          );
-        } else {
-          await fetchInstruments(
-            status.toLocaleLowerCase() !== "all"
-              ? status.toLocaleLowerCase()
-              : "",
-            sort,
-            page,
-            token
-          );
-        }
+      // if (hasMorePages) {
+      if (searchQuery) {
+        await searchInstruments(
+          status.toLocaleLowerCase() !== "all"
+            ? status.toLocaleLowerCase()
+            : "",
+          sort,
+          searchQuery,
+          page,
+          token
+        );
+      } else {
+        await fetchInstruments(
+          status.toLocaleLowerCase() !== "all"
+            ? status.toLocaleLowerCase()
+            : "",
+          sort,
+          page,
+          token
+        );
       }
+      // }
     };
     fetchData();
-  }, [page, age, status, sort, searchQuery, hasMorePages]);
+    console.log(instruments);
+  }, [age, status, sort, searchQuery]);
 
   const isActiveAge = useCallback(
     (elem) => {
