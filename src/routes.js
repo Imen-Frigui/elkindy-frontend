@@ -19,7 +19,7 @@ import EventsList from "views/events/EventsList";
 import TicketsList from "views/tickets/TicketsList";
 import EventDetails from "views/events/components/EventDetails";
 import { GiPapers } from "react-icons/gi";
-
+import { FaUsers } from "react-icons/fa";
 import {
   MdHome,
   MdPerson,
@@ -30,6 +30,7 @@ import AssignTeachers from "./views/course/AssignTeachers";
 
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
+import UserList from "views/users/usersList";
 
 
 const routes = [
@@ -78,13 +79,13 @@ const routes = [
     icon: <MdEventNote className="h-6 w-6" />,
     component: <EventsList />,
   },
- /* {
-    name: "Tickets List",
+  {
+    name: "Users List",
     layout: "/admin",
-    path: "tickets",
-    icon: <GiTicket className="h-6 w-6" />,
-    component: <TicketsList />,
-  },*/
+    path: "users",
+    icon: <FaUsers className="h-6 w-6" />,
+    component: <UserList />,
+  },
 
   {
     name: "Courses List",

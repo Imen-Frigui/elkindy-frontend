@@ -226,7 +226,7 @@ const TeacherFormStep1 = ({ onNext }) => {
         </svg>
                 Use at least 8 characters, one uppercase, one lowercase and one number.
       </Typography>
-      {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+      
       <Input
                         type="password"
                         icon={<FontAwesomeIcon icon={faCheck} />}

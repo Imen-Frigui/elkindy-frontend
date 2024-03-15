@@ -119,19 +119,20 @@ export default function SignIn() {
       {/* Checkbox */}
       <div className="mb-4 flex items-center justify-between px-2">
         <div className="flex items-center">
-          <Checkbox />
+        {/*  <Checkbox />
           <p className="ml-2 text-sm font-medium text-navy-700 dark:text-white">
             Keep me logged In
-          </p>
+    </p> */}
+    {loginError && <div className="text-red-500">{loginError}</div>}
         </div>
         <a       onClick={handleForgotPasswordClick}
-          className="text-sm font-medium text-brand-600 hover:text-brand-600 dark:text-white"
+          className="text-sm  text-kindyblue font-medium text-brand-600 hover:text-kindyorange dark:text-white"
           href=" "
         >
           Forgot Password?
         </a>
       </div>
-      {loginError && <div className="text-red-500">{loginError}</div>}
+      
   {/* Your input fields here */}
   <button
       disabled={isLoading}
@@ -148,7 +149,7 @@ export default function SignIn() {
           </span>
           <a
             href="/auth/register"
-            className="ml-1 text-sm font-medium text-brand-600 hover:text-brand-600 dark:text-white"
+            className="ml-1  text-kindyblue  text-sm font-medium text-brand-600 hover:text-kindyorange  dark:text-white"
           >
             Create an account
           </a>

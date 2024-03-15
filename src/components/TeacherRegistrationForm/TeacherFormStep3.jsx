@@ -10,9 +10,7 @@ const TeacherFormStep3 = ({ onBack, onConfirm }) => {
     const navigate = useNavigate();
     const [register, { isLoading }] = useRegisterMutation();
 
-    // Fetch the accumulated registration data from the Redux state
     const formData = useSelector(state => state.registration.formData);
-
     const { userInfo } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -23,25 +21,29 @@ const TeacherFormStep3 = ({ onBack, onConfirm }) => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-     
-            try {
-                const result = await register(formData).unwrap();
-                dispatch(setCredentialsRegistration({ ...result }));
-                console.log(result);
-                navigate('/admin/default');
-            } catch (err) {
-                toast.error(err?.data?.message || 'Registration failed');
-            }
-        
+        try {
+            const result = await register(formData).unwrap();
+            dispatch(setCredentialsRegistration({ ...result }));
+            navigate('/admin/default');
+        } catch (err) {
+            toast.error(err?.data?.message || 'Registration failed');
+        }
     };
 
     return (
-        <div>
-            <h3>Step 3: Confirm Your Details</h3>
-            <p>Please review all your details and click confirm to complete your registration.</p>
-      
-            <button type="button" onClick={onBack} className="px-6 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 rounded-md">Back</button>
-            <button onClick={submitHandler}>Confirm</button>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-kindygray">
+            <div className="max-w-lg w-full bg-white rounded-lg shadow-lg p-6 space-y-6 bg-lightblue">
+                <h3 className="text-2xl font-semibold text-center">Confirm Your Details</h3>
+                <p className="text-gray-600">Please review all your details and click confirm to complete your registration.</p>
+                <div className="flex justify-between">
+                    <button type="button" onClick={onBack}     className="px-6 py-2 border border-white/0 text-kindyblue bg-white/0 hover:bg-kindyblue rounded-tl-2xl rounded-br-2xl hover:text-white hover:border-blue-700 rounded-md"
+>Back</button>
+                    <button onClick={submitHandler}     className="px-6 py-2 hover:text-white hover:bg-kindyorange bg-white/0 border-2 rounded-tl-2xl rounded-br-2xl  text-kindyorange border-kindyorange hover:border-2 rounded-md h"
+>
+                        {isLoading ? 'Registering...' : 'Confirm'}
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
