@@ -1,16 +1,28 @@
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Card from "components/card";
 import useInstrumentStore from "store/instrumentStore";
 import { Link } from "react-router-dom";
 import { Button } from "../index";
+import { useNavigate } from "react-router-dom";
 
 const InstrumentCard = ({ instrument, bidders, image }) => {
-  const [heart, setHeart] = useState(false);
+  const [liked, setLiked] = useState(instrument.liked || false);
+  const [token, setToken] = useState("");
+  const navigate = useNavigate();
+
   const { likePost } = useInstrumentStore();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setToken(token);
+    } else {
+      navigate("/auth/sign-in");
+    }
+  }, [navigate]);
   async function handleLikeClick() {
-    await likePost(instrument._id);
-    setHeart(!heart);
+    const response = await likePost(instrument._id, token);
+    setLiked(!liked);
   }
   return (
     // <Link to={"/admin/marketplace/instrument/" + instrument._id}>
@@ -29,7 +41,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
             className="absolute top-3 right-3 flex items-center justify-center rounded-full bg-white p-2 text-red-600 hover:cursor-pointer"
           >
             <div className="flex h-full w-full items-center justify-center rounded-full text-xl hover:bg-gray-50 dark:text-navy-900">
-              {!heart ? (
+              {!liked ? (
                 <IoHeartOutline />
               ) : (
                 <IoHeart className="text-red-600" />

@@ -8,25 +8,27 @@ import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
 import RTLDefault from "views/rtl/default";
 import { GiTicket } from "react-icons/gi";
-import { FaUserTie, FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
+import {  FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
+import EventsList from "views/events/EventsList";
+
 import SignIn from "views/auth/SignIn";
 import ExamsList from "views/exams/exam.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
-import EventsList from "views/events/EventsList";
 import TicketsList from "views/tickets/TicketsList";
 import EventDetails from "views/events/components/EventDetails";
 import { GiPapers } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";
 import {
-  MdHome,
-  MdPerson,
-  MdLock
+    MdHome,
+    MdPerson,
+    MdLock
 } from "react-icons/md";
 
-import AssignTeachers from "./views/course/AssignTeachers";
+
+    import AssignTeachers from "./views/course/AssignTeachers";
 
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
@@ -87,63 +89,56 @@ const routes = [
     component: <UserList />,
   },
 
-  {
-    name: "Courses List",
-    layout: "/admin",
-    path: "courses",
-    icon: <MdBook className="h-6 w-6 " />,
-    component: <CoursesList />,
-  },
+    {
+        name: "Courses List",
+        layout: "/admin",
+        path: "courses",
+        icon: <MdBook className="h-6 w-6" />,
+        component: <CoursesList />,
+    },
 
-  {
-    name: "All Exams",
-    layout: "/admin",
-    path: "exams",
-    icon: <GiPapers className="h-6 w-6" />,
-    component: <ExamsList />,
-  },
 
+    {
+        name: "All Exams",
+        layout: "/admin",
+        path: "exams",
+        icon: <GiPapers className="h-6 w-6" />,
+        component: <ExamsList />,
+    },
 
 {
     name: "Sign In",
-    layout: "/auth",
+        layout: "/auth",
     path: "sign-in",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-        component: <SignIn />,
+    component: <SignIn />,
     hide: true,
-  },
-  {
+},
+{
     name: "registration",
-    layout: "/auth",
+        layout: "/auth",
     path: "Register",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     component: <Register />,
     hide: true,
 
-  },
-  
+},
 
-  {
+
+{
     name: "unauthorized",
-    layout: "/auth",
+        layout: "/auth",
     path: "unauthorized",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     hide: true,
-       component: <UnauthorizedPage />,
-  },
+    component: <UnauthorizedPage />,
+},
 
-  
-    /*
-  {
-    layout: "/admin",
-    path: "/assign-teachers/:courseId",
-    component: <AssignTeachers />,
-    hide: true,
-  },*/
+
 
 ];
 
-export default routes;
 
+export default routes;

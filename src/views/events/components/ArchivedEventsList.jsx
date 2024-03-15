@@ -125,13 +125,13 @@ style={{ fontFamily: "Georgia, serif" }}
                     type="text"
                     placeholder="Search..."
                     className="h-10 rounded-md border border-gray-300 px-3 py-2 "
-                    style={{ width: "300px" }}
+                    style={{ width: "300px", borderRadius: '22px 0 0 22px' }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   <button
                     className="rounded-r-md bg-gray-200 p-2"
-                    style={{ backgroundColor: "rgb(0, 107, 190)" }}
+                    style={{ backgroundColor: "rgb(0, 107, 190)", borderRadius: "0 22px 22px 0" }}
                   >
                     <IoMdSearch style={{ color: "white" }} />
                   </button>

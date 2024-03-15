@@ -14,11 +14,10 @@ import { FaGuitar, FaPiano, FaViolin } from 'react-icons/fa';
 
 
 export default function SignIn() {
+  // const navigate = useNavigate();
 
- // const navigate = useNavigate();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ export default function SignIn() {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate('/admin/default');
+      navigate("/admin/default");
     } catch (err) {
       dispatch(setLoginError(err?.data?.message || 'An error occurred during login.'));
     }
@@ -65,7 +64,7 @@ export default function SignIn() {
 <h4 className="mb-2.5 md:rounded-lg text-4xl font-bold text-navy-700 dark:text-white text-center">
           Sign In
         </h4>
-        <p className="mb-9 text-base text-gray-600 text-center">
+        <p className="mb-9 text-center text-base text-gray-600">
           Enter your email and password to sign in!
         </p>
         <div className="mb-6 flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-lightPrimary hover:cursor-pointer dark:bg-navy-800 shadow-lg">
@@ -143,7 +142,7 @@ export default function SignIn() {
 </form>
 {isLoading && <Loader />}
 
-<div className="mt-4 flex justify-center">
+        <div className="mt-4 flex justify-center">
           <span className="text-sm font-medium text-navy-700 dark:text-gray-600">
             Not registered yet ?
           </span>

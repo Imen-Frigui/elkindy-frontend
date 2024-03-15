@@ -238,10 +238,8 @@ const EventsList = () => {
       doc.setDrawColor(0);
       doc.roundedRect(10, 10, 260, 90, 4, 4, 'S');
   
-      // Logo at the top left with increased size
-      doc.addImage(img1, "JPEG", 15, 15, 70, 70); // Logo dimensions
+      doc.addImage(img1, "JPEG", 15, 15, 70, 70); 
   
-      // Event title in the middle at the top
       doc.setFontSize(16);
       doc.setFont(undefined, 'bold');
       doc.text(event.title, 140, 20, { align: "center" });
@@ -273,9 +271,6 @@ const EventsList = () => {
       doc.text(`Capacity: ${event.capacity}`, 140, 95, { align: "center" }); 
     });
 
-
-    
-  
     doc.save("events.pdf");
   };
   
@@ -322,19 +317,19 @@ const EventsList = () => {
               </div>
               {/* Search bar */}
               <div className="flex items-center">
-                <div className="flex">
+                <div className="flex"         >
                   <input
                     type="text"
                     placeholder="Search..."
                     className="h-10 rounded-md border border-gray-300 px-3 py-2 "
-                    style={{ width: "300px" }}
+                    style={{ width: "300px", borderRadius: '22px 0 0 22px' }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   <button
                     className="rounded-r-md bg-gray-200 p-2"
-                    style={{ backgroundColor: "rgb(0, 107, 190)" }}
-                  >
+                    style={{ backgroundColor: "rgb(0, 107, 190)", borderRadius: "0 22px 22px 0" }}
+                    >
                     <IoMdSearch style={{ color: "white" }} />
                   </button>
                 </div>

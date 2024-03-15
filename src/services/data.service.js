@@ -2,26 +2,39 @@ import { apiRoutes } from "../config/api";
 import apiHeader from "../utils/apiHeader";
 
 export default class DataService {
-  static async getPublicContent(status = "", sort = "", search = "", page) {
+  static async getPublicContent(
+    accessToken,
+    status = "",
+    sort = "",
+    search = "",
+    page
+  ) {
     if (search.length) {
       return apiRoutes.get(
-        `/instruments/search/?status=${status}&sort=${sort}&query=${search}&pageNumber=${page}`
+        `/instruments/search/?status=${status}&sort=${sort}&query=${search}`,
+        apiHeader(accessToken)
       );
     }
     return apiRoutes.get(
-      `/instruments/?status=${status}&sort=${sort}&query=${search}&pageNumber=${page}`
+      `/instruments/?status=${status}&sort=${sort}`,
+      apiHeader(accessToken)
+    );
+  }
+
+  static async getUserInstruments(accessToken) {
+    return apiRoutes.get(
+      `/instruments/user/instruments`,
+      apiHeader(accessToken)
     );
   }
 
   static async getInstrument(id) {
-    console.log("printing values");
     return apiRoutes.get(`/instruments/${id}`);
   }
 
-  static async addInstrument(instrumentData) {
+  static async addInstrument(instrumentData, accessToken) {
     const { author, title, type, details, price, status, brand, condition } =
       instrumentData;
-    console.log(instrumentData);
     return apiRoutes.post(
       "/instruments",
       {
@@ -33,12 +46,22 @@ export default class DataService {
         price,
         condition,
         status,
-      }
-      // apiHeader(accessToken)
+      },
+      apiHeader(accessToken)
     );
   }
 
-  static async likePost(id) {
-    return apiRoutes.patch(`/instruments/${id}/like`);
+  static async likePost(id, accessToken) {
+    return apiRoutes.patch(
+      `/instruments/${id}/like`,
+      {},
+      apiHeader(accessToken)
+    );
+  }
+  static async deleteInstrument(instrumentId, accessToken) {
+    return apiRoutes.delete(
+      `/instruments/${instrumentId}`,
+      apiHeader(accessToken)
+    );
   }
 }
