@@ -109,6 +109,15 @@ module.exports = withMT({
       fontFamily: {
         body: ["Jost"]
       },
+      fontSize: {
+        sm: '0.8rem',
+        base: '1rem',
+        xl: '1.25rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
+      },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
         inset: "inset 0px 18px 22px",
@@ -151,9 +160,10 @@ module.exports = withMT({
       kindyyellow: '#FCCB67',
       kindygray: '#F7F5EF',
       fontcolor: '#3A4374',
+      lightblue :'#f4fbff',
       bluebg: '#F7F8FD',
-
-
+      lightkindydarkblue :'#2f82a4',
+      kindyyellowlight :'#ffd26d',
       gray: {
         50: "#f8f9fa",
         100: "#edf2f7",

@@ -12,17 +12,22 @@ import { FaUserTie, FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
+import ExamsList from "views/exams/exam.jsx"
+// Icon Imports
 import CoursesList from "views/course/CoursesList";
 import EventsList from "views/events/EventsList";
 import TicketsList from "views/tickets/TicketsList";
 import EventDetails from "views/events/components/EventDetails";
-
+import { GiPapers } from "react-icons/gi";
 
 import {
   MdHome,
   MdPerson,
-  MdLock,
+  MdLock
 } from "react-icons/md";
+
+import AssignTeachers from "./views/course/AssignTeachers";
+
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 
@@ -59,13 +64,13 @@ const routes = [
   },
  
   
-  {
+ /* {
     name: "RTL Admin",
     layout: "/rtl",
     path: "rtl",
     icon: <MdHome className="h-6 w-6" />,
     component: <RTLDefault />,
-  },
+  },*/
   {
     name: "Events List",
     layout: "/admin",
@@ -73,14 +78,13 @@ const routes = [
     icon: <MdEventNote className="h-6 w-6" />,
     component: <EventsList />,
   },
-  
-  {
+ /* {
     name: "Tickets List",
     layout: "/admin",
     path: "tickets",
     icon: <GiTicket className="h-6 w-6" />,
     component: <TicketsList />,
-  },
+  },*/
 
   {
     name: "Courses List",
@@ -89,6 +93,15 @@ const routes = [
     icon: <MdBook className="h-6 w-6 " />,
     component: <CoursesList />,
   },
+
+  {
+    name: "All Exams",
+    layout: "/admin",
+    path: "exams",
+    icon: <GiPapers className="h-6 w-6" />,
+    component: <ExamsList />,
+  },
+
 
 {
     name: "Sign In",
@@ -119,6 +132,8 @@ const routes = [
     hide: true,
        component: <UnauthorizedPage />,
   },
+
+  
     /*
   {
     layout: "/admin",
@@ -126,5 +141,8 @@ const routes = [
     component: <AssignTeachers />,
     hide: true,
   },*/
+
 ];
+
 export default routes;
+

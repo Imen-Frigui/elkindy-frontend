@@ -45,7 +45,8 @@ export default function DeleteConfirmationDialog({ open, onClose, onConfirm, eve
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Are you sure you want to delete this event "{eventTitle}"?
+                        {/* Are you sure you want to delete this event "{eventTitle}" Permanently? */}
+                        Are you sure you want to delete this event Permanently ?
                       </p>
                     </div>
                   </div>

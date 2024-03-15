@@ -10,13 +10,15 @@ import UpdateEvent from "views/events/components/UpdateEvent";
 import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
-
+import ArchivedEventsList  from "../../views/events/components/ArchivedEventsList"
 
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import { io } from "socket.io-client";
 import EventsList from "views/events/EventsList";
+import ExamsList from "views/exams/exam";
+
 
 
 export default function Admin(props) {
@@ -126,8 +128,10 @@ export default function Admin(props) {
                 <Route path="/events/details/:eventId" element={<EventDetails />} />
 
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
+                <Route path="/events/archived" element={<ArchivedEventsList />} />
 
 
+              <Route path={"/exams"} element={<ExamsList/>}/>
 
                 <Route
                   path="/marketplace/create"

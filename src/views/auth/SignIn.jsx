@@ -4,12 +4,16 @@ import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
+import * as Yup from 'yup';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../../slices/userApiSlice';
-import { setCredentials } from '../../slices/authSlice';
+import { setCredentials, setLoginError } from '../../slices/authSlice';
 import Loader from "components/button/Loader";
+import { FaGuitar, FaPiano, FaViolin } from 'react-icons/fa';
+
+
+
 export default function SignIn() {
 
  // const navigate = useNavigate();
@@ -21,14 +25,22 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
-
-  const { userInfo } = useSelector((state) => state.auth);
+  const loginError = useSelector(state => state.auth.loginError);
+    const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/admin/default');
     }
   }, [navigate, userInfo]);
+
+  const handleChange = (setter) => (e) => {
+    setter(e.target.value);
+    // Reset login error when the user starts typing again
+    if (loginError) {
+      dispatch(setLoginError(null));
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -37,19 +49,19 @@ export default function SignIn() {
       dispatch(setCredentials({ ...res }));
       navigate('/admin/default');
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      dispatch(setLoginError(err?.data?.message || 'An error occurred during login.'));
     }
   };
 
-
   return (
-   <div className="grid lg:grid-cols-2 lg:gap-0 md:grid-cols-1 sm:grid-cols-1 " >
-    <div className="bg-customBackground ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full "
+    
+   <div className=" mt-60  grid lg:grid-cols-2  lg:gap-0 md:grid-cols-1 sm:grid-cols-1  " >
+    <div className=" sm:rounded-lg ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full bg-lightblue "
     style={{ 
-    borderRadius: '30px 0 0 30px'
+    borderRadius: '100px 0 0 0 '
 }} >
 
-<h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white text-center">
+<h4 className="mb-2.5 md:rounded-lg text-4xl font-bold text-navy-700 dark:text-white text-center">
           Sign In
         </h4>
         <p className="mb-9 text-base text-gray-600 text-center">
@@ -71,7 +83,7 @@ export default function SignIn() {
       <form onSubmit={submitHandler} className="container w-full">  
       {/* Email */}
       <input
-      
+      required
         variant="auth"
         extra="mb-3"
         label="Email*"
@@ -79,11 +91,11 @@ export default function SignIn() {
         id="email"
         type="text"
         name="email"
- 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-        className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
 
+            value={email}
+            onChange={handleChange(setEmail)}
+            className={`mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none mb-3
+          }`}
       /> 
 
 
@@ -98,6 +110,7 @@ export default function SignIn() {
         id="password"
         type="password"
         name="password"
+        required
         value={password}
         onChange={(e) => setPassword(e.target.value)}
 
@@ -117,13 +130,12 @@ export default function SignIn() {
           Forgot Password?
         </a>
       </div>
-  
+      {loginError && <div className="text-red-500">{loginError}</div>}
   {/* Your input fields here */}
   <button
       disabled={isLoading}
      type="submit"
-    className="linear mt-2 w-full bg-blue-700 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500 dark:active:bg-blue-300 rounded-tr-[25px] rounded-bl-[25px]"
-  >
+     className="mt-2 w-full bg-kindyblue py-[12px] text-base font-medium text-white rounded-tl-3xl rounded-br-3xl hover:bg-transparent  hover:border-2 hover:text-blue-700 border-2 hover:border-white/0 border-white/0 hover:bg-kindyorange hover:text-white">
     Sign In
   </button>
 </form>
@@ -142,10 +154,9 @@ export default function SignIn() {
         </div>
       </div>
     <div
-    class="h-full items-end bg-cover bg-center shadow-lg"
-    style={{ 
+    className="bg-cover bg-center shadow-lg sm:w4/6 "    style={{ 
       backgroundImage: `url(${authImg})`,
-      borderRadius: '0 30px 30px 0'  
+      borderRadius: '0 0 100px 0'   , width: '85.71%' 
     }}
 />
     </div> 
