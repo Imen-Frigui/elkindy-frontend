@@ -13,7 +13,6 @@ import Loader from "components/button/Loader";
 import { FaGuitar, FaPiano, FaViolin } from 'react-icons/fa';
 
 
-
 export default function SignIn() {
 
  // const navigate = useNavigate();
@@ -27,7 +26,9 @@ export default function SignIn() {
   const [login, { isLoading }] = useLoginMutation();
   const loginError = useSelector(state => state.auth.loginError);
     const { userInfo } = useSelector((state) => state.auth);
-
+    const handleForgotPasswordClick = () => {
+      navigate('/auth/forgot-password');
+    };
   useEffect(() => {
     if (userInfo) {
       navigate('/admin/default');
@@ -123,7 +124,7 @@ export default function SignIn() {
             Keep me logged In
           </p>
         </div>
-        <a
+        <a       onClick={handleForgotPasswordClick}
           className="text-sm font-medium text-brand-600 hover:text-brand-600 dark:text-white"
           href=" "
         >

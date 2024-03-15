@@ -110,7 +110,7 @@ module.exports = withMT({
         body: ["Jost"]
       },
       fontSize: {
-        sm: '0.8rem',
+        sm: '1rem',
         base: '1rem',
         xl: '1.25rem',
         '2xl': '1.563rem',
