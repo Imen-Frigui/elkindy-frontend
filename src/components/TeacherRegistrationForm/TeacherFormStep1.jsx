@@ -3,6 +3,7 @@ import authImg from "assets/img/auth/register1.jpg";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import{updateRegistrationData} from 'slices/authSlice';
+import axios from 'axios';
 import { Input, Typography } from '@material-tailwind/react';
     // Clear the error as soon as the user starts correcting it.
     import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -53,56 +54,81 @@ const TeacherFormStep1 = ({ onNext }) => {
             [name]: null // or null, or ''
           }));
       };
+    
+
       const handleNext = async (e) => {
-        e.preventDefault();
-        try {
-            await schema.validate(formData, { abortEarly: false });
-    
-            // Check email existence
-            const emailExistsResponse = await fetch(`http://localhost:3030/api/auth/check-email/${formData.email}`);
-            if (emailExistsResponse.ok) {
-                const data = await emailExistsResponse.json();
-                if (data.exists) {
-                    setErrors(prevErrors => ({
-                        ...prevErrors,
-                        email: 'Email already exists'
-                    }));
-                    return;
+          e.preventDefault();
+      
+          try {
+              // Validate formData with your schema
+              await schema.validate(formData, { abortEarly: false });
+      
+              // Check if the email already exists in your database
+              const emailExistsResponse = await fetch(`http://localhost:3000/api/auth/check-email/${formData.email}`);
+              if (emailExistsResponse.ok) {
+                  const data = await emailExistsResponse.json();
+                  if (data.exists) {
+                      setErrors(prevErrors => ({
+                          ...prevErrors,
+                          email: 'Email already exists'
+                      }));
+                      return;
+                  }
+              } else {
+                  console.error('Failed to fetch email existence:', emailExistsResponse.statusText);
+              }
+      
+              // Email verification using the quickemailverification API
+              const options = {
+                method: 'GET',
+                url: 'https://quickemailverification.p.rapidapi.com/v1/verify',
+                params: {
+                  email: formData.email
+                },
+                headers: {
+                  Authorization: 'fcfc270fa60787dbe029b0e0a28fafbf159062264c54b0f245803e3355aa',
+                  'X-RapidAPI-Key': '3a97662529mshf6ceb2a7f2d6b91p13098bjsn1e114a6cd770',
+                  'X-RapidAPI-Host': 'quickemailverification.p.rapidapi.com'
                 }
-            } else {
-                console.error('Failed to fetch email existence:', emailExistsResponse.statusText);
-            }
-    
-            // Check phone number existence
-            const phoneExistsResponse = await fetch(`http://localhost:3030/api/auth/check-phone/${formData.phoneNumber}`);
-            if (phoneExistsResponse.ok) {
-                const data = await phoneExistsResponse.json();
-                if (data.exists) {
-                    setErrors(prevErrors => ({
-                        ...prevErrors,
-                        phoneNumber: 'Phone number already exists'
-                    }));
-                    return;
-                }
-            } else {
-                console.error('Failed to fetch phone number existence:', phoneExistsResponse.statusText);
-            }
-    
-            // If validations pass and no errors found, proceed to the next step
-            onNext();
-        } catch (err) {
-            // Handle validation errors
-            const newErrors = err.inner.reduce((acc, error) => ({
-                ...acc,
-                [error.path]: error.message,
-            }), {});
-            setErrors(newErrors);
-        }
-    };
+              };
+      
+              const response = await axios.request(options);
+              if (response.data && response.data.result === "valid") {
+                  console.log("Email is valid:", response.data);
+      
+                  // Proceed to the next step if the email is valid
+                  onNext();
+              } else {
+                  // Handle the case where the email is not valid
+                  setErrors(prevErrors => ({
+                      ...prevErrors,
+                      email: 'Email is not valid'
+                  }));
+              }
+      
+          } catch (error) {
+              if (error.response) {
+                  console.error('API error:', error.response.data);
+              } else if (error.request) {
+                  console.error('Network error:', error.request);
+              } else {
+                  console.error('Error:', error.message);
+              }
+      
+              // Handle validation errors from Yup
+              if (error.inner) {
+                  const newErrors = error.inner.reduce((acc, curr) => ({
+                      ...acc,
+                      [curr.path]: curr.message,
+                  }), {});
+                  setErrors(newErrors);
+              }
+          }
+      };
     
     return (
         <div className="flex flex-col lg:grid lg:grid-cols-2 items-center">
-                    <div className="bg-customBackground ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full"
+                    <div className="bg-lightblue ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full"
                  style={{ borderRadius: '30px 0 0 30px' }}>
                 <h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white text-center">Sign up as Teacher</h4>
                 <p className="mb-9 text-base text-gray-600 text-center">Enter your details to sign up!</p>
@@ -113,7 +139,7 @@ const TeacherFormStep1 = ({ onNext }) => {
                     <div className="flex mt-7 flex-col md:flex-row md:space-x-4">
 
                     <Input 
-                    className='flex-1  rounded-xl border-none  bg-white/0 p-3 text-sm '
+                    className='flex-1  rounded-xl border-none  bg-white/0 p-3 text-[16px] text-gray-750'
                     
                       icon={<FontAwesomeIcon icon={faUser} />}
                       label='First Name'
@@ -125,10 +151,10 @@ const TeacherFormStep1 = ({ onNext }) => {
                             error={Boolean(errors.firstName)}
                             helperText={errors.firstName}
                         />
-                  
+                      {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
                         
                         <Input
-                    className='flex-1  rounded-xl border-none mb-3 bg-white/0 p-3 text-sm '
+                    className='flex-1  rounded-xl border-none mb-3 bg-white/0 p-3 text-[16px] text-gray-750'
                 
                              icon={<FontAwesomeIcon icon={faUser} />}
                            label="Last Name" 
@@ -140,25 +166,26 @@ const TeacherFormStep1 = ({ onNext }) => {
                             helperText={errors.lastName}
                         />
                     </div>
-                    
+                    {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                     {/* Email */}
                     <Input
                      type="email"
                      label="Email Address"
                     placeholder="Email"
                     name='email'
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 outline-none mb-3 text-[16px] text-gray-750 "
                         value={formData.email || ''}
                         onChange={handleChange}
                         error={Boolean(errors.email)}
                         helperText={errors.email}
                     />
+                      {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
 
                       <Input 
                         type="date" 
                         label='Birth Date'
                         placeholder="12-345-678" 
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3  text-base"
                         value={formData.dateOfBirth || ''}
                         onChange={handleChange}
                         name="dateOfBirth"
@@ -166,8 +193,8 @@ const TeacherFormStep1 = ({ onNext }) => {
                         error={Boolean(errors.dateOfBirth)}
                         helperText={errors.dateOfBirth}
                     />
-       
-                    
+                             {errors.dateOfBirth && <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>}
+
                     {/* Password */}
                       <Input 
                       type="password"
@@ -175,7 +202,7 @@ const TeacherFormStep1 = ({ onNext }) => {
                       icon={<FontAwesomeIcon icon={faLock} />}
 
                       label="Password" 
-                    className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3"
+                    className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 text-[16px] text-gray-750"
                     value={formData.password || ''}
                     onChange={handleChange}
                     error={Boolean(errors.password)}
@@ -184,8 +211,7 @@ const TeacherFormStep1 = ({ onNext }) => {
              <Typography
               variant="small"
                   color="gray"
-                      className=" mt-2 flex items-center gap-1 font-normal"
-                     >
+                  className={`mt-2 flex items-center gap-1 font-normal ${errors.password ? 'text-red-500' : 'text-gray-600'}`}                     >
                      <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -200,12 +226,12 @@ const TeacherFormStep1 = ({ onNext }) => {
         </svg>
                 Use at least 8 characters, one uppercase, one lowercase and one number.
       </Typography>
-
+      
       <Input
                         type="password"
                         icon={<FontAwesomeIcon icon={faCheck} />}
                         label="Confirm Password"
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 text-[16px] text-gray-750 "
                         name='confirmPassword'
                         value={formData.confirmPassword}
                         onChange={handleChange}
@@ -217,7 +243,7 @@ const TeacherFormStep1 = ({ onNext }) => {
                         type="text" 
                         label='Phone Number'
                         placeholder="12-345-678" 
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 "
+                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3 text-[16px] text-gray-750  "
                         value={formData.phoneNumber || ''}
                         onChange={handleChange}
                         name="phoneNumber"

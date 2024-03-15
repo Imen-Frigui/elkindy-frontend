@@ -16,19 +16,26 @@ import UpdateEvent from "./views/events/components/UpdateEvent"
 import ArchivedEventsList  from "./views/events/components/ArchivedEventsList"
 import SignIn from "views/auth/SignIn";
 import RegisterPage from "views/auth/register";
+import ForgotPassword from "views/auth/Password/forgotPassword";
+import ResetPassword from "views/auth/Password/resetPassword";
+
+
+
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/admin" replace />} />
+      <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
       <Route path="auth/*" element={<AuthLayout />} >
       </Route>
-      <Route path="sign-in" element={<SignIn />} />
-        <Route path="register" element={<RegisterPage/>}/>
-          
-      <Route element={<PrivateRoute allowedRoles={['admin',"student"]} />}>
+  <Route path="auth/forgot-password" element={<ForgotPassword />} />  
+  <Route path="auth/reset-password" element={<ResetPassword />} />  
+
+      
+      <Route element={<PrivateRoute allowedRoles={['admin',"student",'teacher']} />}>
+        
         <Route path="admin/*" element={<AdminLayout />}>
-        </Route>
+          </Route>
           <Route path="courses"  element={<CoursesList />}/>
           <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
             <Route path="events" element={< EventsList />} />
