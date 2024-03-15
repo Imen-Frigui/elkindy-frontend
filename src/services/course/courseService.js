@@ -1,8 +1,9 @@
 const API_BASE_URL = 'http://localhost:3000/api';
 
-export const fetchCourses = async () => {
+export const fetchCourses = async (page = 1, pageSize = 10, searchQuery = '', isInternship ='false') => {
+    const query = new URLSearchParams({ page, pageSize, searchQuery, isInternship }).toString();
     try {
-        const response = await fetch(`${API_BASE_URL}/courses`);
+        const response = await fetch(`${API_BASE_URL}/courses?${query}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -96,9 +97,9 @@ export const archiveCourse = async (courseId) => {
     }
 };
 
-export const fetchArchivedCourses = async () => {
+export const fetchArchivedCourses = async (page = 1, pageSize = 10) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/courses/arch/archived`);
+        const response = await fetch(`${API_BASE_URL}/courses/arch/archived?page=${page}&pageSize=${pageSize}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -110,8 +111,6 @@ export const fetchArchivedCourses = async () => {
 };
 
 export const updateCourseTeachers = async (courseId, teacherIds) => {
-    const stringifiedTeacherIds = JSON.stringify({ teacherIds });
-    console.log('Stringified Teacher Ids:', stringifiedTeacherIds);
     try {
         const response = await fetch(`${API_BASE_URL}/courses/details/${courseId}/teachers`, {
             method: 'PUT',

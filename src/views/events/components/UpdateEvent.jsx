@@ -162,6 +162,7 @@ const UpdateEvent = () => {
               <input
                 id="event-title"
                 type="text"
+                placeholder="Enter your Event title"
                 value={event?.title}
                 onChange={(e) => {
                   setEvent({ ...event, title: e.target.value });
@@ -190,6 +191,7 @@ const UpdateEvent = () => {
               </label>
               <input
                 id="event-location"
+                placeholder="Enter your Event location"
                 type="text"
                 value={event?.location}
                 onChange={(e) => {
@@ -263,6 +265,7 @@ const UpdateEvent = () => {
             </label>
             <textarea
               id="event-description"
+              placeholder="write your event description  here..."
               value={event?.description}
               onChange={(e) =>
                 setEvent({ ...event, description: e.target.value })
@@ -408,6 +411,7 @@ const UpdateEvent = () => {
             <input
               id="capacity"
               type="number"
+              placeholder="capacity"
               value={event?.capacity}
               onChange={(e) =>
                 setEvent({ ...event, capacity: parseInt(e.target.value) })

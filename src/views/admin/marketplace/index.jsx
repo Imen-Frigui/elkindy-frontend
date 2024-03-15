@@ -11,15 +11,18 @@ import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
 import { useQuery } from "../../../hooks/useQuery";
 import useShowToast from "../../../hooks/useShowToast";
+import { useNavigate } from "react-router-dom";
 
 const Marketplace = ({ location }) => {
   const { type } = useParams();
   const query = useQuery();
   const showToast = useShowToast();
+  const [token, setToken] = useState("");
 
   const [status, setStatus] = useState("All");
   const [age, setAge] = useState("3-5");
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
   const [sort, setSort] = useState("");
   const [showFilter, setShowFilter] = useState(false);
@@ -33,30 +36,39 @@ const Marketplace = ({ location }) => {
   } = useInstrumentStore();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setToken(token);
+    } else {
+      navigate("/auth/sign-in");
+    }
     const fetchData = async () => {
-      if (hasMorePages) {
-        if (searchQuery) {
-          await searchInstruments(
-            status.toLocaleLowerCase() !== "all"
-              ? status.toLocaleLowerCase()
-              : "",
-            sort,
-            searchQuery,
-            page
-          );
-        } else {
-          await fetchInstruments(
-            status.toLocaleLowerCase() !== "all"
-              ? status.toLocaleLowerCase()
-              : "",
-            sort,
-            page
-          );
-        }
+      // if (hasMorePages) {
+      if (searchQuery) {
+        await searchInstruments(
+          status.toLocaleLowerCase() !== "all"
+            ? status.toLocaleLowerCase()
+            : "",
+          sort,
+          searchQuery,
+          page,
+          token
+        );
+      } else {
+        await fetchInstruments(
+          status.toLocaleLowerCase() !== "all"
+            ? status.toLocaleLowerCase()
+            : "",
+          sort,
+          page,
+          token
+        );
       }
+      // }
     };
     fetchData();
-  }, [page, age, status, sort, searchQuery, hasMorePages]);
+    console.log(instruments);
+  }, [age, status, sort, searchQuery]);
 
   const isActiveAge = useCallback(
     (elem) => {

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchEvents, deleteEvent } from "../../services/event/eventService";
+import {
+  fetchEvents,
+  archiveEvent,
+  deleteEvent,
+} from "../../services/event/eventService";
 import { useNavigate } from "react-router-dom";
 import AddEvent from "./components/AddEvent";
-import SuccessAlert from "../../components/alert/AlertComponent";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -12,7 +15,13 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
-import { DefaultPagination } from "./components/DefaultPagination";
+import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
+import * as XLSX from "xlsx";
+import { FaFileDownload } from "react-icons/fa";
+import { FaArchive, FaFilePdf } from "react-icons/fa";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import img1 from "assets/img/nfts/img1.jpg";
 import {
   MdCheckCircle,
   MdCancel,
@@ -28,7 +37,6 @@ import DeleteConfirmationDialog from "./components/DeleteConfirmationDialog";
 
 const EventsList = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
-  // const [successMessage, setSuccessMessage] = useState("");
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -40,8 +48,10 @@ const EventsList = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
   useEffect(() => {
     const getEvents = async () => {
       try {
@@ -81,6 +91,9 @@ const EventsList = () => {
     fetchEvents().then(setEvents);
     toast.success("Event added successfully!");
   };
+  const handleClick = () => {
+    navigate("/admin/events/archived");
+  };
 
   const handlePopoverOpen = (event, eventItem) => {
     setSelectedEvent(eventItem);
@@ -91,20 +104,6 @@ const EventsList = () => {
     setSelectedEvent(null);
     setAnchorEl(null);
   };
-
-  // const handleDeleteClick = async () => {
-  //   if (!selectedEvent) return;
-
-  //   try {
-  //     await deleteEvent(selectedEvent._id);
-  //     // Refresh event list
-  //     fetchEvents().then(setEvents);
-  //   } catch (error) {
-  //     console.error("Failed to delete event:", error);
-  //   }
-
-  //   handlePopoverClose();
-  // };
 
   const handleDeleteClick = (eventId) => {
     setSelectedEventId(eventId);
@@ -142,18 +141,47 @@ const EventsList = () => {
     handlePopoverClose();
   };
 
-  // Calculate the index of the first item on the current page
-  const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
-  // Get the current page of items
-  const currentEvents = events.slice(indexOfFirstItem, indexOfFirstItem + itemsPerPage);
-
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(events.length / itemsPerPage);
-
-  // Pagination handler
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected + 1);
+  // Helper function to format date and time
+  const formatDateTime = (isoString, onlyDate = false) => {
+    const options = onlyDate
+      ? { year: "numeric", month: "2-digit", day: "2-digit" }
+      : {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        };
+    return new Date(isoString).toLocaleString("en-US", options);
   };
+  // Function to prepare data for export
+  const prepareDataForExport = (data) => {
+    return data.map((event) => {
+      const { _id, ...rest } = event;
+
+      return {
+        Title: rest.title,
+        Type: rest.eventType,
+        Location: rest.location,
+        Status: rest.status,
+        Description: rest.description,
+        Capacity: rest.capacity,
+        StartDate: formatDateTime(event.startDate, true),
+        EndDate: formatDateTime(event.endDate, true),
+      };
+    });
+  };
+
+  // Function to export data as CSV
+  const exportToCSV = (csvData, fileName) => {
+    const modifiedData = prepareDataForExport(csvData);
+    const worksheet = XLSX.utils.json_to_sheet(modifiedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, fileName + ".csv");
+  };
+
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
@@ -166,30 +194,140 @@ const EventsList = () => {
     )
   );
 
+  // Pagination logic
+  const indexOfLastEvent = currentPage * itemsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
+  const currentEvents = filteredEvents.slice(
+    indexOfFirstEvent,
+    indexOfLastEvent
+  );
+  const handlePreviousPage = () => {
+    setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(filteredEvents.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePageNumberClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleArchiveEvent = async (eventId) => {
+    try {
+      await archiveEvent(eventId);
+      fetchEvents().then(setEvents);
+      toast.success("Event archived successfully!");
+    } catch (error) {
+      console.error("Failed to archive event:", error);
+    }
+  };
+  const handleGeneratePDF = () => {
+    const doc = new jsPDF('l', 'mm', [210, 297]); // Landscape format
+  
+    events.forEach((event, index) => {
+      if (index !== 0) {
+        doc.addPage();
+      }
+  
+      // Card dimensions
+      doc.setDrawColor(0);
+      doc.roundedRect(10, 10, 260, 90, 4, 4, 'S');
+  
+      doc.addImage(img1, "JPEG", 15, 15, 70, 70); 
+  
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text(event.title, 140, 20, { align: "center" });
+
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'normal');
+   
+      doc.text(`Location: ${event.location}`, 95, 20, { align: "right" });
+  
+      doc.setFontSize(11);
+      doc.text(event.description, 140, 35, { align: "center", maxWidth: 250 });
+  
+      const newY = 80; 
+  
+      doc.setFontSize(10);
+      doc.setTextColor(0);
+      doc.text(`Start Date: ${formatDateTime(event.startDate)}`, 20, newY);
+      doc.setTextColor(255, 165, 0);
+      doc.text(`Start Time: ${event.startTime}`, 20, newY + 10);
+  
+      doc.setFontSize(10);
+      doc.setTextColor(0); 
+      doc.text(`End Date: ${formatDateTime(event.endDate)}`, 250, newY, { align: "right" });
+      doc.setTextColor(0, 0, 255); 
+      doc.text(`End Time: ${event.endTime}`, 250, newY + 10, { align: "right" });
+  
+      doc.setFontSize(12);
+      doc.setTextColor(0); 
+      doc.text(`Capacity: ${event.capacity}`, 140, 95, { align: "center" }); 
+    });
+
+    doc.save("events.pdf");
+  };
+  
+  
+  
+
   return (
     <>
-      {/* {successMessage && <SuccessAlert message={successMessage} />} */}
       <ToastContainer position="top-center" />
       <div className="mt-6 flex flex-col">
         <div className="overflow-x-auto rounded-lg">
           <div className="inline-block min-w-full align-middle">
             <div className="mb-4 flex items-center justify-between">
-              <AddEvent onEventAdded={handleEventAdded} />
+              <div className="flex items-center">
+                <AddEvent onEventAdded={handleEventAdded} />
+                {/* Export Button */}
+                <button
+                  className="m-2 mr-0  flex h-10 w-40 items-center justify-center bg-green-500 text-white"
+                  style={{ borderRadius: " 0px 22px" }}
+                  onClick={() => exportToCSV(events, "events_export")}
+                  title="Export Event Table"
+                >
+                  <FaFileDownload className="mr-2" />
+                  Export as CSV
+                </button>
+                <button
+                  className="m-2   mr-0 flex h-10 w-40 items-center justify-center bg-gray-500 text-white"
+                  style={{ borderRadius: "22px 0px" }}
+                  onClick={handleClick}
+                  title="View All Archived Events"
+                >
+                  <FaArchive className="mr-2" />
+                  Archived Events
+                </button>
+                <button
+                  className="m-2  flex h-10 w-40 items-center justify-center bg-blue-500 text-white"
+                  style={{ borderRadius: " 0px 22px" }}
+                  onClick={handleGeneratePDF}
+                  title="Generate PDF of Events"
+                >
+                  <FaFilePdf className="mr-2" />
+                  Generate PDF
+                </button>
+              </div>
               {/* Search bar */}
-              <div className="mt-4 mr-4 flex items-center">
-                <div className="flex">
+              <div className="flex items-center">
+                <div className="flex"         >
                   <input
                     type="text"
                     placeholder="Search..."
                     className="h-10 rounded-md border border-gray-300 px-3 py-2 "
-                    style={{ width: "300px" }}
+                    style={{ width: "300px", borderRadius: '22px 0 0 22px' }}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   <button
                     className="rounded-r-md bg-gray-200 p-2"
-                    style={{ backgroundColor: "rgb(0, 107, 190)" }}
-                  >
+                    style={{ backgroundColor: "rgb(0, 107, 190)", borderRadius: "0 22px 22px 0" }}
+                    >
                     <IoMdSearch style={{ color: "white" }} />
                   </button>
                 </div>
@@ -268,7 +406,7 @@ const EventsList = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800">
-                  {filteredEvents.map((event) => (
+                  {currentEvents.map((event) => (
                     <tr key={event._id} role="row">
                       <td
                         role="cell"
@@ -306,7 +444,7 @@ const EventsList = () => {
                       </td>
                       <td
                         role="cell"
-                        className="flex w-1/4 cursor-pointer items-center whitespace-nowrap p-4 text-sm font-normal text-black dark:text-gray-400"
+                        className="cursor-pointer items-center whitespace-nowrap p-4 text-sm font-normal text-black dark:text-gray-400"
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
                           {showFullDescription ? (
@@ -443,20 +581,30 @@ const EventsList = () => {
                             <Button
                               startIcon={<FaRegEye />}
                               onClick={() => handleDetailsClick()}
+                              title="View event details"
                             >
                               Details
                             </Button>
                             <Button
                               startIcon={<MdEdit />}
                               onClick={() => handleEditClick(selectedEvent._id)}
+                              title="Edit event"
                             >
                               Edit
                             </Button>
                             <Button
                               startIcon={<MdDelete />}
                               onClick={() => handleDeleteClick(event._id)}
+                              title="Delete event"
                             >
                               Delete
+                            </Button>
+                            <Button
+                              startIcon={<FaArchive />}
+                              onClick={() => handleArchiveEvent(event._id)}
+                              title="Archive event"
+                            >
+                              Archive
                             </Button>
                           </Typography>
                         </Popover>
@@ -469,17 +617,59 @@ const EventsList = () => {
           </div>
         </div>
       </div>
-      {/* <DefaultPagination
-        pageCount={totalPages}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      /> */}
       <DeleteConfirmationDialog
         open={deleteConfirmationOpen}
         onClose={() => setDeleteConfirmationOpen(false)}
         onConfirm={handleDeleteConfirmation}
         eventTitle={selectedEvent ? selectedEvent.title : null}
       />
+      {/* Pagination Controls */}
+      <div className="mt-4 flex items-center justify-center gap-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={`flex items-center gap-2 rounded-full px-4 py-2 text-white transition-colors ${
+            currentPage === 1
+              ? "cursor-not-allowed bg-gray-300"
+              : "bg-[#f6a12d] hover:bg-blue-500"
+          }`}
+        >
+          <GrFormPreviousLink />
+          Previous
+        </button>
+
+        {Array.from(
+          { length: Math.ceil(filteredEvents.length / itemsPerPage) },
+          (_, i) => i + 1
+        ).map((pageNumber) => (
+          <button
+            key={pageNumber}
+            onClick={() => handlePageNumberClick(pageNumber)}
+            className={`flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors ${
+              currentPage === pageNumber
+                ? "bg-blue-500"
+                : "bg-[#f6a12d] hover:bg-blue-500"
+            }`}
+          >
+            {pageNumber}
+          </button>
+        ))}
+
+        <button
+          onClick={handleNextPage}
+          disabled={
+            currentPage === Math.ceil(filteredEvents.length / itemsPerPage)
+          }
+          className={`flex items-center gap-2 rounded-full px-4 py-2 text-white transition-colors ${
+            currentPage === Math.ceil(filteredEvents.length / itemsPerPage)
+              ? "cursor-not-allowed bg-gray-300"
+              : "bg-[#f6a12d] hover:bg-blue-500"
+          }`}
+        >
+          Next
+          <GrFormNextLink />
+        </button>
+      </div>
     </>
   );
 };

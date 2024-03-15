@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import useShowToast from "../../../../hooks/useShowToast";
+import React, { useEffect } from "react";
 import {
   Input,
   FormLayout,
@@ -24,6 +25,7 @@ import useInstrumentStore from "store/instrumentStore";
 function CreateInstrument() {
   const { postInstrument, loading } = useInstrumentStore();
   const [category, setCategory] = useState("Exchange");
+  const [token, setToken] = useState("");
   const [brand, setBrand] = useState("");
   const navigate = useNavigate();
   const showToast = useShowToast();
@@ -58,6 +60,14 @@ function CreateInstrument() {
     title: "",
     details: "",
   };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setToken(token);
+    } else {
+      navigate("/auth/sign-in");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (values, setSubmitting, setStatus) => {
     let postData = {
@@ -71,8 +81,7 @@ function CreateInstrument() {
     }
     setSubmitting(true);
     try {
-      const response = await postInstrument(postData);
-      console.log(response);
+      const response = await postInstrument(postData, token);
       showToast("Post added", "success");
       if (response.success) {
         setTimeout(() => {
