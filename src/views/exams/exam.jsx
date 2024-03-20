@@ -10,7 +10,6 @@ import { fetchEvalStudent } from '../../services/exam/examService';
 import { FiSearch } from "react-icons/fi";
 import { fetchGrades } from '../../services/exam/examService';
 import { GiPapers } from "react-icons/gi";
-import Banner from "../events/components/Banner";
 import ExamBanner from "./components/examBanner";
 import ExamTimetablePDF from "./components/emploipdf";
 const ExamsList = () => {

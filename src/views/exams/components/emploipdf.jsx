@@ -1,8 +1,6 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, PDFViewer,PDFDownloadLink } from '@react-pdf/renderer';
-import { text } from '@fortawesome/fontawesome-svg-core';
-import { saveAs } from 'file-saver';
-import { GiCloudDownload } from 'react-icons/gi';
+import { Document, Page, Text, View, StyleSheet,PDFDownloadLink } from '@react-pdf/renderer';
+
 
 // Component to generate PDF timetable for exams
 const ExamTimetablePDF = ({ exams }) => {
@@ -71,10 +69,8 @@ const renderTimetableRows = () => {
     },
     dateCell: {
        fontSize :"8px",
+      backgroundColor: '#144b68',
        
-      },
-      dateCell: {
-        backgroundColor: '#144b68',
       },
      
   });
