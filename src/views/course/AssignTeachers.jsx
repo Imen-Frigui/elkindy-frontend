@@ -6,6 +6,7 @@ import { useDrop} from 'react-dnd';
 
 import DraggableTeacher from "./components/DraggableTeacher";
 import   '../../assets/css/ScrollBar.css'
+import ClassAssignment from "./components/ClassAssignment";
 
 
 const AssignTeachers = () => {
@@ -127,7 +128,7 @@ const AssignTeachers = () => {
                         </div>
                     </div>
                 </div>
-
+                <ClassAssignment courseId={courseId} onClassUpdate={() => {/* Handle the class update */}} />
             </div>
     );
 };

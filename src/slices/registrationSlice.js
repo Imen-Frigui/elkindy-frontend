@@ -17,7 +17,7 @@ const initialState = {
       coursesTaught: '',
       // Role will be set based on the page context
       role: '', // Assume it's either 'teacher' or 'student'
-      preferedInstrument:''
+      preferedInstrument:'',
     },
   };
 
