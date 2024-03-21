@@ -29,9 +29,10 @@ const App = () => {
       <Route path="auth/*" element={<AuthLayout />} >
       </Route>
   <Route path="auth/forgot-password" element={<ForgotPassword />} />  
-  <Route path="auth/reset-password" element={<ResetPassword />} />  
+  <Route path="auth/reset-password" element={<ResetPassword />} />
 
-      
+
+
       <Route element={<PrivateRoute allowedRoles={['admin',"student",'teacher']} />}>
         
         <Route path="admin/*" element={<AdminLayout />}>

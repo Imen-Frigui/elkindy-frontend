@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { fetchTickets, deleteTicket} from "../../services/tickets/ticketService";
-import {  fetchEventById} from "../../services/event/eventService";
-import { useNavigate } from "react-router-dom";
 import AddTicket from "./components/AddTicket";
 import SuccessAlert from "../../components/alert/AlertComponent";
 import Popover from "@mui/material/Popover";
@@ -14,16 +12,11 @@ import { FaRegEye } from "react-icons/fa";
 
 
 const TicketsList = () => {
-  const [showFullDescription, setShowFullDescription] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const toggleDescription = () => {
-    setShowFullDescription(!showFullDescription);
-  };
+
 
   const [tickets, setTickets] = useState([]);
-  const [events, setEvents] = useState([]); 
 
-  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);

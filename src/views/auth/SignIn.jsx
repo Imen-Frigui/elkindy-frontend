@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../../slices/userApiSlice';
 import { setCredentials, setLoginError } from '../../slices/authSlice';
 import Loader from "components/button/Loader";
-import { FaGuitar, FaPiano, FaViolin } from 'react-icons/fa';
 
 
 export default function SignIn() {
