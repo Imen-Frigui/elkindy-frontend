@@ -128,4 +128,23 @@ export const updateClassTeachers = async (classId, teacherIds) => {
     }
 };
 
+export const generateClassesForCourse = async (courseId, maxStudentsPerClass, teacherIds) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ courseId, maxStudentsPerClass, teacherIds }),
+        });
 
+        if (!response.ok) {
+            throw new Error('Failed to generate classes.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to generate classes for course ID ${courseId}:`, error);
+        throw error;
+    }
+};
