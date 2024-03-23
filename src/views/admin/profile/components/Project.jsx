@@ -5,7 +5,7 @@ import image1 from "assets/img/profile/image1.png";
 import image2 from "assets/img/profile/image2.png";
 import image3 from "assets/img/profile/image3.png";
 import Card from "components/card";
-import useInstrumentStore from "../../../../store/instrumentStore";
+import useInstrumentStore from "../../../../ZustStore/instrumentStore";
 import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
 import SwipeToDelete from "react-swipe-to-delete-ios";
 import useShowToast from "../../../../hooks/useShowToast";

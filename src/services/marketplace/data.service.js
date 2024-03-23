@@ -1,5 +1,5 @@
-import { apiRoutes } from "../config/api";
-import apiHeader from "../utils/apiHeader";
+import { apiRoutes } from "../../config/api";
+import apiHeader from "../../utils/apiHeader";
 
 export default class DataService {
   static async getPublicContent(

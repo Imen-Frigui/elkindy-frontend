@@ -20,7 +20,7 @@ import {
   AutoCompleteInput,
 } from "../../../../components";
 import { useState } from "react";
-import useInstrumentStore from "store/instrumentStore";
+import useInstrumentStore from "ZustStore/instrumentStore";
 
 function CreateInstrument() {
   const { postInstrument, loading } = useInstrumentStore();

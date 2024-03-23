@@ -1,5 +1,5 @@
 import zustand, { create } from "zustand";
-import DataService from "../services/data.service";
+import DataService from "../services/marketplace/data.service";
 
 const useInstrumentStore = create((set) => ({
   instruments: [],
@@ -38,12 +38,7 @@ const useInstrumentStore = create((set) => ({
         "",
         page
       );
-      console.log(data.instruments);
-      // if (data.instruments.length === 0) {
-      //   set({ hasMorePages: false });
-      // }
       set({ instruments: data.instruments });
-
       set({ loading: false });
     } catch (error) {
       set({ loading: false });
@@ -116,7 +111,7 @@ const useInstrumentStore = create((set) => ({
   deleteInstrument: async (instrumentId) => {
     try {
       set({ loading: true });
-     const {data} = await DataService.deleteInstrument(instrumentId);
+      const { data } = await DataService.deleteInstrument(instrumentId);
       set({ loading: false });
       return data;
     } catch (error) {

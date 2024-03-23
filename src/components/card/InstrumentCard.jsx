@@ -1,7 +1,7 @@
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import Card from "components/card";
-import useInstrumentStore from "store/instrumentStore";
+import useInstrumentStore from "../../ZustStore/instrumentStore";
 import { Link } from "react-router-dom";
 import { Button } from "../index";
 import { useNavigate } from "react-router-dom";

@@ -10,39 +10,37 @@ import UpdateEvent from "views/events/components/UpdateEvent";
 import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
-import ArchivedEventsList  from "../../views/events/components/ArchivedEventsList"
+import ArchivedEventsList from "../../views/events/components/ArchivedEventsList";
 
 import SideBarr from "components/sidebarr";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
-import { io } from "socket.io-client";
 import EventsList from "views/events/EventsList";
 import ExamsList from "views/exams/exam";
-
-
-
+import useSocketStore from "../../ZustStore/socketStore";
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
-  const [socket, setSocket] = useState(null);
-
-  React.useEffect(() => {
+  const [userData, setUserData] = useState(null);
+  const { socket, initializeSocket } = useSocketStore();
+  useEffect(() => {
     window.addEventListener("resize", () =>
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
-    setSocket(io("http://localhost:5000"));
   }, []);
 
   useEffect(() => {
-    console.log(socket);
-  }, []);
-
-  React.useEffect(() => {
     getActiveRoute(routes);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const connectSocket = async () => {
+      await initializeSocket();
+    };
+    connectSocket();
+  }, []);
   const getActiveRoute = (routes) => {
     let activeRoute = "Main Dashboard";
     for (let i = 0; i < routes.length; i++) {
@@ -104,8 +102,11 @@ export default function Admin(props) {
               <Routes>
                 {getRoutes(routes)}
 
-                <Route path="/courses" element={<CoursesList />}/>
-                <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+                <Route path="/courses" element={<CoursesList />} />
+                <Route
+                  path="/courses/assign-teachers/:courseId"
+                  element={<AssignTeachers />}
+                />
 
                 <Route
                   path="/marketplace/create"
@@ -117,21 +118,28 @@ export default function Admin(props) {
                 />
                 <Route
                   path="/"
-                  element={<Navigate to="/admin/default" replace />} />
+                  element={<Navigate to="/admin/default" replace />}
+                />
 
+                <Route path="/courses" element={<CoursesList />} />
                 <Route
-                    path="/courses" element={<CoursesList />}/>
-                <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+                  path="/courses/assign-teachers/:courseId"
+                  element={<AssignTeachers />}
+                />
 
+                <Route path="/events" element={<EventsList />} />
                 <Route
-                    path="/events" element={<EventsList />}/>
-                <Route path="/events/details/:eventId" element={<EventDetails />} />
+                  path="/events/details/:eventId"
+                  element={<EventDetails />}
+                />
 
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
-                <Route path="/events/archived" element={<ArchivedEventsList />} />
+                <Route
+                  path="/events/archived"
+                  element={<ArchivedEventsList />}
+                />
 
-
-              <Route path={"/exams"} element={<ExamsList/>}/>
+                <Route path={"/exams"} element={<ExamsList />} />
 
                 <Route
                   path="/marketplace/create"

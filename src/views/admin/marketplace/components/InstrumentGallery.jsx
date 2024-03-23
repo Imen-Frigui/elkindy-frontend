@@ -52,7 +52,7 @@ function Gallery() {
   ));
 
   return (
-    <aside className=" z-50 h-full items-center md:fixed md:z-10 lg:fixed">
+    <aside className=" z-20 h-full items-center md:fixed md:z-10 lg:fixed">
       {/* <button onClick={() => SetModalVisiblity(true)} className=" w-25 "> */}
       <div className="flex justify-start md:w-[1050px]">
         <img

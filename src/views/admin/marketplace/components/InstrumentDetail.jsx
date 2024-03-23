@@ -1,32 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import useInstrumentStore from "store/instrumentStore";
+import useInstrumentStore from "ZustStore/instrumentStore";
 import Gallery from "./InstrumentGallery";
-import { Button, BackButton } from "../../../../components";
-import { io } from "socket.io-client";
+import { Button, BackButton, ExchangeModal } from "../../../../components";
 
 function InstrumentDetail() {
   const { id } = useParams();
   const { getInstrument, instrument, loading } = useInstrumentStore();
-  const [socket, setSocket] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       await getInstrument(id);
-      console.log(instrument);
     };
-    setSocket(io("http://localhost:5000"));
+
     fetchData();
   }, [id]);
 
+  const handleExchangeClick = () => {
+    setShowModal(true);
+  };
+  const handleItemSelect = (item) => {
+    setSelectedItem(item);
+  };
+
   const handleNotification = () => {
-    const message = "Someone is interested in exchanging instruments with you";
-    socket.emit("sendNotification", {
-      senderName: "user",
-      receiverName: "post.username",
-      instrument: instrument,
-      message: message,
-    });
+    // const message = "Someone is interested in exchanging instruments with you";
+    // socket.emit("sendNotification", {
+    //   senderName: "user",
+    //   receiverName: "post.username",
+    //   instrument: instrument,
+    //   message: message,
+    // });
   };
 
   return (
@@ -38,7 +44,7 @@ function InstrumentDetail() {
         <div className="md:col-span-4">
           <Gallery />
         </div>
-        <div className=" content-center px-5 md:z-50 md:col-span-5 md:px-0">
+        <div className=" content-center px-5 md:z-30 md:col-span-5 md:px-0">
           <h2 className="font-bold text-kindyorange">{instrument.brand}</h2>
           <h1 className="my-2 text-3xl font-bold md:text-5xl">
             {instrument.title}
@@ -56,10 +62,23 @@ function InstrumentDetail() {
             <Button
               onClick={handleNotification}
               text={"Contact Owner"}
-              className="border-transparent border-1 w-58  rounded-lg bg-kindyorange py-2 px-4 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
+              className="border-transparent border-1 w-58  rounded-lg bg-kindyorange px-4 py-2 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
+            />
+            <Button
+              onClick={handleExchangeClick}
+              text={"Exchange"}
+              className="border-transparent border-1 w-58  rounded-lg bg-kindyorange px-4 py-2 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
             />
           </div>
         </div>
+        {showModal && (
+          <ExchangeModal
+            instrument={instrument}
+            onSelectItem={handleItemSelect}
+            // onRequestExchange={handleExchangeRequest}
+            onCloseModal={() => setShowModal(false)}
+          />
+        )}
       </div>
     </>
   );

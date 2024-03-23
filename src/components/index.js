@@ -14,3 +14,5 @@ export { default as AddIcon } from "./ui/AddIcons";
 export { default as NoData } from "./ui/NoData";
 export { default as SearchBar } from "./ui/SearchBar";
 export { default as AutoCompleteInput } from "./ui/AutoCompleteInput";
+export { default as ExchangeModal } from "./ui/ExchangeModal";
+export { default as InstrumentItem } from "./ui/InstrumentItem";
