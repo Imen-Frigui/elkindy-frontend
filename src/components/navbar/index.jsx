@@ -75,9 +75,7 @@ const Navbar = (props) => {
         sound.play();
         setShowDropdown(true);
       });
-      return () => {
-        socket.off("getNotification");
-      };
+     
     }
   }, [socket]);
   const markAllRead = () => {

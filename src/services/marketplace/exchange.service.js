@@ -1,6 +1,5 @@
 import { apiRoutes } from "../../config/api";
 import apiHeader from "../../utils/apiHeader";
-import axios from "axios";
 
 export default class ExchangeService {
   static async createExchange(exchangeData, accessToken) {
@@ -8,22 +7,19 @@ export default class ExchangeService {
       .post("/exchanges/create", exchangeData, apiHeader(accessToken))
       .catch((error) => {
         if (error.response && error.response.status === 409) {
-          throw new Error("Exchange already exists");
+          throw new Error("This exchange request has already been sent");
         } else {
           throw new Error("Error creating exchange: " + error.message);
         }
       });
   }
-  static async fetchReceivedExchanges(accessToken) {
-    try {
-      const response = await apiRoutes.get(
-        "/exchanges/received",
-        apiHeader(accessToken)
-      );
-      return response.data.exchangesReceived;
-    } catch (error) {
-      throw new Error("Error fetching received exchanges: " + error.message);
-    }
+  static async fetchReceivedExchanges(accessToken, itemId) {
+    console.log("service")
+    return await apiRoutes
+      .get(`/exchanges/received/${itemId}`, apiHeader(accessToken))
+      .catch((error) => {
+        throw new Error("Error fetching trades: " + error.message);
+      });
   }
   static async fetchSentExchanges(accessToken) {
     try {

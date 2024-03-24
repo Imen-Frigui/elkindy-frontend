@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
-import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
 
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
-import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
 import ArchivedEventsList from "../../views/events/components/ArchivedEventsList";
@@ -18,12 +16,12 @@ import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetai
 import EventsList from "views/events/EventsList";
 import ExamsList from "views/exams/exam";
 import useSocketStore from "../../ZustStore/socketStore";
+import UserTrades from "views/admin/marketplace/components/UserTrades";
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
-  const [userData, setUserData] = useState(null);
   const { socket, initializeSocket } = useSocketStore();
   useEffect(() => {
     window.addEventListener("resize", () =>
@@ -40,7 +38,8 @@ export default function Admin(props) {
       await initializeSocket();
     };
     connectSocket();
-  }, []);
+  },[]);
+
   const getActiveRoute = (routes) => {
     let activeRoute = "Main Dashboard";
     for (let i = 0; i < routes.length; i++) {
@@ -115,6 +114,11 @@ export default function Admin(props) {
                 <Route
                   path="/marketplace/instrument/:id"
                   element={<InstrumentDetail />}
+                />
+
+                <Route
+                  path="/marketplace/trades"
+                  element={<UserTrades />}
                 />
                 <Route
                   path="/"

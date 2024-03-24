@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useInstrumentStore from "ZustStore/instrumentStore";
 import Gallery from "./InstrumentGallery";
-import { Button, BackButton, ExchangeModal } from "../../../../components";
+import { Button, BackButton, TradeModal } from "../../../../components";
 
 function InstrumentDetail() {
   const { id } = useParams();
-  const { getInstrument, instrument, loading } = useInstrumentStore();
+  const { getInstrument, instrument } = useInstrumentStore();
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -16,10 +16,13 @@ function InstrumentDetail() {
     };
 
     fetchData();
-  }, [id]);
+  }, [getInstrument,id]);
 
   const handleExchangeClick = () => {
     setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
   const handleItemSelect = (item) => {
     setSelectedItem(item);
@@ -72,9 +75,11 @@ function InstrumentDetail() {
           </div>
         </div>
         {showModal && (
-          <ExchangeModal
+          <TradeModal
             instrument={instrument}
             onSelectItem={handleItemSelect}
+            isOpen={setShowModal}
+            onClose={handleCloseModal}
             // onRequestExchange={handleExchangeRequest}
             onCloseModal={() => setShowModal(false)}
           />

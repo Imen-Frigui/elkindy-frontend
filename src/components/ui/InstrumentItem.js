@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
+import { CheckIcon } from "@heroicons/react/24/solid";
 
-function InstrumentItem({ item,selected, onSelectItem }) {
+function InstrumentItem({ item, selected, onSelectItem }) {
   const handleClick = () => {
     if (selected) {
       onSelectItem(null);
@@ -12,7 +13,7 @@ function InstrumentItem({ item,selected, onSelectItem }) {
 
   return (
     <div
-      className={`mb-3 flex w-full cursor-pointer items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none ${
+      className={` mb-3 flex w-full cursor-pointer flex-row items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none ${
         selected
           ? ` border-4 border-kindyorange bg-kindyblue`
           : `border-transparent`
@@ -20,7 +21,7 @@ function InstrumentItem({ item,selected, onSelectItem }) {
       onClick={handleClick}
     >
       <div>
-        <div className="flex items-center bg-white">
+        <div className="flex items-center justify-end bg-white">
           <div>
             <img className="h-[83px] w-[83px] rounded-lg" src={guitar} alt="" />
           </div>
@@ -39,6 +40,13 @@ function InstrumentItem({ item,selected, onSelectItem }) {
             </p>
           </div>
         </div>
+      </div>
+      <div className=" flex justify-end">
+        {selected ? (
+          <CheckIcon className="h-5 w-5 rounded-3xl bg-kindyorange text-white" />
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );

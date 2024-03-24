@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdModeEditOutline } from "react-icons/md";
-import image1 from "assets/img/profile/image1.png";
-import image2 from "assets/img/profile/image2.png";
-import image3 from "assets/img/profile/image3.png";
 import Card from "components/card";
 import useInstrumentStore from "../../../../ZustStore/instrumentStore";
 import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
 import SwipeToDelete from "react-swipe-to-delete-ios";
 import useShowToast from "../../../../hooks/useShowToast";
 
-const Project = () => {
+const Project = ({ onInstrumentClick }) => {
   const [token, setToken] = useState("");
 
   const fetchUserInstruments = useInstrumentStore(
@@ -74,15 +71,18 @@ const Project = () => {
               showDeleteAction={true}
               deleteColor="rgba(252, 58, 48, 1.00)"
               deleteText="Delete"
-              // onDeleteConfirm={(onSuccess, onCancel) => {
-              //   if (window.confirm("Do you really want to delete this item?")) {
-              //     onSuccess();
-              //   } else {
-              //     onCancel();
-              //   }
-              // }}
+              onDeleteConfirm={(onSuccess, onCancel) => {
+                if (window.confirm("Do you really want to delete this item?")) {
+                  onSuccess();
+                } else {
+                  onCancel();
+                }
+              }}
             >
-              <div className="mb-3 flex w-full items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <div
+                className="mb-3 flex w-full items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none"
+                onClick={() => onInstrumentClick(instrument._id)}
+              >
                 <div className="flex items-center">
                   <div className="">
                     <img

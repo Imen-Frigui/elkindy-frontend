@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import useInstrumentStore from "../../ZustStore/instrumentStore";
-import useExchangeStore from "./../../ZustStore/exchangeStore";
+import useExchangeStore from "../../ZustStore/exchangeStore";
 import { useNavigate } from "react-router-dom";
-import { InstrumentItem } from "../../components/";
+import { InstrumentItem } from "..";
 import useSocketStore from "../../ZustStore/socketStore";
-function ExchangeModal({ instrument, onSelectItem, onCloseModal }) {
+import useShowToast from "../../hooks/useShowToast";
+
+function ExchangeModal({
+  instrument,
+  onCloseModal,
+
+}) {
   const [token, setToken] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+
   const navigate = useNavigate();
+  const showToast = useShowToast();
 
   const instruments = useInstrumentStore((state) => state.instruments);
   const loading = useInstrumentStore((state) => state.loading);
-  const { socket, initializeSocket } = useSocketStore();
+  const { socket } = useSocketStore();
 
   const {
-    exchanges,
     createExchange,
-    setExchanges,
-    setLoading,
     setError,
     error,
   } = useExchangeStore();
@@ -64,13 +69,14 @@ function ExchangeModal({ instrument, onSelectItem, onCloseModal }) {
         receiverInstrument: instrument,
       };
       const res = await createExchange(exchangeData, token);
-      setSuccessMessage("Exchange request sent successfully.");
       handleNotification();
+      setSuccessMessage("Exchange request sent successfully.");
       setTimeout(() => {
         onCloseModal();
       }, 1000);
     } catch (error) {
       setError(error.message);
+      showToast(error.message, "error");
     }
   };
   return (
@@ -131,18 +137,19 @@ function ExchangeModal({ instrument, onSelectItem, onCloseModal }) {
             </button>
           </div>
           {error && (
-            <div className=" bg-red-700 p-4 text-center text-lg text-white shadow">
+            <div className=" m-8 rounded-lg bg-red-700 p-3 text-center text-lg text-white shadow">
               <p>{error}</p>
             </div>
           )}
           {successMessage && (
-            <div className="bg-green-700 p-4 text-center text-lg text-white shadow">
+            <div className="bg-green-700 m-8 rounded-lg p-3 text-center text-lg text-white shadow">
               <p>{successMessage}</p>
             </div>
           )}
         </div>
       </div>
     </div>
+    
   );
 }
 

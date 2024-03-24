@@ -1,5 +1,4 @@
 import instrumentValidation from "validations/instrumentValidation";
-import { ToastContainer, toast } from "react-toastify";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import useShowToast from "../../../../hooks/useShowToast";
@@ -7,8 +6,6 @@ import React, { useEffect } from "react";
 import {
   Input,
   FormLayout,
-  BackButton,
-  AddIcon,
   FormTitle,
   FormControl,
   Label,
@@ -47,19 +44,7 @@ function CreateInstrument() {
     { name: "Ibanez" },
     { name: "Casio" },
   ];
-  const options = {
-    position: "top-center",
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  };
-  const initialValues = {
-    title: "",
-    details: "",
-  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -98,15 +83,6 @@ function CreateInstrument() {
   return (
     <div className="">
       <div className=" mx-auto w-full">
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          draggable
-        />
         <FormLayout>
           <Formik
             initialValues={{
@@ -162,13 +138,13 @@ function CreateInstrument() {
                     />
                     <div
                       className={
-                        category == "buy"
+                        category === "buy"
                           ? "flex flex-row justify-between space-x-2 align-baseline "
                           : ""
                       }
                     >
                       <Dropdown
-                        className={category == "buy" ? "w-[500px]" : ""}
+                        className={category === "buy" ? "w-[500px]" : ""}
                         onChange={setCategory}
                         value={category}
                         options={[
@@ -178,7 +154,7 @@ function CreateInstrument() {
                           "buy",
                         ]}
                       />
-                      {category == "buy" ? (
+                      {category === "buy" ? (
                         <Input
                           className={"w-1/2"}
                           placeholder="Price"

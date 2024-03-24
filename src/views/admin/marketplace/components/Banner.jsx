@@ -17,17 +17,15 @@ const Banner1 = () => {
 
         <div className="mt-[36px] flex items-center justify-between gap-4 sm:justify-start 2xl:gap-10">
           <Link to="/admin/marketplace/create">
-            <button className="text-black linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium transition duration-200 hover:!bg-white/80 active:!bg-white/70">
+            <button className="linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium text-black transition duration-200 hover:!bg-white/80 active:!bg-white/70">
               Post your instrument now
             </button>
           </Link>
-
-          <button
-            href=" "
-            className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2"
-          >
-            Explore Instruments
-          </button>
+          <Link to="/admin/marketplace/trades">
+            <button className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2">
+              My trades
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -6,20 +6,23 @@ const useExchangeStore = create((set) => ({
   exchangesSent: [],
   loading: false,
   error: null,
-
+  
   setExchangesReceived: (exchangesReceived) => set({ exchangesReceived }),
   setExchangesSent: (exchangesSent) => set({ exchangesSent }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 
-  fetchReceivedExchanges: async (accessToken) => {
+  fetchReceivedExchangesByItem: async (accessToken, itemId) => {
     try {
       set({ loading: true });
-      const response = await ExchangeService.fetchReceivedExchanges(
-        accessToken
+      const {data}  = await ExchangeService.fetchReceivedExchanges(
+        accessToken,
+        itemId
       );
-      set({ exchangesReceived: response, loading: false });
+      console.log(data);
+      set({ exchangesReceived: data.receivedExchanges, loading: false });
     } catch (error) {
+      console.log(error)
       set({ error: error.message, loading: false });
     }
   },
