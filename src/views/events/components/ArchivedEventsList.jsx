@@ -96,12 +96,13 @@ const ArchivedEvents = () => {
 
   return (
     <div>
-<h1 
-className="cursor-pointer text-4xl font-extrabold mb-4 m-6 text-center text-gray-500 hover:text-blue-500 transition-colors duration-300 bg-gray-200 hover:bg-blue-200 p-4 rounded-lg font-poppins transform hover:scale-105 transition-transform duration-300"
-style={{ fontFamily: "Georgia, serif" }}
+<h1 className="cursor-pointer text-3xl font-bold mb-4 mx-auto text-center text-gray-700 hover:text-blue-700 transition-colors duration-300 bg-gray-200 hover:bg-blue-200 px-4 py-2 rounded-lg font-poppins transform hover:scale-105 transition-transform duration-300"
+style={{ fontFamily: "Georgia, serif", maxWidth: "fit-content" }}
 >
-  Review your Archived Events
+  Review Archived Events
 </h1>
+
+
    
 <div className="mt-6 flex flex-col">
         <div className="overflow-x-auto rounded-lg">

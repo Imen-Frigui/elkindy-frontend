@@ -32,7 +32,6 @@ const App = () => {
   <Route path="auth/reset-password" element={<ResetPassword />} />
 
 
-
       <Route element={<PrivateRoute allowedRoles={['admin',"student",'teacher']} />}>
         
         <Route path="admin/*" element={<AdminLayout />}>
