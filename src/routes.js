@@ -67,13 +67,7 @@ const routes = [
   },
  
   
- /* {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "rtl",
-    icon: <MdHome className="h-6 w-6" />,
-    component: <RTLDefault />,
-  },*/
+
   {
     name: "Events List",
     layout: "/admin",
@@ -138,7 +132,16 @@ const routes = [
     hide: true,
     component: <UnauthorizedPage />,
 },
+  
+{
+  name: "RTL Admin",
+  layout: "/rtl",
+  path: "rtl",
+  icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+  hide: true,
 
+  component: <RTLDefault />,
+},
 
 
 ];
