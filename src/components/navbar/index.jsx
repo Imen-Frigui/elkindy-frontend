@@ -25,6 +25,7 @@ const Navbar = (props) => {
   const { onOpenSidenav, brandText, socket } = props;
   const [darkmode, setDarkmode] = React.useState(false);
 
+
   const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -65,6 +66,8 @@ const Navbar = (props) => {
     setStatusNotifications([]);
     setShowDropdown(false);
   };
+
+
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">

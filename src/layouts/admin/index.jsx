@@ -17,8 +17,10 @@ import CreateInstrument from "views/admin/marketplace/components/CreateInstrumen
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import EventsList from "views/events/EventsList";
 import ExamsList from "views/exams/exam";
-import useSocketStore from "../../ZustStore/socketStore";
-import UserTrades from "views/admin/marketplace/components/UserTrades";
+import ClassConfigPage from "../../views/course/ClassConfigPage";
+
+
+
 export default function Admin(props) {
   const { ...rest } = props;
   const location = useLocation();
@@ -103,11 +105,9 @@ export default function Admin(props) {
               <Routes>
                 {getRoutes(routes)}
 
-                <Route path="/courses" element={<CoursesList />} />
-                <Route
-                  path="/courses/assign-teachers/:courseId"
-                  element={<AssignTeachers />}
-                />
+                <Route path="/courses" element={<CoursesList />}/>
+                <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+                <Route path="/courses/:courseId/class/:classId" element={<ClassConfigPage />} />
 
                 <Route
                   path="/marketplace/create"

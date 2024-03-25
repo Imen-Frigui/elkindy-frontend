@@ -6,8 +6,6 @@ import NFTMarketplace from "views/admin/marketplace";
 import { MdBook, MdEventNote } from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
-import RTLDefault from "views/rtl/default";
-import { GiTicket } from "react-icons/gi";
 import {  FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
@@ -17,22 +15,24 @@ import SignIn from "views/auth/SignIn";
 import ExamsList from "views/exams/exam.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
-import TicketsList from "views/tickets/TicketsList";
-import EventDetails from "views/events/components/EventDetails";
+
 import { GiPapers } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";
 import {
     MdHome,
     MdPerson,
-    MdLock
+    MdOutlineNoteAlt
 } from "react-icons/md";
 import AssignTeachers from "./views/course/AssignTeachers";
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";
+import TeacherDashboard from "./views/teacher/TeacherDashboard";
 
 
 const routes = [
+
+
   {
     name: "ElKindy Dashboard",
     layout: "/admin",
@@ -95,6 +95,14 @@ const routes = [
         path: "exams",
         icon: <GiPapers className="h-6 w-6" />,
         component: <ExamsList />,
+    },
+
+    {
+        //name: "Teacher Dashboard",
+        layout: "/admin",
+        path: "teacher",
+        icon: <MdOutlineNoteAlt  className="h-6 w-6" />,
+        component: <TeacherDashboard />,
     },
 
 {
