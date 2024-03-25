@@ -148,3 +148,56 @@ export const generateClassesForCourse = async (courseId, maxStudentsPerClass, te
         throw error;
     }
 };
+
+export const assignTeachersToClass = async (classId, teacherIds) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/${classId}/assign-teacher`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ teacherIds }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to assign teachers.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to assign teachers to class ID ${classId}:`, error);
+        throw error;
+    }
+};
+
+export const fetchNextSessionForTeacher = async (teacherId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/teachers/${teacherId}/sessions/upcoming`);
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to assign teachers to teacher ID ${teacherId}:`, error);
+        throw error;
+    }
+};
+
+
+export const addStudentsToClass = async (classId, studentIds) => {
+    try {
+        const response = await fetch(`/api/classes/${classId}/add-students`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ studentIds }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add students to the class.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to add students to class ID ${classId}:`, error);
+        throw error;
+    }
+};

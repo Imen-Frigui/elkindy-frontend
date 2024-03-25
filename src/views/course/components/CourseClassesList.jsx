@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { fetchClassesByCourse, generateClassesForCourse } from '../../../services/class/classService';
 import GenerateClassesPanel from "./GenerateClassesPanel";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from "react-router-dom";
 
 const CourseClassesList = ({ courseId }) => {
     const [classes, setClasses] = useState([]);
     const [showGeneratePanel, setShowGeneratePanel] = useState(false);
+
+    const navigate = useNavigate()
+
 
     const handleGenerateClasses = async (maxStudentsPerClass) => {
         try {
@@ -48,7 +54,19 @@ const CourseClassesList = ({ courseId }) => {
                         {classes.map((classItem, index) => (
                             <li key={index} className="border-b border-gray-200 p-2 hover:bg-gray-100">
                                 {classItem.name}
-                                {/* Additional class details and actions here */}
+                                <button
+                                    onClick={() => navigate(`/admin/courses/${courseId}/class/${classItem._id}`)}
+                                    className="button-with-tooltip">
+                                    <FontAwesomeIcon icon={faInfoCircle}
+                                                     style={{
+                                                         color: '#FB9D37',
+                                                         fontSize: '20px'
+                                                     }}
+                                                     className="mr-6"/>
+                                    <span className="tooltip-text">
+                                                        Details
+                                                    </span>
+                                </button>
                             </li>
                         ))}
                     </ul>

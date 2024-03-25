@@ -7,6 +7,7 @@ import { useDrop} from 'react-dnd';
 import DraggableTeacher from "./components/DraggableTeacher";
 import   '../../assets/css/ScrollBar.css'
 import CourseClassesList from "./components/CourseClassesList";
+import CourseSchedule from "./components/CourseSchedule";
 
 
 const AssignTeachers = () => {
@@ -69,9 +70,21 @@ const AssignTeachers = () => {
         }),
     }));
 
+    const [showCalendar, setShowCalendar] = useState(false);
+
+    const handleToggleCalendar = () => setShowCalendar(!showCalendar);
 
     return (
         <div className="container ">
+            <button
+                className="toggle-calendar-view-btn"
+                onClick={handleToggleCalendar}
+            >
+                {showCalendar ? "Hide Schedule" : "View Class Schedule"}
+            </button>
+
+            {/* Conditional rendering of the Calendar Component */}
+            {showCalendar && <CourseSchedule courseId={courseId} />}
             <div className="flex flex-col md:flex-row sm:flex-row mt-8  ">
                 <div
                     className="scrollbar-styled flex flex-col mr-6 md:mr-6 mb-4 sm:mb-0 w-1/4 p-4 bg-gray-500 rounded-xl gap-y-4 overflow-y-auto max-h-96 ">
