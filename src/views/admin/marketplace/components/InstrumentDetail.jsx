@@ -16,7 +16,7 @@ function InstrumentDetail() {
     };
 
     fetchData();
-  }, [getInstrument,id]);
+  }, [getInstrument, id]);
 
   const handleExchangeClick = () => {
     setShowModal(true);
@@ -29,13 +29,6 @@ function InstrumentDetail() {
   };
 
   const handleNotification = () => {
-    // const message = "Someone is interested in exchanging instruments with you";
-    // socket.emit("sendNotification", {
-    //   senderName: "user",
-    //   receiverName: "post.username",
-    //   instrument: instrument,
-    //   message: message,
-    // });
   };
 
   return (
@@ -67,11 +60,15 @@ function InstrumentDetail() {
               text={"Contact Owner"}
               className="border-transparent border-1 w-58  rounded-lg bg-kindyorange px-4 py-2 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
             />
-            <Button
-              onClick={handleExchangeClick}
-              text={"Exchange"}
-              className="border-transparent border-1 w-58  rounded-lg bg-kindyorange px-4 py-2 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
-            />
+            {instrument.status === "exchange" ? (
+              <Button
+                onClick={handleExchangeClick}
+                text={"Exchange"}
+                className="border-transparent border-1 w-58  rounded-lg bg-kindyorange px-4 py-2 text-white transition  duration-300 hover:border-gray-100 hover:bg-opacity-80  hover:text-white focus:outline-none "
+              />
+            ) : (
+              <div></div>
+            )}
           </div>
         </div>
         {showModal && (

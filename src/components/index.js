@@ -19,3 +19,6 @@ export { default as InstrumentItem } from "./ui/InstrumentItem";
 export { default as IncomingTrades } from "./ui/UserIncomingTradesItem";
 export { default as Modal } from "./ui/Modal";
 export { default as TradeItem } from "./ui/TradeItem";
+export { default as LatestTrades } from "./ui/LatestTrades";
+export { default as NotificationStatus } from "./ui/NotificationStatus";
+export { default as TradeNotification } from "./ui/NotificationTrade";

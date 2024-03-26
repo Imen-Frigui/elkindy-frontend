@@ -14,7 +14,6 @@ export default class ExchangeService {
       });
   }
   static async fetchReceivedExchanges(accessToken, itemId) {
-    console.log("service")
     return await apiRoutes
       .get(`/exchanges/received/${itemId}`, apiHeader(accessToken))
       .catch((error) => {
@@ -31,5 +30,22 @@ export default class ExchangeService {
     } catch (error) {
       throw new Error("Error fetching sent exchanges: " + error.message);
     }
+  }
+
+  static async fetchLatestTrades(accessToken) {
+    return await apiRoutes
+      .get(`/exchanges/recent`, apiHeader(accessToken))
+      .catch((error) => {
+        throw new Error("Error fetching trades: " + error.message);
+      });
+  }
+
+  static async updateTradeStatus(accessToken, exchangeId, newStatus) {
+    const requestBody = { status: newStatus };
+    return await apiRoutes
+      .put(`/exchanges/${exchangeId}`, requestBody, apiHeader(accessToken))
+      .catch((error) => {
+        throw new Error("Error fetching trades: " + error.message);
+      });
   }
 }

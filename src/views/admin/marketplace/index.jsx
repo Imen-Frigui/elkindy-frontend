@@ -1,6 +1,6 @@
-import Banner from "./components/Banner";
 import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
 import avatar1 from "assets/img/avatars/avatar1.png";
+import banner from "assets/img/nfts/banner7.jpg";
 
 import InstrumentCard from "components/card/InstrumentCard";
 
@@ -10,6 +10,7 @@ import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
 import { useQuery } from "../../../hooks/useQuery";
 import { useNavigate } from "react-router-dom";
+import Banner1 from "./components/Banner";
 
 const Marketplace = () => {
   const query = useQuery();
@@ -115,7 +116,15 @@ const Marketplace = () => {
   return (
     <div className=" z-500 mt-2 grid h-full grid-cols-1 gap-5 md:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-3">
       <div className="col-span-1 h-fit w-full md:col-span-5">
-        <Banner />
+        <Banner1
+          backgroundImage={banner}
+          title="Discover Your Perfect Harmony: Instruments Marketplace"
+          subtitle="Exchange, Play, Repeat: Unleash Your Musical Potential"
+          button1Link="/admin/marketplace/create"
+          button1Text="Post your instrument now"
+          button2Link="/admin/marketplace/trades"
+          button2Text="My trades"
+        />
         <div className=" mb-2 mt-2  flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue px-4 py-0 dark:bg-indigo-50 md:flex-row md:items-center">
           <h4 className="ml-1 text-2xl font-bold text-white dark:text-navy-700 ">
             Explore Instruments:
@@ -154,7 +163,6 @@ const Marketplace = () => {
             Filter
           </button>
         </div>
-
         <div className=" grid grid-cols-1 gap-3 md:grid-cols-5">
           <div
             className={
@@ -257,13 +265,11 @@ const Marketplace = () => {
             </div>
           </div>
         </div>
-
         <div className="mb-5 mt-5 flex items-center justify-between px-[26px]">
           <h4 className="text-2xl font-bold text-navy-700 dark:text-white">
             Recently Added
           </h4>
         </div>
-
         {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <InstrumentCard
             bidders={[avatar1, avatar2, avatar3]}

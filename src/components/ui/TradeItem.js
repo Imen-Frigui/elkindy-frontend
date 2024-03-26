@@ -47,7 +47,6 @@ function TradeItem({ item, status }) {
                 status
               )}`}
             >
-              {" "}
               {status}
             </button>
           </div>

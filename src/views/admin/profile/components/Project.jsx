@@ -61,8 +61,8 @@ const Project = ({ onInstrumentClick }) => {
         instruments.map((instrument, index) => (
           <>
             <SwipeToDelete
-              className="mb-3 rounded-3xl bg-navy-800"
-              height={100}
+              className="mb-3 h-auto rounded-3xl bg-navy-800"
+              height={150}
               key={instrument._id}
               onDelete={() => handleDelete(instrument._id)}
               transitionDuration={250}
@@ -80,22 +80,22 @@ const Project = ({ onInstrumentClick }) => {
               }}
             >
               <div
-                className="mb-3 flex w-full items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none"
+                className="mb-3 flex h-full w-full items-center justify-between rounded-2xl bg-white p-5 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none"
                 onClick={() => onInstrumentClick(instrument._id)}
               >
                 <div className="flex items-center">
                   <div className="">
                     <img
-                      className="h-[83px] w-[83px] rounded-lg"
+                      className="h-[80px] w-[83px] rounded-lg"
                       src={guitar}
                       alt=""
                     />
                   </div>
-                  <div className="ml-4">
+                  <div className="ml-4 h-auto w-full">
                     <p className="text-base font-medium text-navy-700 dark:text-white">
                       {instrument.title}
                     </p>
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className="mt-2 overflow-clip text-sm text-gray-600">
                       {instrument.details}
                       <a
                         className="ml-1 font-medium text-brand-500 hover:text-brand-500 dark:text-white"
