@@ -1,8 +1,61 @@
 import { HiX } from "react-icons/hi";
 import Links from "./sidebar/components/Links";
 import routes from "routes.js";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import { useSelector} from "react-redux";
 
 function SideBarr({ open, onClose }) {
+  const [userData, setUserData] = useState(null);
+
+  const [filteredRoutes, setFilteredRoutes] = useState(routes);
+
+
+  const { userInfo } = useSelector((state) => state.auth);
+  console.log(userInfo);
+
+
+
+  const getRoutesForRole = (routes, role) => {
+    if (role === 'teacher') {
+      const teacherPaths = ['default',  'teacher'];
+      return routes.filter(route => teacherPaths.includes(route.path));
+    }
+    return routes;
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    if (!userData) {
+      fetchUserData().then(r => console.log(r, 'userData', userData));
+    }
+    if (userData) {
+      const roleRoutes = getRoutesForRole(routes, userData.user?.role);
+      setFilteredRoutes(roleRoutes);
+    }
+  }, [userData]);
+
+  const isTeacher = userData?.user?.role === 'teacher';
+  console.log('isTeacher', isTeacher);
   return (
     <>
       <div
@@ -17,14 +70,17 @@ function SideBarr({ open, onClose }) {
           <HiX />
         </span>
         <div class="ml-6 flex w-12 flex-col  items-center space-y-10 py-6">
-          <div class="border-kindyOrange h-screen space-y-48 rounded-tl-[40px]  rounded-br-[40px] border-2 bg-kindyblue pt-5 dark:!bg-navy-900 ">
-            {" "}
-            <Links routes={routes} />
+
+          <div className={`border-2 h-screen space-y-48 pt-5 rounded-tl-[40px] rounded-br-[40px] ${
+              isTeacher ? 'bg-kindyorange border-kindyorange' : 'bg-kindyblue border-kindyblue'
+          } dark:!bg-navy-900`}>            {" "}
+            { /* <Links routes={routes}/> */}
+            <Links routes={filteredRoutes} />
             <div class="flex items-center justify-center pb-2">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
                 class="h-6 w-6 cursor-pointer text-white hover:hover:text-kindyyellow"

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
-import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
 
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
-import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
 import ArchivedEventsList  from "../../views/events/components/ArchivedEventsList"
@@ -18,6 +16,7 @@ import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetai
 import { io } from "socket.io-client";
 import EventsList from "views/events/EventsList";
 import ExamsList from "views/exams/exam";
+import ClassConfigPage from "../../views/course/ClassConfigPage";
 
 
 
@@ -106,6 +105,7 @@ export default function Admin(props) {
 
                 <Route path="/courses" element={<CoursesList />}/>
                 <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
+                <Route path="/courses/:courseId/class/:classId" element={<ClassConfigPage />} />
 
                 <Route
                   path="/marketplace/create"

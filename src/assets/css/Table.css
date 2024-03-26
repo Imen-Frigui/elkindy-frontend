@@ -1,0 +1,62 @@
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.attendance-table thead th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: left;
+    padding: 12px;
+}
+
+.attendance-table tbody td {
+    padding: 12px;
+    color: #333;
+}
+
+.attendance-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+/* Hovering over rows */
+.attendance-table tbody tr:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.present-status {
+    color: green;
+    font-weight: bold;
+}
+
+.absent-status {
+    color: red;
+    font-weight: bold;
+}
+
+.excused-status {
+    color: orange;
+    font-weight: bold;
+}
+
+.submit-attendance-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.submit-attendance-btn:hover {
+    background-color: #45a049;
+}
