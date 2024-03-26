@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 
 const Greeting = ({ username }) => {
     return (
-        <div className="absolute top-[125px] left-[140px] w-[415px] h-[137px] flex flex-col items-start p-0 gap-[10px] bg-[#F7F5EF]">
+        <div className=" top-[125px] left-[140px] w-[415px] h-[137px] flex flex-col items-start p-0 gap-[10px] bg-[#F7F5EF]">
             <h1 className="text-5xl font-bold text-gray-800">
                 Good Morning
             </h1>

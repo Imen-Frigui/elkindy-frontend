@@ -201,3 +201,50 @@ export const addStudentsToClass = async (classId, studentIds) => {
         throw error;
     }
 };
+export const fetchSessionsByClassId = async (classId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/sessions/${classId}/sessions`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch sessions for the class.');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch sessions for class ID ${classId}:`, error);
+        throw error;
+    }
+};
+
+export const fetchStudentsByClassId = async (classId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/${classId}/students`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch students for the class.');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch students for class ID ${classId}:`, error);
+        throw error;
+    }
+};
+
+
+export const manageAttendanceForSession = async (sessionId, attendanceData) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/sessions/${sessionId}/attendance`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(attendanceData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to manage attendance for the session.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to manage attendance for session ID ${sessionId}:`, error);
+        throw error;
+    }
+};
