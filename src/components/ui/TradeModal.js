@@ -91,8 +91,8 @@ function ExchangeModal({
         >
           &#8203;
         </span>
-        <div className="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
-          <div className="bg-indigo-50 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+        <div className="inline-block transform overflow-hidden rounded-lg bg-kindygray text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
+          <div className="bg-kindygray px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
             <div className="md:items-centers sm:flex sm:items-start md:flex">
               <div className="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
                 <h3
@@ -120,7 +120,7 @@ function ExchangeModal({
               </div>
             </div>
           </div>
-          <div className="bg-indigo-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6  ">
+          <div className="bg-kindygray px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6  ">
             <button
               onClick={onRequestExchange}
               type="button"

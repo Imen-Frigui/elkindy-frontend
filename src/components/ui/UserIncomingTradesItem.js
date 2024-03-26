@@ -16,7 +16,6 @@ const IncomingTrades = ({ tradeData }) => {
   const { socket } = useSocketStore();
 
   const token = localStorage.getItem("token");
-  console.log(tradeData);
   const handleAcceptTrade = async () => {
     try {
       await updateTradeStatus(token, tradeData._id, "accepted");

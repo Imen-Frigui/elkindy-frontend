@@ -22,3 +22,4 @@ export { default as TradeItem } from "./ui/TradeItem";
 export { default as LatestTrades } from "./ui/LatestTrades";
 export { default as NotificationStatus } from "./ui/NotificationStatus";
 export { default as TradeNotification } from "./ui/NotificationTrade";
+export { default as ImageUploader } from "./ui/ImageUploader";
