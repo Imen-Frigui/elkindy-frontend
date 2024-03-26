@@ -38,7 +38,7 @@ const NextCourseCard = ({ teacherId }) => {
 
     return (
         <div
-            className="absolute left-[114px] top-[295px] flex h-[202px] w-[527px] flex-col justify-center rounded-xl bg-[#233255] p-4 shadow-lg">
+            className=" left-[114px] top-[295px] flex h-[202px] w-[527px] flex-col justify-center rounded-xl bg-[#233255] p-4 shadow-lg">
             <h3 className=" left-[129px] mt-1 mb-0.5 top-[315px] w-[160px] h-[29px] text-[20px] font-semibold leading-[29px] text-[#FDFDF5]">
                 Your Next Course
             </h3>

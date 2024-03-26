@@ -32,20 +32,22 @@ const TeacherDashboard = () => {
         if (!userData) {
             fetchUserData().then(r => console.log(r, 'userData', userData));
         }
-    }, []);
+    }, [userData]);
 
     const isTeacher = userData?.user?.role === 'teacher';
     const idTeacher = userData?.user?._id;
     console.log(idTeacher)
     console.log(userData)
     console.log('isTeacher', isTeacher);
+    const classId = "65fdb45d109f0caf0bf53434";
+
 
     return (
-        <>
-            {userData && <Greeting username={userData.user.username}></Greeting>}
+        <div className="flex flex-col">
+            <Greeting username={userData?.user?.username}></Greeting>
             <NextCourseCard teacherId={idTeacher}></NextCourseCard>
-            <AttendanceSheet></AttendanceSheet>
-       </>
+            <AttendanceSheet classId={classId} />
+        </div>
     );
 }
 
