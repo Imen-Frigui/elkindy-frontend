@@ -1,9 +1,10 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Navbar from "components/navbar/RTL";
-import Sidebar from "components/sidebar/RTL";
-import Footer from "components/footer/Footer";
+import Navbar from "../../views/rtl/default/components/front/Navbar";
+
 import routes from "routes.js";
+import PromoSection from "../../views/rtl/default/components/front/PromoSection";
+import ClassSection from "../../views/rtl/default/components/front/ClassSection";
 
 export default function RTL(props) {
   const { ...rest } = props;
@@ -13,7 +14,7 @@ export default function RTL(props) {
 
   React.useEffect(() => {
     window.addEventListener("resize", () =>
-      window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
+        window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
   }, []);
   React.useEffect(() => {
@@ -24,9 +25,9 @@ export default function RTL(props) {
     let activeRoute = "RTL";
     for (let i = 0; i < routes.length; i++) {
       if (
-        window.location.href.indexOf(
-          routes[i].layout + "/" + routes[i].path
-        ) !== -1
+          window.location.href.indexOf(
+              routes[i].layout + "/" + routes[i].path
+          ) !== -1
       ) {
         setCurrentRoute(routes[i].name);
       }
@@ -37,7 +38,7 @@ export default function RTL(props) {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
       if (
-        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
       ) {
         return routes[i].secondary;
       }
@@ -48,7 +49,7 @@ export default function RTL(props) {
     return routes.map((prop, key) => {
       if (prop.layout === "/rtl") {
         return (
-          <Route path={`/${prop.path}`} element={prop.component} key={key} />
+            <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );
       } else {
         return null;
@@ -58,15 +59,30 @@ export default function RTL(props) {
 
   document.documentElement.dir = "rtl";
   return (
-    <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      < div className="bg-[#F7F5EF]">
+        <Navbar />
+        <PromoSection />
+        <ClassSection />
+
+
+
+
+
+
+        {/* <h1>Paragraphs are the building blocks of papers. Many
+          students define paragraphs in terms of length: a paragraph is
+          a group of at least five sentences, a paragraph is half a page long,
+          etc. In reality, though, the unity and coherence of ideas among senten
+          ces is what constitutes a paragraph. </h1>
+        <Header/>
+         <Sidebar open={open} onClose={() => setOpen(false)} />}
       {/* Navbar & Main Content */}
-      <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
-        {/* Main Content */}
+        {/*  <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
+
         <main
           className={`mx-[12px] h-full flex-none transition-all md:pe-2 xl:mr-[313px]`}
         >
-          {/* Routes */}
+
           <div className="h-full">
             <Navbar
               onOpenSidenav={() => setOpen(true)}
@@ -91,6 +107,10 @@ export default function RTL(props) {
           </div>
         </main>
       </div>
-    </div>
+
+          <Footer />
+
+*/}
+      </div>
   );
 }
