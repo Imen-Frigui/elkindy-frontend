@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../../assets/css/StatCard.css'
-import courses from '../../../assets/svg/courses.svg';
+import student from '../../../assets/svg/student.svg';
 
 const StatCard = ({ title, totalCount, stats }) => {
     const { malePercentage, femalePercentage } = stats;
@@ -11,7 +11,7 @@ const StatCard = ({ title, totalCount, stats }) => {
                 <div className="circle-progress"
                      style={{background: `conic-gradient(#006BBE 0% ${malePercentage}%, #EA7D17 ${femalePercentage}% 100%)`}}>
                     <div className="icon-wrapper">
-                        <img src={courses} alt="Icon" className="icon"/>
+                        <img src={student} alt="Icon" className="icon"/>
                     </div>
                 </div>
             </div>

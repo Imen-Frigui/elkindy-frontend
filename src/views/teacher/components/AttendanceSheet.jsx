@@ -69,7 +69,7 @@ const AttendanceSheet = ({ classId }) => {
 
     return (
         <div className="attendance-sheet-container">
-            <table className="attendance-table min-w-full divide-y divide-gray-200">
+            <table className="attendance-table min-w-full divide-y divide-gray-200 mb-4">
                 <thead>
                 <tr>
                     <th>Students</th>
@@ -91,7 +91,7 @@ const AttendanceSheet = ({ classId }) => {
                 ))}
                 </tbody>
             </table>
-            <ButtonComponent color="orange" text="Submit Attendance" onClick={submitAttendance}>Submit Attendance</ButtonComponent>
+            <ButtonComponent color="#3F51B5" text="Submit Attendance" onClick={submitAttendance}>Submit Attendance</ButtonComponent>
         </div>
     );
 };

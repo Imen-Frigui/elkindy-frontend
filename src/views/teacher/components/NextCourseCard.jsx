@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { VscPiano } from "react-icons/vsc";
 import { format } from 'date-fns';
 import { fetchNextSessionForTeacher } from "../../../services/class/classService";
 import piano from "../../../assets/img/piano.svg";
