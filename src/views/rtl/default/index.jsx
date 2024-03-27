@@ -16,13 +16,15 @@ import TaskCard from "views/rtl/default/components/TaskCard";
 import tableDataCheck from "./variables/tableDataCheck.json";
 import tableDataComplex from "./variables/tableDataComplex.json";
 import Header from "./components/Header";
+import Navbar from "./components/front/Navbar";
 
 const Dashboard = () => {
   return (
     <div>
-      {/* Card widget */}
+        <Navbar />
 
-   <Header/>
+
+     <Header />
     </div>
   );
 };

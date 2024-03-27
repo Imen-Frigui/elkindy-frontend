@@ -6,6 +6,7 @@ import NFTMarketplace from "views/admin/marketplace";
 import { MdBook, MdEventNote } from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
+import RTLDefault from "views/rtl/default";
 import {  FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
@@ -146,16 +147,16 @@ const routes = [
     hide: true,
     component: <UnauthorizedPage />,
 },
-  
-{
-  name: "RTL Admin",
-  layout: "/rtl",
-  path: "rtl",
-  icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-  hide: true,
 
-  component: <RTLDefault />,
-},
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "rtl",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <RTLDefault />,
+    },
 
 
 ];
