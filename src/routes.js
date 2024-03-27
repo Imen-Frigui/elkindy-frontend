@@ -21,7 +21,8 @@ import { FaUsers } from "react-icons/fa";
 import {
     MdHome,
     MdPerson,
-    MdOutlineNoteAlt
+    MdOutlineNoteAlt,
+    MdSchedule
 } from "react-icons/md";
 
 
@@ -31,6 +32,7 @@ import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";
 import TeacherDashboard from "./views/teacher/TeacherDashboard";
+import TeacherSchedule from "./views/teacher/TeacherSchedule";
 
 
 const routes = [
@@ -112,6 +114,13 @@ const routes = [
         path: "teacher",
         icon: <MdOutlineNoteAlt  className="h-6 w-6" />,
         component: <TeacherDashboard />,
+    },
+    {
+        //name: "Teacher Dashboard",
+        layout: "/admin",
+        path: "Schedule",
+        icon: <MdSchedule  className="h-6 w-6" />,
+        component: <TeacherSchedule />,
     },
 
 {
