@@ -25,32 +25,32 @@ function CreateInstrument() {
   const [category, setCategory] = useState("Exchange");
   const [token, setToken] = useState("");
   const [brand, setBrand] = useState("");
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState(null);
   const navigate = useNavigate();
   const showToast = useShowToast();
 
-  const handleImageUpload = (event) => {
-    console.log(event)
-    if (event && event.target && event.target.files) {
-      const files = event.target.files;
-      const imagesArray = [];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+  const handleImageUpload = (files) => {
+    const imagesArray = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file && file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = () => {
           imagesArray.push(reader.result);
           if (imagesArray.length === files.length) {
-            setSelectedImages(imagesArray);
+            setSelectedImages(reader.result);
           }
         };
         reader.readAsDataURL(file);
+      } else {
+        setSelectedImages(null);
       }
     }
   };
   const removeImage = (index) => {
     const newImages = [...selectedImages];
     newImages.splice(index, 1);
-    setSelectedImages(newImages);
+    setSelectedImages(null);
   };
   const handleSingleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -58,7 +58,7 @@ function CreateInstrument() {
       const reader = new FileReader();
       reader.onload = () => {
         const imageDataURL = reader.result;
-        setSelectedImages([...selectedImages, imageDataURL]);
+        setSelectedImages(imageDataURL);
       };
       reader.readAsDataURL(file);
     }
@@ -96,8 +96,9 @@ function CreateInstrument() {
       details: values.details,
       status: category.toLowerCase(),
       brand: brand,
+      img: selectedImages,
     };
-    if (category.toLowerCase() === "buy") {
+    if (category.toLowerCase() === "sell") {
       postData.price = values.price;
     }
     setSubmitting(true);
@@ -172,31 +173,46 @@ function CreateInstrument() {
                       />
                       <div
                         className={
-                          category === "buy"
-                            ? "flex flex-row justify-between space-x-2 align-baseline "
+                          category === "sell"
+                            ? "flex flex-row space-x-2 align-baseline "
                             : ""
                         }
                       >
                         <Dropdown
-                          className={category === "buy" ? "w-[500px]" : ""}
+                          className={category === "sell" ? "w-[250px]" : ""}
                           onChange={setCategory}
                           value={category}
                           options={[
                             "exchange",
                             "maintenance",
                             "available for borrow",
-                            "buy",
+                            "sell",
                           ]}
                         />
-                        {category === "buy" ? (
-                          <Input
-                            className={"w-1/2"}
-                            placeholder="Price"
-                            status={status}
-                            name="price"
-                            id="price"
-                            type="number"
-                          />
+                        {category === "sell" ? (
+                          <div className="relative mt-1 w-full">
+                            <Input
+                              className={"w-1/2"}
+                              placeholder="Enter price in dinars"
+                              status={status}
+                              name="price"
+                              id="price"
+                              type="number"
+                              step=".10"
+                              min="0"
+                              oninput="this.value = Math.abs(this.value)"
+                            />
+                            <div class="pointer-events-none absolute inset-0 flex w-full items-center justify-between gap-2 pl-[1.1rem]">
+                              <span>
+                                {/* <p class="text-xs text-gray-600 transition-all md:text-sm">
+                                  Enter price in dinars
+                                </p> */}
+                              </span>
+                              <div class="text-2xs mr-3 rounded-md bg-gray-200 px-3 py-2 font-bold text-gray-700">
+                                DT
+                              </div>
+                            </div>
+                          </div>
                         ) : (
                           <div></div>
                         )}

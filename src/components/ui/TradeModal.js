@@ -51,7 +51,7 @@ function ExchangeModal({
     const message = "Someone is interested in exchanging instruments with you";
     socket.emit("sendNotification", {
       senderId: "user",
-      receiverId: instrument.author,
+      receiverId: instrument.author[0]._id,
       instrument: instrument,
       message: message,
     });
@@ -64,7 +64,7 @@ function ExchangeModal({
         return;
       }
       const exchangeData = {
-        receiver: instrument.author,
+        receiver: instrument.author[0]._id,
         senderInstrument: selectedItem,
         receiverInstrument: instrument,
       };
@@ -126,7 +126,7 @@ function ExchangeModal({
               type="button"
               className="border-transparent inline-flex w-full justify-center rounded-md border bg-kindyorange px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-opacity-80 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
             >
-              Request Exchange
+              Request Swap
             </button>
             <button
               onClick={onCloseModal}

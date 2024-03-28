@@ -244,7 +244,7 @@ const Marketplace = () => {
                     "Exchange",
                     "Maintenance",
                     "Available for borrow",
-                    "Buy",
+                    "Sell",
                   ].map((cat, i) => {
                     return (
                       <Button

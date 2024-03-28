@@ -1,4 +1,4 @@
-import zustand, { create } from "zustand";
+import { create } from "zustand";
 import DataService from "../services/marketplace/data.service";
 
 const useInstrumentStore = create((set) => ({
@@ -10,27 +10,6 @@ const useInstrumentStore = create((set) => ({
   fetchInstruments: async (status, sort, page, accessToken) => {
     try {
       set({ loading: true });
-      // if (sort !== "" || status !== "") {
-      //   page = 1;
-      //   set({ instruments: [] });
-      //   const { data } = await DataService.getPublicContent(
-      //     accessToken,
-      //     status,
-      //     sort,
-      //     "",
-      //     page
-      //   );
-      //   if (data.instruments.length === 0) {
-      //     set({ hasMorePages: false });
-      //   }
-      //   set((state) => ({
-      //     instruments: [...data.instruments],
-      //   }));
-      //   set({ loading: false });
-
-      //   return;
-      // }
-
       const { data } = await DataService.getPublicContent(
         accessToken,
         status,
@@ -54,15 +33,13 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  getInstrument: async (id) => {
+  getInstrument: async (id, accessToken) => {
     try {
       set({ loading: true });
-      const { data } = await DataService.getInstrument(id);
-      console.log(data);
+      const { data } = await DataService.getInstrument(id,accessToken);
       set({ instrument: data.instrument });
       set({ loading: false });
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -85,7 +62,6 @@ const useInstrumentStore = create((set) => ({
       set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -104,7 +80,6 @@ const useInstrumentStore = create((set) => ({
       set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -115,7 +90,6 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
       return data;
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },

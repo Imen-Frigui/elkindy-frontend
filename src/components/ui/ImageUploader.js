@@ -1,11 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 function ImageUploader({
   handleImageUpload,
-  handleSingleImageUpload,
   selectedImages,
   removeImage,
 }) {
   const [isDragging, setIsDragging] = useState(false);
+
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      handleImageUpload(acceptedFiles);
+    },
+    [handleImageUpload]
+  );
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+  });
+
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -25,6 +37,7 @@ function ImageUploader({
     const files = e.dataTransfer.files;
     handleImageUpload(files);
   };
+
   return (
     <div className="w-full">
       <div
@@ -36,14 +49,12 @@ function ImageUploader({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <label
-          htmlFor="imageUpload"
-        >
+        <label htmlFor="imageUpload">
           <input
             type="file"
             id="imageUpload"
             className="hidden"
-            onChange={handleImageUpload}
+            {...getInputProps()}
             accept="image/*"
             multiple="true"
           />
@@ -67,10 +78,42 @@ function ImageUploader({
         data-rbd-droppable-context-id="0"
         className="relative mt-4 grid w-full grid-cols-4 gap-3"
       >
-        {selectedImages.map((image, index) => (
+        {selectedImages && (
+          <div className="relative">
+            <img
+              src={selectedImages}
+              className="h-48 w-full rounded-lg object-cover"
+            />
+            <div className="absolute right-1 top-1 -translate-y-1/2 translate-x-1/2">
+              <button
+                onClick={() => removeImage()}
+                className="rounded-full bg-kindyorange p-1 text-white"
+              >
+                <svg
+                  stroke="#FFFFFF"
+                  fill="#FFFFFF"
+                  strokeWidth="0"
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  height="14"
+                  width="14"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* {selectedImages.map((image, index) => (
           <div key={index} className="relative">
             <img
-              src={image}
+              src={selectedImages}
               alt={`Uploaded Image ${index + 1}`}
               className="h-48 w-full rounded-lg object-cover"
             />
@@ -98,29 +141,7 @@ function ImageUploader({
               </button>
             </div>
           </div>
-        ))}
-
-        <button
-          onClick={() => document.getElementById("imageUpload").click()}
-          class="flex h-[85px] items-center justify-center rounded-lg border border-gray-300 bg-gray-100 text-gray-500"
-        >
-          <svg
-            stroke="currentColor"
-            fill="none"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            height="36"
-            width="36"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 4v16m8-8H4"
-            ></path>
-          </svg>
-        </button>
+        ))} */}
       </div>
     </div>
   );

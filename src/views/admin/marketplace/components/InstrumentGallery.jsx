@@ -15,7 +15,7 @@ const displayed_images = [
 
 const active_thumbnail_class = " outline outline-4 outline-orange ";
 
-function Gallery() {
+function Gallery({images}) {
   const numImages = displayed_images.length;
   const [CurrentImageIndex, setCurrentImageIndex] = useState(0);
   const [ModalVisible, SetModalVisiblity] = useState(false);
@@ -56,7 +56,7 @@ function Gallery() {
       {/* <button onClick={() => SetModalVisiblity(true)} className=" w-25 "> */}
       <div className="flex justify-start md:w-[1050px]">
         <img
-          src={image}
+          src={images}
           className="mb-5 w-1/4 md:rounded-lg "
           alt="product"
         />
