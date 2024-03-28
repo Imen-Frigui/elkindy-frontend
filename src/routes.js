@@ -34,6 +34,8 @@ import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";
 import TeacherDashboard from "./views/teacher/TeacherDashboard";
 import TeacherSchedule from "./views/teacher/TeacherSchedule";
+import CourseDetails from "./views/rtl/default/components/front/CourseDetails";
+import Dashboard from "views/rtl/default";
 
 
 const routes = [
@@ -165,6 +167,24 @@ const routes = [
         hide: true,
 
         component: <RTLDefault />,
+    },
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "/",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <Dashboard />,
+    },
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "course/:courseId",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <CourseDetails />,
     },
 
 

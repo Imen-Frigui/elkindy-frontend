@@ -32,7 +32,7 @@ const Navbar = () => {
                     LOGIN
                 </Link>
 
-                <div className="flex justify-between md:flex space-x-28">
+                <div className="flex justify-between md:flex gap-28">
                     <Link to="/" className="hover:underline">Home</Link>
                     <Link to="/about" className="hover:underline">About School</Link>
                     <Link to="/gallery" className="hover:underline">Gallery</Link>
@@ -40,10 +40,10 @@ const Navbar = () => {
                 </div>
 
                 <Link to="/" className="flex items-center">
-                    <img src={logo} alt="El Kindy Conservatoire" className="h-12 mr-4"/>
+                    <img src={logo} alt="El Kindy Conservatoire" />
                 </Link>
             </nav>
-            <div className="text-center absolute w-full mt-10">
+            <div className="text-center absolute w-full mt-12">
                 <h1 className="text-5xl font-script text-yellow-400"
                     style={{fontFamily: 'Dancing Script, cursive', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'}}>
                     From First Note to Ovation - El Kindy Guides the Way
