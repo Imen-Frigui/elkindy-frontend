@@ -5,6 +5,8 @@ import Navbar from "../../views/rtl/default/components/front/Navbar";
 import routes from "routes.js";
 import PromoSection from "../../views/rtl/default/components/front/PromoSection";
 import ClassSection from "../../views/rtl/default/components/front/ClassSection";
+import CourseDetails from "../../views/rtl/default/components/front/CourseDetails";
+import Dashboard from "../../views/rtl/default";
 
 export default function RTL(props) {
   const { ...rest } = props;
@@ -60,14 +62,24 @@ export default function RTL(props) {
   // document.documentElement.dir = "rtl";
   return (
       < div className="bg-[#F7F5EF]">
-        <Navbar />
-        <PromoSection />
-        <ClassSection />
 
+        <Routes>
+          {getRoutes(routes)}
+          <Route
+              path="/rtl"
+              element={<Dashboard />}
+          />
+          <Route
+              path="/rtl"
+              element={<PromoSection />}
+          />
+          <Route
+              path="/rtl"
+              element={<ClassSection />}
+          />
+          <Route path="/rtl/course/:courseId" element={<CourseDetails />} />
 
-
-
-
+        </Routes>
 
         {/* <h1>Paragraphs are the building blocks of papers. Many
           students define paragraphs in terms of length: a paragraph is

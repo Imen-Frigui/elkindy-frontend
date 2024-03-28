@@ -11,3 +11,11 @@ option {
 }
 
 
+.category-link {
+	color: #2563eb;
+}
+
+.category-link:hover {
+	color: #1d4ed8;
+}
+

@@ -142,3 +142,16 @@ export const fetchAssignedTeachers = async (courseId) => {
     }
 };
 
+export const fetchTopThreeCourses = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/popular`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch top three courses:", error);
+        throw error;
+    }
+};
