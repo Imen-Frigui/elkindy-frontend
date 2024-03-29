@@ -67,13 +67,7 @@ const routes = [
   },
  
   
- /* {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "rtl",
-    icon: <MdHome className="h-6 w-6" />,
-    component: <RTLDefault />,
-  },*/
+
   {
     name: "Events List",
     layout: "/admin",
@@ -114,16 +108,19 @@ const routes = [
     component: <SignIn />,
     hide: true,
 },
+
+
 {
     name: "registration",
         layout: "/auth",
-    path: "Register",
+    path: "Register/:courseId",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     component: <Register />,
     hide: true,
 
 },
+
 
 
 {
@@ -135,7 +132,16 @@ const routes = [
     hide: true,
     component: <UnauthorizedPage />,
 },
+  
+{
+  name: "RTL Admin",
+  layout: "/rtl",
+  path: "rtl",
+  icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+  hide: true,
 
+  component: <RTLDefault />,
+},
 
 
 ];

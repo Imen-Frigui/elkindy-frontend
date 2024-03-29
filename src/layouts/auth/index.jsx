@@ -38,7 +38,7 @@ export default function Auth() {
                     path="/"
                     element={<Navigate to="/auth" replace />}/>
                   <Route path="/auth/sign-in" element={<SignIn />} />
-                  <Route path="/auth/register" element={<RegisterPage />} />
+                  <Route path="/auth/register/:courseId" element={<RegisterPage />} />
                   
                 </Routes>
               

@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import authImg from "assets/img/auth/registerstudent.jpg";
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateFormData, setRole } from 'slices/studentRegistrationSlice';
-import { Input, Typography } from '@material-tailwind/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faLock, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { setCredentialsRegistration } from 'slices/studentRegistrationSlice';
-import { toast } from 'react-toastify';
-import { useRegisterMutation } from 'slices/userApiSlice';
-import { TagsInput } from 'react-tag-input-component';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    setCredentialsRegistration,
+    setRole,
+    updateFormData,
+    addCourse,
+    setCourses
+} from 'slices/studentRegistrationSlice';
+import {Input, Typography} from '@material-tailwind/react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCheck, faLock, faPhone} from '@fortawesome/free-solid-svg-icons';
+import {faUser} from '@fortawesome/free-regular-svg-icons';
+import {useRegisterMutation} from 'slices/userApiSlice';
+import {TagsInput} from 'react-tag-input-component';
 import '../StudentRegistrationForm/tags.css';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
+
 const StudentFormStep1 = ({ onNext }) => {
   const Navigate = useNavigate();
     const dispatch = useDispatch();
@@ -21,6 +25,9 @@ const StudentFormStep1 = ({ onNext }) => {
     const [errors, setErrors] = useState({});
     const [register, { isLoading }] = useRegisterMutation();
     const [selected, setSelected] = useState([]);
+
+    let { courseId } = useParams();
+
 
     const schema = Yup.object({
         firstName: Yup.string().required('First Name is required'),
@@ -40,18 +47,18 @@ const StudentFormStep1 = ({ onNext }) => {
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
             .required('Confirm password is required'),
             preferedInstrument: Yup.array().min(1, 'prefered Instrumens is required').required('prefered Instruments is required'),
+        courses: Yup.array().min(1, 'Course is required').required('Course is required'),
     });
 
     useEffect(() => {
         console.log(formData);
-        dispatch(setRole('student'));
-
-    }, [formData]);
+        dispatch(setRole('user'));
+    }, [dispatch, formData]);
 
     const handleTagsChange = (tags) => {
         console.log(formData)
         setSelected(tags);
-        dispatch(updateFormData({ field: 'preferedInstrument', value: tags }));
+        dispatch(updateFormData({ field: 'preferedInstrument', value: tags}));
       };
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -64,9 +71,10 @@ const StudentFormStep1 = ({ onNext }) => {
     };
     const submitHandler = async (e) => {
         e.preventDefault();
+
         try {
             await schema.validate(formData, { abortEarly: false });
-    
+             /*
             // Check email existence in your database
             const emailExistsResponse = await fetch(`http://localhost:3000/api/auth/check-email/${formData.email}`);
             if (emailExistsResponse.ok) {
@@ -102,7 +110,7 @@ const StudentFormStep1 = ({ onNext }) => {
                 }));
                 return;
             }
-    
+            */
             // Check phone number existence in your database
             const phoneExistsResponse = await fetch(`http://localhost:3000/api/auth/check-phone/${formData.phoneNumber}`);
             if (phoneExistsResponse.ok) {
@@ -117,17 +125,28 @@ const StudentFormStep1 = ({ onNext }) => {
             } else {
                 console.error('Failed to fetch phone number existence:', phoneExistsResponse.statusText);
             }
-    
+
+
+            console.log(formData);
+            console.log(courseId);
+            dispatch(addCourse([courseId]));
             const result = await register(formData).unwrap();
             dispatch(setCredentialsRegistration({ ...result }));
             Navigate('/admin/default');
             onNext();
         } catch (err) {
-            const newErrors = err.inner.reduce((acc, error) => ({
-                ...acc,
-                [error.path]: error.message,
-            }), {});
-            setErrors(newErrors);
+            if (err.inner) {
+                const newErrors = err.inner.reduce((acc, error) => ({
+                    ...acc,
+                    [error.path]: error.message,
+                }), {});
+                setErrors(newErrors);
+            } else {
+                // Handle other types of errors (e.g., network errors)
+                console.error('An unexpected error occurred:', err);
+                // Optionally set a generic error message or handle the error differently
+                setErrors({ generic: "An unexpected error occurred. Please try again." });
+            }
         }
     };
 
@@ -169,6 +188,18 @@ const StudentFormStep1 = ({ onNext }) => {
                             error={Boolean(errors.lastName)}
                             helperText={errors.lastName}
                         />
+                        {/*
+                        <Input
+                            className='flex-1   dark:text-gray-500  text-gray-800 rounded-xl border-none mb-3 bg-white/0 p-3 text-[16px] text-gray-750'
+                            icon={<FontAwesomeIcon icon={faUser} />}
+                            label="Last Name"
+                            variant='outlined'
+                            placeholder="Last Name"
+                            name="lastName"
+                            value={formData.courses || ''}
+                            onChange={handleChange}
+                        />
+                        */}
                     </div>
                     {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                     
@@ -255,8 +286,9 @@ const StudentFormStep1 = ({ onNext }) => {
     {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
 
                     {/* New input for preferred instrument */}
-                 
-   
+
+
+
                     <div
       className="bg-gray-50 mt-7  dark:bg-gray-800 ">
            <label htmlFor="Prefered Instrument" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Prefered Instrument:</label>

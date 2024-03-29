@@ -4,6 +4,7 @@ import Navbar from "components/navbar/RTL";
 import Sidebar from "components/sidebar/RTL";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
+import Header from "views/rtl/default/components/Header";
 
 export default function RTL(props) {
   const { ...rest } = props;
@@ -58,15 +59,21 @@ export default function RTL(props) {
 
   document.documentElement.dir = "rtl";
   return (
-    <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+    <div >
+      <h1>Paragraphs are the building blocks of papers. Many
+         students define paragraphs in terms of length: a paragraph is 
+         a group of at least five sentences, a paragraph is half a page long,
+          etc. In reality, though, the unity and coherence of ideas among senten
+          ces is what constitutes a paragraph. </h1>
+          <Header/>
+     {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
       {/* Navbar & Main Content */}
-      <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
-        {/* Main Content */}
+    {/*  <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
+       
         <main
           className={`mx-[12px] h-full flex-none transition-all md:pe-2 xl:mr-[313px]`}
         >
-          {/* Routes */}
+       
           <div className="h-full">
             <Navbar
               onOpenSidenav={() => setOpen(true)}
@@ -90,7 +97,12 @@ export default function RTL(props) {
             </div>
           </div>
         </main>
-      </div>
+      </div> */}
+                  <div className="p-3">
+
+          <Footer />
+          </div>
+
     </div>
   );
 }

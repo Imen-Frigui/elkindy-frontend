@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { addTicket } from "../../../services/tickets/ticketService"; 
 import ButtonComponent from "../../../components/button/ButtonComponnent";
-import SuccessAlert from "../../../components/alert/AlertComponent";
 
 const AddTicket = ({ onTicketAdded }) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
