@@ -5,7 +5,7 @@ const useShowToast = () => {
   const showToast = (message, type = "default") => {
     toast[type](message, {
       position: "top-right",
-      autoClose: 2000,
+      autoClose: 1000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,

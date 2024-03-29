@@ -1,5 +1,5 @@
-import { apiRoutes } from "../config/api";
-import apiHeader from "../utils/apiHeader";
+import { apiRoutes } from "../../config/api";
+import apiHeader from "../../utils/apiHeader";
 
 export default class DataService {
   static async getPublicContent(
@@ -28,13 +28,22 @@ export default class DataService {
     );
   }
 
-  static async getInstrument(id) {
-    return apiRoutes.get(`/instruments/${id}`);
+  static async getInstrument(id,accessToken) {
+    return apiRoutes.get(`/instruments/${id}`, apiHeader(accessToken));
   }
 
   static async addInstrument(instrumentData, accessToken) {
-    const { author, title, type, details, price, status, brand, condition } =
-      instrumentData;
+    const {
+      author,
+      title,
+      type,
+      details,
+      price,
+      status,
+      brand,
+      condition,
+      img,
+    } = instrumentData;
     return apiRoutes.post(
       "/instruments",
       {
@@ -46,6 +55,7 @@ export default class DataService {
         price,
         condition,
         status,
+        img,
       },
       apiHeader(accessToken)
     );
