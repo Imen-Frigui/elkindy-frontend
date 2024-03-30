@@ -9,6 +9,7 @@ import ReactTimeAgo from "react-time-ago";
 
 const InstrumentCard = ({ instrument, bidders, image }) => {
   const [liked, setLiked] = useState(instrument.liked || false);
+  const [likeScore, setLikeScore] = useState(instrument.likeScore);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
   async function handleLikeClick() {
     const response = await likePost(instrument._id, token);
     setLiked(!liked);
+    setLikeScore(response.likeScore)
   }
   return (
     // <Link to={"/admin/marketplace/instrument/" + instrument._id}>
@@ -48,7 +50,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
               ) : (
                 <div>
                   <IoHeart className="text-red-600" />
-                  <span className="text-xs" >{instrument.likeScore}</span>
+                  <span className="text-xs">{likeScore}</span>
                 </div>
               )}
             </div>

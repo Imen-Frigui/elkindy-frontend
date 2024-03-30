@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import useInstrumentStore from "../../ZustStore/instrumentStore";
 import useExchangeStore from "../../ZustStore/exchangeStore";
 import { useNavigate } from "react-router-dom";
-import { InstrumentItem } from "..";
+import { InstrumentItem, LoadingSpinner } from "..";
 import useSocketStore from "../../ZustStore/socketStore";
 import useShowToast from "../../hooks/useShowToast";
-
-function ExchangeModal({
-  instrument,
-  onCloseModal,
-
-}) {
+import { ToastContainer } from "react-toastify";
+import { Spinner } from "@chakra-ui/react";
+function ExchangeModal({ instrument, onCloseModal }) {
   const [token, setToken] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
@@ -22,11 +19,7 @@ function ExchangeModal({
   const loading = useInstrumentStore((state) => state.loading);
   const { socket } = useSocketStore();
 
-  const {
-    createExchange,
-    setError,
-    error,
-  } = useExchangeStore();
+  const { createExchange, setError, error } = useExchangeStore();
 
   const fetchUserInstruments = useInstrumentStore(
     (state) => state.fetchUserInstruments
@@ -60,7 +53,8 @@ function ExchangeModal({
   const onRequestExchange = async () => {
     try {
       if (!selectedItem) {
-        setError("Please select an item before requesting exchange.");
+        // setError("Please select an item before requesting exchange.");
+        showToast("Please select an item before requesting exchange.", "error");
         return;
       }
       const exchangeData = {
@@ -70,17 +64,27 @@ function ExchangeModal({
       };
       const res = await createExchange(exchangeData, token);
       handleNotification();
-      setSuccessMessage("Exchange request sent successfully.");
+      // setSuccessMessage("Exchange request sent successfully.");
+      showToast("Exchange request sent successfully.", "success");
       setTimeout(() => {
         onCloseModal();
       }, 1000);
     } catch (error) {
-      setError(error.message);
+      // setError(error.message);
       showToast(error.message, "error");
     }
   };
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+      />
       <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -103,7 +107,9 @@ function ExchangeModal({
                 </h3>
                 <div className="mt-2">
                   <div className="space-y-4">
-                    {instruments.length === 0 ? (
+                    {loading ? (
+                      <LoadingSpinner />
+                    ) : instruments.length === 0 ? (
                       <p>You don't have any instruments yet.</p>
                     ) : (
                       instruments.map((item) => (
@@ -136,20 +142,9 @@ function ExchangeModal({
               Cancel
             </button>
           </div>
-          {error && (
-            <div className=" m-8 rounded-lg bg-red-700 p-3 text-center text-lg text-white shadow">
-              <p>{error}</p>
-            </div>
-          )}
-          {successMessage && (
-            <div className="bg-green-700 m-8 rounded-lg p-3 text-center text-lg text-white shadow">
-              <p>{successMessage}</p>
-            </div>
-          )}
         </div>
       </div>
     </div>
-    
   );
 }
 

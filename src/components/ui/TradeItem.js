@@ -2,7 +2,7 @@ import React from "react";
 import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
 import { Link } from "react-router-dom";
 
-function TradeItem({ item, status }) {
+function TradeItem({ item, status, data }) {
   const getStatusColor = (status) => {
     switch (status) {
       case "requested":
@@ -17,39 +17,44 @@ function TradeItem({ item, status }) {
   };
   return (
     <div
-      className={` mb-3 flex w-full cursor-pointer flex-row items-center justify-between rounded-2xl bg-white p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none 
+      className={` w-full cursor-pointer items-center justify-between rounded-2xl  p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none 
       `}
     >
-      <div>
-        <div className="flex items-center justify-end bg-white">
-          <div>
-            <img className="h-[83px] w-[83px] rounded-lg" src={guitar} alt="" />
-          </div>
-          <div className="ml-4">
-            <p className="text-base font-medium text-navy-700 dark:text-white">
-              {item.title}
-            </p>
-            <p className="mt-2 text-sm text-gray-600">
-              {item.details}
-              <Link to={"/admin/marketplace/instrument/" + item._id}>
-                <a
-                  className="ml-1 font-medium text-brand-500 hover:text-brand-500 dark:text-white"
-                  href="# "
-                >
-                  See instrument details
-                </a>
-              </Link>
-            </p>
-          </div>
-          <div>
-            <button
-              className={`rounded-3xl px-2 text-white ${getStatusColor(
-                status
-              )}`}
+      <div className=" w-full items-center justify-end ">
+        {new Date(data.createdAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        })}
+        <div>
+          <button
+            className={`rounded-3xl px-2 text-white ${getStatusColor(status)}`}
+          >
+            {status}
+          </button>
+        </div>
+        <div>
+          <img
+            className=" h-1/2 w-full rounded-xl 3xl:h-full 3xl:w-full"
+            src={item.img}
+            alt=""
+          />
+        </div>
+        <div className="ml-4">
+          <p className="text-base font-medium text-navy-700 dark:text-white">
+            {item.title}
+          </p>
+          <p className="mt-2 overflow-hidden text-ellipsis text-sm text-gray-600">
+            {item.details}
+            <Link
+              className="ml-1 font-medium text-brand-500  hover:text-brand-500 dark:text-white"
+              to={"/admin/marketplace/instrument/" + item._id}
             >
-              {status}
-            </button>
-          </div>
+              See instrument details
+            </Link>
+          </p>
         </div>
       </div>
     </div>
