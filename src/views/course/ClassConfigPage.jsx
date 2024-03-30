@@ -49,7 +49,7 @@ const ClassConfigPage = () => {
     const handleSave = async () => {
         try {
             await assignTeachersToClass(classId, assignedTeacherIds);
-            navigate(-1); // Navigate back after saving
+            //navigate(-1); // Navigate back after saving
         } catch (error) {
             console.error('Failed to assign teachers:', error);
         }
@@ -63,8 +63,12 @@ const ClassConfigPage = () => {
         }),
     }));
 
-    const toggleGenerateSessionPanel = () => {
+    const toggleGenerateSessionPanel = async () => {
         setShowGenerateSessionPanel(!showGenerateSessionPanel);
+        const fetchedSessions = await fetchSessionsByClassId(classId);
+        if (fetchedSessions) {
+            setSessions(fetchedSessions);
+        }
     };
 
 

@@ -17,7 +17,6 @@ const ClassAssignment = ({ courseId, onClassUpdate }) => {
 
     const handleClassChange = async (e) => {
         setSelectedClassId(e.target.value);
-        // Optionally, fetch current assigned teachers for the selected class
     };
 
     const handleUpdateClassTeachers = async () => {

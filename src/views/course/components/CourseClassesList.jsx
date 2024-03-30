@@ -47,23 +47,23 @@ const CourseClassesList = ({ courseId }) => {
                     Generate Classes
                 </button>
             </div>
-            <div className="container mx-auto p-4 w-full flex flex-row items-start space-x-4">
+            <div className="container p-4 w-full flex flex-row items-start">
                 <div className="flex-1 bg-white shadow-lg rounded-lg overflow-hidden">
                     <div className="bg-gray-200 text-gray-800 text-xl font-semibold p-4">Classes List</div>
                     <ul className="list-none p-4">
                         {classes.map((classItem, index) => (
-                            <li key={index} className="border-b border-gray-200 p-2 hover:bg-gray-100">
+                            <li key={index} className="flex justify-between items-center border-b border-gray-200 p-2 hover:bg-gray-100">
                                 {classItem.name}
                                 <button
                                     onClick={() => navigate(`/admin/courses/${courseId}/class/${classItem._id}`)}
-                                    className="button-with-tooltip">
+                                    className="flex-shrink-0 ml-4">
                                     <FontAwesomeIcon icon={faInfoCircle}
                                                      style={{
                                                          color: '#FB9D37',
                                                          fontSize: '20px'
                                                      }}
                                                      className="mr-6"/>
-                                    <span className="tooltip-text">
+                                    <span className="sr-only">
                                                         Details
                                                     </span>
                                 </button>
