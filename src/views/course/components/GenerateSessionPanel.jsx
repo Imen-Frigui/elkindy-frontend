@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { createRepeatingSessions, fetchTeachersByClassId } from '../../../services/class/classService';
+import {
+    createRepeatingSessions,
+    fetchSessionsByClassId,
+    fetchTeachersByClassId
+} from '../../../services/class/classService';
 import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 const GenerateSessionPanel = ({ classId, onClose }) => {
@@ -22,12 +26,45 @@ const GenerateSessionPanel = ({ classId, onClose }) => {
             }
         };
 
+
         if (classId) {
             loadTeachers();
         }
     }, [classId]);
 
     const handleSubmit = async () => {
+        if (!startDate) {
+            toast.error("Please select a start date.");
+            return;
+        }
+        if (!startTime) {
+            toast.error("Please select a start time.");
+            return;
+        }
+        if (!endTime) {
+            toast.error("Please select an end time.");
+            return;
+        }
+        if (new Date(startDate + ' ' + startTime) >= new Date(startDate + ' ' + endTime)) {
+            toast.error("Start time must be earlier than end time.");
+            return;
+        }
+        if (new Date(startDate) < new Date()) {
+            toast.error("Start date must be in the future.");
+            return;
+        }
+        if (!room) {
+            toast.error("Please specify a room.");
+            return;
+        }
+        if (!repeatCount) {
+            toast.error("Please enter a repeat count.");
+            return;
+        }
+        if (!selectedTeacher) {
+            toast.error("Please select a teacher.");
+            return;
+        }
         const sessionDetails = {
             classId,
             room,

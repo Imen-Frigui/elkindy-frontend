@@ -52,7 +52,7 @@ const AssignTeachers = () => {
         try {
             console.log(assignedTeacherIds)
             await updateCourseTeachers(courseId, { teacherIds: assignedTeacherIds });
-            navigate(`/admin/courses`);
+            //navigate(`/admin/courses`);
         } catch (error) {
             console.error('Failed to update course teachers:', error);
         }

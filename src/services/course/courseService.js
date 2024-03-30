@@ -148,10 +148,35 @@ export const fetchTopThreeCourses = async () => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error("Failed to fetch top three courses:", error);
+        throw error;
+    }
+};
+
+export const fetchStudentStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/students-stats`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch student stats:", error);
+        throw error;
+    }
+};
+
+export const fetchTeacherStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/teachers-stats`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch teacher stats:", error);
         throw error;
     }
 };
