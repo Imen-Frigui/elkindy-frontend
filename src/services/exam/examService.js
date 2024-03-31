@@ -129,7 +129,23 @@ export const createExam = async (examData) => {
     }
 };
 
-
+export const sendEmail = async (name) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/sendEmail/${name}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+           
+        });
+        if (response.ok) {
+            return { success: true, message: 'Email sent successfully' };
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+};
 
 export const createGrade = async (gradeData) => {
     try {
