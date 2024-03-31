@@ -109,6 +109,15 @@ module.exports = withMT({
       fontFamily: {
         body: ["Jost"]
       },
+      fontSize: {
+        sm: '1rem',
+        base: '1rem',
+        xl: '1.25rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
+      },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
         inset: "inset 0px 18px 22px",

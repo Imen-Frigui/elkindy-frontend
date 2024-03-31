@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { addCourse } from '../../../services/course/courseService'
 import ButtonComponent from "../../../components/button/ButtonComponnent";
-
-
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 const AddCourse = ({ onCourseAdded }) => {
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -13,7 +16,7 @@ const AddCourse = ({ onCourseAdded }) => {
     const [inputValues, setInputValues] = useState({
         courseName: '',
         courseDescription: '',
-        courseCategory: '',
+        courseCategory: 'Violon Ori',
         price: 0,
         startDate: '',
         endDate: '',
@@ -26,40 +29,37 @@ const AddCourse = ({ onCourseAdded }) => {
         courseDescription: '',
         price: ''
     });
+    const [showInternshipAlert, setShowInternshipAlert] = useState(false);
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
         setInputValues(prevState => ({
             ...prevState,
             [name]: value,
+            // Automatically determine isInternship based on dates
+            isInternship: name === 'startDate' || name === 'endDate' ? !!prevState.startDate && !!prevState.endDate : prevState.isInternship,
         }));
-        if (name === 'startDate' || name === 'endDate') {
-            const isInternship = inputValues.startDate && inputValues.endDate;
-            setIsInternship(isInternship);
-            handleInternshipChange({ target: { checked: true } })// Set the checkbox state
-            if (isInternship) {
-                alert('Setting both start and end dates will categorize this course as an internship.');
 
-            }
+        // Optionally, remove this alert to improve user experience and use visual indicators instead
+        if ((name === 'startDate' || name === 'endDate') && inputValues.startDate && inputValues.endDate) {
+            alert('Setting both start and end dates will categorize this course as an internship.');
         }
     };
+
 
     const handleInternshipChange = (e) => {
         setIsInternship(e.target.checked);
     };
 
     useEffect(() => {
-        console.log(errors);
-        const { startDate, endDate } = inputValues
-        if (startDate && endDate) {
-            setIsInternship(true);
-            alert('Setting both start and end dates will categorize this course as an internship.');
-            handleInternshipChange({ target: { checked: true } })
-        } else {
-            setIsInternship(false);
-            handleInternshipChange({ target: { checked: false } })
+        const { startDate, endDate } = inputValues;
+        const newIsInternship = !!startDate && !!endDate;
+
+        if (newIsInternship !== isInternship) {
+            setIsInternship(newIsInternship);
+            setShowInternshipAlert(newIsInternship); // Trigger the alert through state
         }
-    }, [errors, inputValues.startDate, inputValues.endDate, inputValues]);
+    }, [inputValues.startDate, inputValues.endDate, inputValues, isInternship]);
 
 
     const handleDrawerClose = () => setIsDrawerOpen(false);
@@ -116,6 +116,24 @@ const AddCourse = ({ onCourseAdded }) => {
 
     return (
         <>
+            <Dialog
+                open={showInternshipAlert}
+                onClose={() => setShowInternshipAlert(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Internship Alert"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Setting both start and end dates will categorize this course as an internship.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowInternshipAlert(false)} color="primary" autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <ButtonComponent className="mb-3 shadow-shadow-900" text="Add Course" color="#0C4B65" onClick={() => setIsDrawerOpen(true)}>
                 Add course
             </ButtonComponent>

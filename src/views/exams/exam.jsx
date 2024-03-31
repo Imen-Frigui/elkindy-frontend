@@ -10,6 +10,8 @@ import { fetchEvalStudent } from '../../services/exam/examService';
 import { FiSearch } from "react-icons/fi";
 import { fetchGrades } from '../../services/exam/examService';
 import { GiPapers } from "react-icons/gi";
+import ExamBanner from "./components/examBanner";
+import ExamTimetablePDF from "./components/emploipdf";
 const ExamsList = () => {
     const [exams, setExams] = useState([]);
     const [filteredExams, setFilteredExams] = useState([]);
@@ -253,11 +255,21 @@ const ExamsList = () => {
     const handleDrawerClose4 = () => setIsDrawerOpen4(false);
     return (
         <>
-            <div className="flex flex-col mt-16">
-                <div className="absolute top-20 left-[50%] transform -translate-x-1/2 mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[650px] xl:gap-2 flex justify-center mt-20">
-                    <div className="relative mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[650px] xl:gap-2">
+     
 
-                        <div className="flex h-full items-center rounded-full bg-baground text-navy-700 dark:bg-navy-900 dark:text-white xl:w-[650px]">
+    
+
+
+            <div className="flex flex-col mt-16">
+
+            <div>
+            <ExamBanner />   
+           
+        </div>
+                <div className="relative  left-[50%] transform -translate-x-1/2 mt-[20px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl  shadow-shadow-700 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[650px] xl:gap-2 flex justify-center mt-20">
+                    <div className="relative mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-700 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[650px] xl:gap-2">
+
+                        <div className="flex h-20 items-center rounded-full bg-baground text-navy-700 dark:bg-navy-900 dark:text-white xl:w-[650px]">
 
                             <GiPapers className="h-4 w-4 text-gray-400 dark:text-white" />
 
@@ -276,13 +288,13 @@ const ExamsList = () => {
                     <div className="overflow-x-auto rounded-lg">
                         <div className="inline-block min-w-full align-middle">
 
-                            <div class="flex justify-between ">
+                            <div class="flex justify-between " className="mt-10 flex justify-between">
                                 <div>
                                     <ButtonComponent className="mb-3" text="Add Exam" color="#006BBE" onClick={() => setIsDrawerOpen(true)}>
                                         Add Exam
                                     </ButtonComponent>
                                 </div>
-
+                                   <div>    <ExamTimetablePDF  className="mt-15" exams={exams}  /></div>
                                 <div>
                                     <ButtonComponent className="mb-3" text="Student Grades" color="#006BBE" onClick={() => setIsDrawerOpen4(true)}>
                                         Show Grades
@@ -314,10 +326,12 @@ const ExamsList = () => {
                                                 </div>
                                                 <div className="max-w-md w-full mx-auto -my-16 px-4 relative overflow-hidden z-10 bg-white p-8 rounded-lg shadow-md before:w-24 before:h-24 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12 table-drawer">
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                                        <div className="mb-4 flex flex-col">
-                                                            <label className="block text-sm font-medium text-navy-900" htmlFor="updatedName">Updated Name</label>
-                                                            <input type="text" id="updatedName" value={updatedExamName} onChange={(e) => setUpdatedExamName(e.target.value)} className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue" name="updatedName" />
-                                                        </div>
+                                                    <div class="mb-4 flex flex-col ">
+  <label class="block text-sm font-medium text-navy-900" for="updatedName">Updated Name</label>
+  <input type="text" id="updatedName" value={updatedExamName} onChange={(e) => setUpdatedExamName(e.target.value)}
+         class="mt-1 p-2 w-full bg-transparent border-gray-600 rounded-md text-kindydarkblue" name="updatedName" />
+</div>
+
 
 
 
@@ -463,7 +477,7 @@ const ExamsList = () => {
 
                                                 <ButtonComponent type="submit" text="Confirm" color="#0D6BBE"
                                                 >
-                                                    Update
+                                                    Confirm
                                                 </ButtonComponent>
                                                 {/* <button onClick={handleDrawerClose} className="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button> */}
                                                 <div class="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl  p-2 hover:bg-slate-200">

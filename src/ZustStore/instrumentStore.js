@@ -1,5 +1,5 @@
-import zustand, { create } from "zustand";
-import DataService from "../services/data.service";
+import { create } from "zustand";
+import DataService from "../services/marketplace/data.service";
 
 const useInstrumentStore = create((set) => ({
   instruments: [],
@@ -10,27 +10,6 @@ const useInstrumentStore = create((set) => ({
   fetchInstruments: async (status, sort, page, accessToken) => {
     try {
       set({ loading: true });
-      // if (sort !== "" || status !== "") {
-      //   page = 1;
-      //   set({ instruments: [] });
-      //   const { data } = await DataService.getPublicContent(
-      //     accessToken,
-      //     status,
-      //     sort,
-      //     "",
-      //     page
-      //   );
-      //   if (data.instruments.length === 0) {
-      //     set({ hasMorePages: false });
-      //   }
-      //   set((state) => ({
-      //     instruments: [...data.instruments],
-      //   }));
-      //   set({ loading: false });
-
-      //   return;
-      // }
-
       const { data } = await DataService.getPublicContent(
         accessToken,
         status,
@@ -38,12 +17,7 @@ const useInstrumentStore = create((set) => ({
         "",
         page
       );
-      console.log(data.instruments);
-      // if (data.instruments.length === 0) {
-      //   set({ hasMorePages: false });
-      // }
       set({ instruments: data.instruments });
-
       set({ loading: false });
     } catch (error) {
       set({ loading: false });
@@ -59,15 +33,13 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  getInstrument: async (id) => {
+  getInstrument: async (id, accessToken) => {
     try {
       set({ loading: true });
-      const { data } = await DataService.getInstrument(id);
-      console.log(data);
+      const { data } = await DataService.getInstrument(id,accessToken);
       set({ instrument: data.instrument });
       set({ loading: false });
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -90,7 +62,6 @@ const useInstrumentStore = create((set) => ({
       set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
@@ -109,18 +80,16 @@ const useInstrumentStore = create((set) => ({
       set({ instruments: data.instruments });
       set({ loading: false });
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
   deleteInstrument: async (instrumentId) => {
     try {
       set({ loading: true });
-     const {data} = await DataService.deleteInstrument(instrumentId);
+      const { data } = await DataService.deleteInstrument(instrumentId);
       set({ loading: false });
       return data;
     } catch (error) {
-      console.error(error);
       set({ loading: false });
     }
   },
