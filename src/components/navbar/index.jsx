@@ -1,14 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import navbarimage from "assets/img/layout/Navbar.png";
-import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
-import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
-
 import {
   IoMdNotificationsOutline,
   IoMdInformationCircleOutline,
@@ -17,39 +13,20 @@ import avatar from "assets/img/avatars/avatar4.png";
 import messageSound from "assets/sound/message.mp3";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useLogoutMutation } from '../../slices/userApiSlice';
+import { useLogoutMutation } from "../../slices/userApiSlice";
 
 import { logout } from "../../slices/authSlice";
+import NotificationStatus from "components/ui/NotificationStatus";
+import TradeNotification from "components/ui/NotificationTrade";
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
+  const [statusNotification, setStatusNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { onOpenSidenav, brandText, socket } = props;
   const [darkmode, setDarkmode] = React.useState(false);
 
   const navigate = useNavigate();
 
-/*  useEffect(() => {
-    const verifyCookie = async () => {
-      if (!cookies.refreshToken) {
-        navigate("/auth/sign-in");
-      }
-      const { data } = await axios.post(
-        "http://localhost:3030",
-        {},
-        { withCredentials: true }
-      );
-      const { status, user } = data;
-      setUsername(user);
-      return status
-        ? toast(`Hello ${user}`, {
-            position: "top-right",
-          })
-        : (removeCookie("refreshToken"), navigate("/login"));
-    };
-    verifyCookie();
-  }, 
-  
-  [cookies, navigate, removeCookie]);*/
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -58,30 +35,34 @@ const Navbar = (props) => {
 
   const logoutHandler = async () => {
     try {
-     
       dispatch(logout());
-      navigate('/auth/sign-in');
+      navigate("/auth/sign-in");
     } catch (err) {
       console.error(err);
-  console.log(props);
+      console.log(props);
     }
   };
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
-        console.log("Notification received:", data);
         setNotifications((prev) => [...prev, data]);
         const sound = new Audio(messageSound);
         sound.play();
         setShowDropdown(true);
       });
-      return () => {
-        socket.off("getNotification");
-      };
+
+      socket.on("getTradeStatus", (data) => {
+        setStatusNotifications((prev) => [...prev, data]);
+        const sound = new Audio(messageSound);
+        sound.play();
+        setShowDropdown(true);
+      });
     }
   }, [socket]);
+
   const markAllRead = () => {
     setNotifications([]);
+    setStatusNotifications([]);
     setShowDropdown(false);
   };
 
@@ -122,13 +103,10 @@ const Navbar = (props) => {
             <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
           </p>
           <input
-             type="text"
-             placeholder="Search..."
-          
-             
-             class="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"
-/>
-
+            type="text"
+            placeholder="Search..."
+            class="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 dark:bg-navy-900 dark:text-white dark:placeholder:!text-white sm:w-fit"
+          />
         </div>
         <span
           className="flex cursor-pointer text-xl text-gray-600 dark:text-white xl:hidden"
@@ -156,28 +134,18 @@ const Navbar = (props) => {
               </div>
 
               {notifications.map((notification, index) => (
-                <button
+                <TradeNotification
                   key={index}
-                  className="flex w-full items-center bg-indigo-50 px-3 rounded-lg"
+                  notification={notification}
                   onClick={() => {}}
-                >
-                  <div className="flex h-full w-[55px] items-center justify-center rounded-xl   py-4 text-2xl text-white">
-                    {/* <BsArrowBarUp /> */}
-                    <img src={guitar} alt="" />
-                  </div>
-                  <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                    <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                      <p>
-                        {notification.senderName} sent an exchange request for{" "}
-                        {notification.instrument.title}
-                      </p>
-                      <a>See more details</a>{" "}
-                    </p>
-                    <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                      {/* {notification.message} */}
-                    </p>
-                  </div>
-                </button>
+                />
+              ))}
+              {statusNotification.map((notification, index) => (
+                <NotificationStatus
+                  key={index}
+                  status={notification.status}
+                  onClick={() => {}}
+                />
               ))}
 
               {/* <button className="flex w-full items-center">
@@ -292,9 +260,10 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
-                 <a href=" "
-                   className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
-                onClick={logoutHandler}
+                <a
+                  href=" "
+                  className="mt-3 text-sm font-medium text-red-500 transition duration-150 ease-out hover:text-red-500 hover:ease-in"
+                  onClick={logoutHandler}
                 >
                   Log Out
                 </a>

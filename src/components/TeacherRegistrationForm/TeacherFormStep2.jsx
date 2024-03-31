@@ -68,7 +68,7 @@ const TeacherFormStep2 = ({ onBack, onNext }) => {
 
     return (
         <div className="flex flex-col lg:flex-row w-full">
-        <div className="flex-1 flex flex-col justify-center bg-customBackground dark:bg-gray-800 shadow-lg p-8">
+        <div className="flex-1 flex flex-col justify-center bg-lightblue dark:bg-gray-800 shadow-lg p-8">
             <h2 className="text-3xl font-bold text-navy-700 dark:text-white mb-6">Step 2: Professional Details</h2>
             <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
                 
@@ -146,7 +146,7 @@ const TeacherFormStep2 = ({ onBack, onNext }) => {
                 <button 
     type="button" 
     onClick={onBack} 
-    className="px-6 py-2 border border-white/0 text-blue-600 bg-white/0 hover:bg-blue-600 rounded-tl-2xl rounded-br-2xl hover:text-white hover:border-blue-700 rounded-md"
+    className="px-6 py-2 border border-white/0 text-kindyblue bg-white/0 hover:bg-kindyblue rounded-tl-2xl rounded-br-2xl hover:text-white hover:border-blue-700 rounded-md"
 >
     Back
 </button>

@@ -11,7 +11,8 @@ const initialState = {
         confirmPassword: '',
         gender: '',
         preferedInstrument: '',
-        role:'' // Removed additional fields for teachers
+        role:'',
+        courses: [], // Only for students// Removed additional fields for teachers
     },
 };
 
@@ -27,6 +28,13 @@ export const studentRegistrationSlice = createSlice({
                 state.formData.username = `${state.formData.firstName}${state.formData.lastName}`;
             }
         },
+        addCourse: (state, action) => {
+            state.formData.courses.push({_id: action.payload});
+        },
+
+        setCourses: (state, action) => {
+            state.formData.courses = action.payload;
+        },
         setRole: (state, action) => {
             state.formData.role = action.payload;
         },
@@ -41,6 +49,6 @@ export const studentRegistrationSlice = createSlice({
     },
 });
 
-export const { updateFormData, resetFormData, setRole, setCredentialsRegistration } = studentRegistrationSlice.actions;
+export const { updateFormData, resetFormData, setRole, setCredentialsRegistration , addCourse, setCourses} = studentRegistrationSlice.actions;
 
 export default studentRegistrationSlice.reducer;

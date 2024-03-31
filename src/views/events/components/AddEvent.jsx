@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { addEvent } from "../../../services/event/eventService";
 import ButtonComponent from "../../../components/button/ButtonComponnent";
 // import SuccessAlert from "../../../components/alert/AlertComponent";
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000');
 
 const AddEvent = ({ onEventAdded }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

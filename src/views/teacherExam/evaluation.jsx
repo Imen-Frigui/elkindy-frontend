@@ -5,8 +5,7 @@ import { deleteExam } from '../../services/exam/examService';
 import ButtonComponent from "../../components/button/ButtonComponnent";
 import { fetchEvalStudent } from '../../services/exam/examService';
 import { fetchStudents } from '../../services/exam/examService';
-import { FiSearch } from "react-icons/fi";
-import { gradeData } from '../../services/exam/examService';
+
 const EvaluationList = () => {
 
     const [filteredStudents, setFilteredStudents] = useState([]);
@@ -174,8 +173,7 @@ const EvaluationList = () => {
     // };
 
     const handleDrawerClose = () => setIsDrawerOpen(false);
-    const handleDrawerClose2 = () => setIsDrawerOpen2(false);
-    const handleDrawerClose3 = () => setIsDrawerOpen3(false);
+
 
 
     return (

@@ -195,8 +195,14 @@ const CoursesList = () => {
         getCourses();
     }, [ currentPage, pageSize, searchQuery]);
 
-    const handleCourseAdded = () => {
-        fetchCourses().then(setCourses);
+    const handleCourseAdded = async () => {
+        //fetchCourses().then(setCourses);
+        try {
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
+
+        }catch (error) {}
+
     };
 
     const handlePageChange = (newPage) => {
@@ -210,7 +216,7 @@ const CoursesList = () => {
             const response = await archiveCourse(courseId);
             if (response) {
                 // Refresh the courses list or update the state to reflect the change
-                const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+                const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery).then(setCourses);
                 setCourses(updatedCourses.data);
             } else {
                 throw new Error('Failed to archive the course');
@@ -231,6 +237,7 @@ const CoursesList = () => {
 
     return (
         <>
+
             {showTourBanner && <TourBanner onStartTour={startTour} />}
             {joyrideRun && !showStatCard && ( <Joyride
                 continuous

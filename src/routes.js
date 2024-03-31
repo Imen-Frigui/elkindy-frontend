@@ -20,7 +20,7 @@ import CoursesList from "views/course/CoursesList";
 import TicketsList from "views/tickets/TicketsList";
 import EventDetails from "views/events/components/EventDetails";
 import { GiPapers } from "react-icons/gi";
-
+import { FaUsers } from "react-icons/fa";
 import {
     MdHome,
     MdPerson,
@@ -32,46 +32,56 @@ import {
 
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
+import UserList from "views/users/usersList";
 
 
 const routes = [
-    {
-        name: "ElKindy Dashboard",
-        layout: "/admin",
-        path: "default",
-        icon: <MdHome className="h-6 w-6" />,
-        component: <MainDashboard />,
-    },
-    {
-        name: "ElKindy Marketplace",
-        layout: "/admin",
-        path: "marketplace",
-        icon: <FaShoppingBasket className="h-6 w-6" />,
-        component: <NFTMarketplace />,
-        secondary: true,
-    },
-    {
-        name: "ElKindy Users",
-        layout: "/admin",
-        icon: <FaCalendarAlt className="h-6 w-6" />,
-        path: "data-tables",
-        component: <DataTables />,
-    },
-    {
-        name: "Profile",
-        layout: "/admin",
-        path: "profile",
-        icon: <MdPerson className="h-6 w-6" />,
-        component: <Profile />,
-    },
+  {
+    name: "ElKindy Dashboard",
+    layout: "/admin",
+    path: "default",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <MainDashboard />,
+  },
+  {
+    name: "ElKindy Marketplace",
+    layout: "/admin",
+    path: "marketplace",
+    icon: <FaShoppingBasket className="h-6 w-6" />,
+    component: <NFTMarketplace />,
+    secondary: true,
+  },
+  {
+    name: "ElKindy Users",
+    layout: "/admin",
+    icon: <FaCalendarAlt className="h-6 w-6" />,
+    path: "data-tables",
+    component: <DataTables />,
+  },
+  {
+    name: "Profile",
+    layout: "/admin",
+    path: "profile",
+    icon: <MdPerson className="h-6 w-6" />,
+    component: <Profile />,
+  },
+ 
+  
 
-    {
-        name: "Events List",
-        layout: "/admin",
-        path: "events",
-        icon: <MdEventNote className="h-6 w-6" />,
-        component: <EventsList />,
-    },
+  {
+    name: "Events List",
+    layout: "/admin",
+    path: "events",
+    icon: <MdEventNote className="h-6 w-6" />,
+    component: <EventsList />,
+  },
+  {
+    name: "Users List",
+    layout: "/admin",
+    path: "users",
+    icon: <FaUsers className="h-6 w-6" />,
+    component: <UserList />,
+  },
 
     {
         name: "Courses List",
@@ -98,16 +108,19 @@ const routes = [
     component: <SignIn />,
     hide: true,
 },
+
+
 {
     name: "registration",
         layout: "/auth",
-    path: "Register",
+    path: "Register/:courseId",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     component: <Register />,
     hide: true,
 
 },
+
 
 
 {
@@ -119,7 +132,16 @@ const routes = [
     hide: true,
     component: <UnauthorizedPage />,
 },
+  
+{
+  name: "RTL Admin",
+  layout: "/rtl",
+  path: "rtl",
+  icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+  hide: true,
 
+  component: <RTLDefault />,
+},
 
 
 ];
