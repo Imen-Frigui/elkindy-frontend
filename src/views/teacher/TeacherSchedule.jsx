@@ -58,7 +58,7 @@ const TeacherSchedule = () => {
     }, [teacherId]);
 
     return (
-        <div className="calendar-container mt-8 bg-[#F7F5EF] p-3" >
+        <div className="mt-8 bg-[#F7F5EF] p-3  w-full" >
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin]}
                 initialView="timeGridWeek" // 'dayGridMonth', 'timeGridDay'
@@ -71,7 +71,9 @@ const TeacherSchedule = () => {
                 editable={false} // Allows dragging and resizing events
                 selectable={true} // Allows selection of timeslots
                 selectMirror={true} // Temporary event follows the mouse
-                dayMaxEvents={true} // When too many events in a day, show popover
+                dayMaxEvents={true}// When too many events in a day, show popover
+                aspectRatio={1.5}
+                contentHeight="500px"
             />
         </div>
     );

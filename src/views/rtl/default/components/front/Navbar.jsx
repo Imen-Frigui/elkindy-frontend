@@ -39,7 +39,7 @@ const Navbar = () => {
                     <Link to="/elkindy-band" className="hover:underline">El Kindy Band</Link>
                 </div>
 
-                <Link to="/" className="flex items-center">
+                <Link to="/rtl" className="flex items-center">
                     <img src={logo} alt="El Kindy Conservatoire" />
                 </Link>
             </nav>

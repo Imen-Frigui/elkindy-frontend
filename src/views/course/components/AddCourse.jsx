@@ -83,14 +83,17 @@ const AddCourse = ({ onCourseAdded }) => {
             formIsValid = false;
             newErrors["price"] = "Price is required.";
         }
-        if (!inputValues.startDate || startDate <= today) {
-            formIsValid = false;
-            newErrors["startDate"] = "Must be in the future.";
-        }
+        if (isInternship){
+            if (!inputValues.startDate || startDate <= today) {
+                formIsValid = false;
+                newErrors["startDate"] = "Must be in the future.";
+            }
 
-        if (!inputValues.endDate || endDate <= today || endDate <= startDate) {
-            formIsValid = false;
-            newErrors["endDate"] = "Must be after the start date. Must be in the future.";
+            if ( !inputValues.endDate || endDate <= today || endDate <= startDate) {
+                formIsValid = false;
+                newErrors["endDate"] = "Must be after the start date. Must be in the future.";
+            }
+
         }
 
         setErrors(newErrors);

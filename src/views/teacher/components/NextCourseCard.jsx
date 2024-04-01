@@ -36,25 +36,22 @@ const NextCourseCard = ({ teacherId }) => {
     }
 
     return (
-        <div
-            className=" left-[114px] top-[295px] flex h-[202px] w-[527px] flex-col justify-center rounded-xl bg-[#233255] p-4 shadow-lg">
-            <h3 className=" left-[129px] mt-1 mb-0.5 top-[315px] w-[160px] h-[29px] text-[20px] font-semibold leading-[29px] text-[#FDFDF5]">
+        <div className="relative max-w-lg mx-auto flex flex-col bg-[#233255] py-3 px-10 rounded-xl shadow-lg">
+            <h3 className="text-2xl font-semibold text-[#FDFDF5] mb-4">
                 Your Next Course
             </h3>
-            <div
-                className="flex mx-auto h-[200px] w-[400px] items-center justify-between rounded-xl bg-[#F7F5EF] pl-9 shadow-md"
-                style={{
-                    boxShadow: '0px 4px 70px rgba(0, 0, 0, 0.15)',
-                    borderRadius: '10.6023px',
-                }}
-            >
+            <div className="flex items-center justify-between bg-[#F7F5EF] shadow-md rounded-xl p-4 w-full" style={{
+                boxShadow: '0px 4px 70px rgba(0, 0, 0, 0.15)',
+                borderRadius: '10.6023px',
+            }}>
+
                 <div className="flex items-center space-x-3">
-                    <div className="flex h-[80px] w-[80px] items-center justify-center rounded-l bg-red-200">
-                        <img src={piano} alt="Piano"/>
+                    <div className="bg-red-200 rounded-full p-4">
+                        <img src={piano} alt="Piano" className="h-16 w-16"/>
                     </div>
 
                     <div className="pl-5">
-                        <h3 className="text-xl font-bold text-blue-800">{nextSession.classId.name}</h3>
+                        <h3 className="text-xl font-bold text-blue-800">{nextSession?.classId?.name}</h3>
                         <p className="text-lg text-blue-800">{courseTime} | Room: {nextSession.room}</p>
                         <p className="text-lg font-bold text-gray-500">{courseDate}</p>
                     </div>

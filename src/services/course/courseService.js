@@ -180,3 +180,26 @@ export const fetchTeacherStats = async () => {
         throw error;
     }
 };
+
+export const uploadCourseImage = async (courseId, file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/${courseId}/upload-image`, {
+            method: 'PATCH',
+            body: formData,
+            // `fetch` will set it automaticallTheContentTYpeof the FormData object
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to upload course image:", error);
+        throw error;
+    }
+};
+

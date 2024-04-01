@@ -6,7 +6,7 @@ import { FaDollarSign } from 'react-icons/fa';
 const CourseCard = ({ course }) => {
     return (
         <div className="bg-white mb-4 rounded-lg shadow-md flex flex-col">
-            <img src={guitarImage} alt={course.title} className="object-cover" />
+            <img src={course.image || guitarImage} alt={course.title || "Course Image"} className="object-cover"/>
             <div className="p-4 flex flex-col">
                 <h4 className="text-lg font-semibold mb-2 text-center font-body text-[#C25934] ">{course.title}</h4>
                 <p className="text-[#0C4B65] text-center text-sm mb-4">{course.description}</p>

@@ -48,7 +48,7 @@ const TeacherDashboard = () => {
         <div>
             <div className="flex flex-col justify-between lg:flex-row lg:items-start lg:space-x-4">
                 <div className="flex flex-col space-y-4">
-                    <Greeting username={userData?.user?.username}/>
+                    <Greeting username={userData?.user?.username} gender={userData?.user?.gender}/>
                     <NextCourseCard teacherId={teacherId}/>
                 </div>
                 {teacherId && (

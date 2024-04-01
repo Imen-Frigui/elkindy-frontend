@@ -137,7 +137,7 @@ const ClassConfigPage = () => {
                 <div className="flex-1 lg rounded-lg overflow-hidden">
                     <h3 className="text-xl font-semibold text-gray-800 mb-4">Class Sessions</h3>
                     {sessions.length > 0 ? (
-                        <div className="flex flex-wrap -m-4 h-[500px] overflow-auto">
+                        <div className="flex flex-wrap -m-4 overflow-auto">
                             {sessions.map((session, index) => (
                                 <div key={index} className="p-4 md:w-1/2">
                                     <div

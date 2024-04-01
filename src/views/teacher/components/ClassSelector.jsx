@@ -17,6 +17,7 @@ const ClassSelector = ({ teacherId, onSelectClass }) => {
         const loadClasses = async () => {
             const classesData = await fetchClassesForTeacher(teacherId);
             setClasses(classesData);
+            console.log(classesData)
         };
 
         if (teacherId) {
@@ -51,10 +52,10 @@ const ClassSelector = ({ teacherId, onSelectClass }) => {
     return (
         <div className="container flex flex-col items-center mt-8 mb-4 ">
             <select onChange={(e) => handleClassChange(e.target.value)}
-                    className="mb-4 w-full md:w-1/2 p-2 bg-white dark:bg-gray-700 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md"                    defaultValue="">
+                    className="mb-4 w-full max-w-md p-2 bg-white dark:bg-gray-700 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md">
                 <option value="" disabled>Select a Class</option>
                 {classes.map((cls) => (
-                    <option key={cls._id} value={cls._id}>{cls.name}</option>
+                    <option key={cls._id} value={cls._id}>{cls.name} - {cls.courseId?.title}</option>
                 ))}
             </select>
             {selectedClass && selectedClass._id && (
@@ -68,11 +69,11 @@ const ClassSelector = ({ teacherId, onSelectClass }) => {
                 />
             )}
             {students.length > 0 && (
-                <div className="mt-4 w-full md:w-1/2">
-                    <h3 className="text-3xl text-gray-800 font-normal dark:text-gray-200 mb-4">Student List</h3>
+                <div className="mt-4 w-full max-w-md">
+                    <h3 className="text-lg md:text-xl text-gray-800 font-normal dark:text-gray-200 mb-4">Student List</h3>
                     <ol className="space-y-3 overflow-auto h-36">
                         {students.map((student, index) => (
-                            <li key={student._id} className="flex items-center justify-center">
+                            <li key={student._id} className="flex items-center">
                                 <div className="w-8 h-8 rounded-full bg-kindyorange flex items-center justify-center text-white mr-4 dark:bg-indigo-500">
                                     {index + 1}
                                 </div>
