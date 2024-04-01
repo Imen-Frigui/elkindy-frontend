@@ -26,7 +26,9 @@ const Dashboard = () => {
       <div className="bg-[#F7F5EF]">
           <Navbar />
           <PromoSection />
-          <ClassSection />
+          <div id="class-section" className="my-4">
+            <ClassSection />
+          </div>
       </div>
   );
 };

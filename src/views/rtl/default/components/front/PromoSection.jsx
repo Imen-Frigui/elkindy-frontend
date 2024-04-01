@@ -41,13 +41,13 @@ const PromoSection = () => {
                 >
                     Register Now
                 </Link>
-                <Link
-                    to="/classes"
+                <a
+                    href="#class-section"
                     className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full"
                     style={{ borderRadius: '22px 5px' }}
                 >
                     Explore Classes
-                </Link>
+                </a>
             </div>
         </div>
         </div>

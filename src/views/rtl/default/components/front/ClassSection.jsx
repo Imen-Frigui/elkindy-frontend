@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import CourseCard from "./CourseCard";
-import {fetchTopThreeCourses} from "../../../../../services/course/courseService";
+import {fetchTopThreeCourses, fetchCourses} from "../../../../../services/course/courseService";
+import ClassCard from "./ClassCard";
 
 const ClassSection = () => {
     const [courses, setCourses] = useState([]);
+    const [classes, setClasses] = useState([]);
 
     useEffect(() => {
+
         const getTopThreeCourses = async () => {
             try {
                 const topCourses = await fetchTopThreeCourses();
@@ -16,6 +19,13 @@ const ClassSection = () => {
                 console.error("Error fetching top three courses:", error);
             }
         };
+        const fetchAllClasses = async () => {
+            const fetchedClasses = await fetchCourses();
+            console.log(fetchedClasses.data);
+            setClasses(fetchedClasses.data);
+        };
+
+        fetchAllClasses();
 
         getTopThreeCourses();
     }, []);
@@ -39,14 +49,31 @@ const ClassSection = () => {
                     <CourseCard key={course._id} course={course}/>
                 ))}
             </div>
-
-*            <Link to="/classes"
+            {/*}
+           <Link to="#all-courses"
                   className="w-[250px] h-[50px] bg-[#F98100] items-center flex justify-center my-4 px-10 text-white mx-auto"
                   style={{
                       borderRadius: '22px 5px',
                   }}>
                 VIEW ALL
-            </Link>
+            </Link>*/}
+            {/*}
+            <div className="" id="all-courses">
+                <div className="my-4" id="all-courses">
+                    <h3 className="text-center text-4xl font-semibold my-6">Choose Your Class</h3>
+                    <div className="flex flex-col justify-center">
+                        {classes.map((classInfo, index) => (
+                            <ClassCard key={index} classInfo={classInfo}/>
+                        ))}
+                    </div>
+                    <div className="text-center">
+                        <button
+                            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-8 rounded-full mt-4">
+                            Read More
+                        </button>
+                    </div>
+                </div>
+            </div>*/}
         </article>
     );
 };

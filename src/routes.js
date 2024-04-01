@@ -86,7 +86,7 @@ const routes = [
   },
 
     {
-        name: "Courses List",
+        name: "Courses",
         layout: "/admin",
         path: "courses",
         icon: <MdBook className="h-6 w-6" />,

@@ -90,9 +90,7 @@ export const deleteClass = async (classId) => {
     }
 };
 
-// Add to classService.js
 
-// Fetch classes by course ID
 export const fetchClassesByCourse = async (courseId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/classes/by-course?courseId=${courseId}`);
@@ -172,7 +170,10 @@ export const assignTeachersToClass = async (classId, teacherIds) => {
 
 export const fetchNextSessionForTeacher = async (teacherId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/classes/teachers/${teacherId}/sessions/upcoming`);
+        const response = await fetch(`${API_BASE_URL}/classes/teachers/${teacherId}/sessions/upcoming`, {
+            headers: {
+                'Cache-Control': 'no-cache'
+            }});
         return await response.json();
     } catch (error) {
         console.error(`Failed to assign teachers to teacher ID ${teacherId}:`, error);
@@ -265,7 +266,10 @@ export const fetchClassesForTeacher = async (teacherId) => {
 
 export const fetchClassStats = async (classId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/classes/${classId}/stats`);
+        const response = await fetch(`${API_BASE_URL}/classes/${classId}/stats`, {
+            headers: {
+                'Cache-Control': 'no-cache'
+            }});
         if (!response.ok) {
             throw new Error('Failed to fetch class stats.');
         }

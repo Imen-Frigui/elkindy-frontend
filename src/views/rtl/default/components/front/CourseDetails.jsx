@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import SideBar from "./SideBar";
 import { fetchCourseById } from "../../../../../services/course/courseService";
 import Navbar from "./Navbar";
@@ -38,7 +38,7 @@ const CourseDetails = () => {
                 <SideBar categories={course.category}/>
                 <div className="container mx-auto px-4 py-8">
                     <div className="bg-white rounded-t-lg overflow-hidden shadow-lg">
-                        <img src={violinImage} alt="Violin Class" className="w-full h-auto"/>
+                        <img src={course.image || violinImage} alt={course.title || "Course Image"} className="w-full h-auto"/>
                         <div className="p-8">
                             <p className="text-sm font-light text-[#0C4B65] mb-4">
                                 In our violin class, students embark on a captivating journey into the world of music
@@ -71,6 +71,13 @@ const CourseDetails = () => {
                             </p>
                         </div>
                     </div>
+                    <Link to={`/auth/register/${course._id}`}
+                          className="w-[250px] h-[50px] bg-[#F98100] items-center flex justify-center my-4 px-10 text-white mx-auto"
+                          style={{
+                              borderRadius: '22px 5px',
+                          }}>
+                        Subscribe to this course
+                    </Link>
                 </div>
             </div>
         </>
