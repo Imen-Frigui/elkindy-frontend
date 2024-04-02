@@ -30,7 +30,7 @@ const Dashboard = () => {
             <ClassSection />
           </div>
       </div>
+
   );
 };
-
 export default Dashboard;
