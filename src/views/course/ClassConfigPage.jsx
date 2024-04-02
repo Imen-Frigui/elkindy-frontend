@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
-import { assignTeachersToClass ,fetchClassById} from "../../services/class/classService";
+import { assignTeachersToClass ,fetchClassById, fetchSessionsByClassId} from "../../services/class/classService";
 import { fetchAssignedTeachers} from "../../services/course/courseService";
 import TeacherProfile from "./components/TeacherProfile";
+import GenerateSessionPanel from "./components/GenerateSessionPanel";
 const ClassConfigPage = () => {
     const { courseId, classId } = useParams();
     const navigate = useNavigate();
-    const [teachers, setTeachers] = useState([]); // Ensured teachers is an array
+    const [teachers, setTeachers] = useState([]);
     const [assignedTeacherIds, setAssignedTeacherIds] = useState([]);
-    const [classDetail, setClassDetail] = useState({}); // Renamed from setClass to avoid naming conflict
+    const [classDetail, setClassDetail] = useState({});
+
+    const [showGenerateSessionPanel, setShowGenerateSessionPanel] = useState(false);
+    const [sessions, setSessions] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,8 +23,13 @@ const ClassConfigPage = () => {
                 setAssignedTeacherIds(fetchedClass.teacher.map(t => t._id));
             }
 
+            const fetchedSessions = await fetchSessionsByClassId(classId);
+            if (fetchedSessions ) {
+                setSessions(fetchedSessions);
+            }
+
             const fetchedTeachers = await fetchAssignedTeachers(courseId);
-            if (fetchedTeachers && fetchedTeachers) {
+            if (fetchedTeachers) {
                 setTeachers(fetchedTeachers);
             }
         };
@@ -40,7 +49,7 @@ const ClassConfigPage = () => {
     const handleSave = async () => {
         try {
             await assignTeachersToClass(classId, assignedTeacherIds);
-            navigate(-1); // Navigate back after saving
+            //navigate(-1); // Navigate back after saving
         } catch (error) {
             console.error('Failed to assign teachers:', error);
         }
@@ -53,6 +62,15 @@ const ClassConfigPage = () => {
             isOver: !!monitor.isOver(),
         }),
     }));
+
+    const toggleGenerateSessionPanel = async () => {
+        setShowGenerateSessionPanel(!showGenerateSessionPanel);
+        const fetchedSessions = await fetchSessionsByClassId(classId);
+        if (fetchedSessions) {
+            setSessions(fetchedSessions);
+        }
+    };
+
 
 
     return (
@@ -109,9 +127,45 @@ const ClassConfigPage = () => {
                     </div>
                 </div>
             </div>
+
+            <button onClick={toggleGenerateSessionPanel}
+                    className="bg-kindydarkblue hover:bg-kindyblue text-white mx-auto mt-4 font-bold py-2 px-4 rounded">
+                Generate Session
+            </button>
+
+            <div className="container mx-auto p-4 w-full flex flex-row items-start space-x-4">
+                <div className="flex-1 lg rounded-lg overflow-hidden">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4">Class Sessions</h3>
+                    {sessions.length > 0 ? (
+                        <div className="flex flex-wrap -m-4 overflow-auto">
+                            {sessions.map((session, index) => (
+                                <div key={index} className="p-4 md:w-1/2">
+                                    <div
+                                        className="h-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg">
+                                        <div className="p-6">
+                                            <h2 className="title-font text-lg font-medium text-gray-900 dark:text-white mb-3">{session.classId.name} -
+                                                Room: {session.room}</h2>
+                                            <p className="leading-relaxed mb-3">Date: {new Date(session.date).toLocaleDateString()} |
+                                                Start: {new Date(session.startTime).toLocaleTimeString()} -
+                                                End: {new Date(session.endTime).toLocaleTimeString()}</p>
+                                            <p className="leading-relaxed text-gray-600 dark:text-gray-400">Teacher: {session.teacher.username}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-gray-600 dark:text-gray-400">No sessions found for this class.</p>
+                    )}
+                </div>
+                {showGenerateSessionPanel &&
+                    <GenerateSessionPanel classId={classId} onClose={toggleGenerateSessionPanel}/>}
+
+            </div>
+
         </div>
-)
-    ;
+    )
+        ;
 };
 
 export default ClassConfigPage;

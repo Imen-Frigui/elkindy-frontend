@@ -6,6 +6,7 @@ import NFTMarketplace from "views/admin/marketplace";
 import { MdBook, MdEventNote } from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
+import RTLDefault from "views/rtl/default";
 import {  FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
@@ -21,7 +22,8 @@ import { FaUsers } from "react-icons/fa";
 import {
     MdHome,
     MdPerson,
-    MdOutlineNoteAlt
+    MdOutlineNoteAlt,
+    MdSchedule
 } from "react-icons/md";
 
 
@@ -31,6 +33,9 @@ import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";
 import TeacherDashboard from "./views/teacher/TeacherDashboard";
+import TeacherSchedule from "./views/teacher/TeacherSchedule";
+import CourseDetails from "./views/rtl/default/components/front/CourseDetails";
+import Dashboard from "views/rtl/default";
 
 
 const routes = [
@@ -67,7 +72,13 @@ const routes = [
   },
  
   
-
+ /* {
+    name: "RTL Admin",
+    layout: "/rtl",
+    path: "rtl",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <RTLDefault />,
+  },*/
   {
     name: "Events List",
     layout: "/admin",
@@ -84,7 +95,7 @@ const routes = [
   },
 
     {
-        name: "Courses List",
+        name: "Courses",
         layout: "/admin",
         path: "courses",
         icon: <MdBook className="h-6 w-6" />,
@@ -106,6 +117,13 @@ const routes = [
         path: "teacher",
         icon: <MdOutlineNoteAlt  className="h-6 w-6" />,
         component: <TeacherDashboard />,
+    },
+    {
+        //name: "Teacher Dashboard",
+        layout: "/admin",
+        path: "Schedule",
+        icon: <MdSchedule  className="h-6 w-6" />,
+        component: <TeacherSchedule />,
     },
 
 {
@@ -140,16 +158,34 @@ const routes = [
     hide: true,
     component: <UnauthorizedPage />,
 },
-  
-{
-  name: "RTL Admin",
-  layout: "/rtl",
-  path: "rtl",
-  icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-  hide: true,
 
-  component: <RTLDefault />,
-},
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "rtl",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <RTLDefault />,
+    },
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "/",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <Dashboard />,
+    },
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "course/:courseId",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <CourseDetails />,
+    },
 
 
 ];

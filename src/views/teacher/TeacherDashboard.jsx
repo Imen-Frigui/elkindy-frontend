@@ -3,9 +3,12 @@ import NextCourseCard from "./components/NextCourseCard";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import AttendanceSheet from "./components/AttendanceSheet";
+import ClassSelector from "./components/ClassSelector";
+import TeacherSchedule from "./TeacherSchedule";
 
 const TeacherDashboard = () => {
     const [userData, setUserData] = useState(null);
+    const [selectedClassId, setSelectedClassId] = useState(null);
 
 
     useEffect(() => {
@@ -35,20 +38,30 @@ const TeacherDashboard = () => {
     }, [userData]);
 
     const isTeacher = userData?.user?.role === 'teacher';
-    const idTeacher = userData?.user?._id;
-    console.log(idTeacher)
+    const teacherId = userData?.user?._id;
+    console.log(teacherId)
     console.log(userData)
     console.log('isTeacher', isTeacher);
-    const classId = "65fdb45d109f0caf0bf53434";
 
 
     return (
-        <div className="flex flex-col">
-            <Greeting username={userData?.user?.username}></Greeting>
-            <NextCourseCard teacherId={idTeacher}></NextCourseCard>
-            <AttendanceSheet classId={classId} />
+        <div>
+            <div className="flex flex-col justify-between lg:flex-row lg:items-start lg:space-x-4">
+                <div className="flex flex-col space-y-4">
+                    <Greeting username={userData?.user?.username} gender={userData?.user?.gender}/>
+                    <NextCourseCard teacherId={teacherId}/>
+                </div>
+                {teacherId && (
+                    <div className="mt-4 lg:mt-0 lg:flex-grow">
+                        <ClassSelector teacherId={teacherId} onSelectClass={setSelectedClassId}/>
+                    </div>
+                )}
+            </div>
+            <div className="w-full mb-4">
+                {selectedClassId && <AttendanceSheet classId={selectedClassId}/>}
+            </div>
         </div>
-    );
+)
+    ;
 }
-
 export default TeacherDashboard;

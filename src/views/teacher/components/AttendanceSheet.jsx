@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchSessionsByClassId, fetchStudentsByClassId, manageAttendanceForSession } from '../../../services/class/classService';
 import '../../../assets/css/Table.css'
 import ButtonComponent from "../../../components/button/ButtonComponnent";
-import {orange} from "@mui/material/colors";
+import { FaCheck, FaTimes } from 'react-icons/fa';
+
 const AttendanceSheet = ({ classId }) => {
     const [sessions, setSessions] = useState([]);
     const [students, setStudents] = useState([]);
@@ -52,7 +53,7 @@ const AttendanceSheet = ({ classId }) => {
             sessionId: session._id,
             attendance: students.map(student => ({
                 student: student._id,
-                status: attendance[session._id]?.[student._id] || 'Absent' // default to 'Absent' if not set
+                status: attendance[session._id]?.[student._id] || '-' // default to '-' if not set
             }))
         }));
 
@@ -68,22 +69,23 @@ const AttendanceSheet = ({ classId }) => {
     };
 
     return (
-        <div className="attendance-sheet-container">
-            <table className="attendance-table min-w-full divide-y divide-gray-200">
+        <div className="mx-auto">
+            <div className="overflow-x-auto">
+            <table className="attendance-table min-w-full divide-y divide-gray-200 mb-4 table-auto">
                 <thead>
                 <tr>
-                    <th>Students</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
                     {sessions.map(session => (
-                        <th key={session._id}>{new Date(session.date).toLocaleDateString()}</th>
+                        <th key={session._id} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{new Date(session.date).toLocaleDateString()}</th>
                     ))}
                 </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                 {students.map(student => (
                     <tr key={student._id}>
-                        <td>{student.username}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{student.username}</td>
                         {sessions.map(session => (
-                            <td key={`${session._id}-${student._id}`} onClick={() => handleAttendanceChange(session._id, student._id)}>
+                            <td key={`${session._id}-${student._id}`} onClick={() => handleAttendanceChange(session._id, student._id)} className="px-6 py-4 whitespace-nowrap cursor-pointer">
                                 {attendance[session._id]?.[student._id] || '-'}
                             </td>
                         ))}
@@ -91,8 +93,11 @@ const AttendanceSheet = ({ classId }) => {
                 ))}
                 </tbody>
             </table>
-            <ButtonComponent color="orange" text="Submit Attendance" onClick={submitAttendance}>Submit Attendance</ButtonComponent>
-        </div>
+                <div className="flex justify-end">
+                    <ButtonComponent color="#3F51B5" text="Submit Attendance" onClick={submitAttendance}>Submit Attendance</ButtonComponent>
+                </div>
+            </div>
+            </div>
     );
 };
 
