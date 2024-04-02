@@ -72,7 +72,7 @@ const IncomingTrades = ({
     "Instrument not suitable",
     "Unavailable for trade",
     "Condition disagreement",
-    "Location inconvenience",
+    "Low money offer",
     "Change of plans",
     "Not interested anymore",
     "Other",
@@ -127,6 +127,12 @@ const IncomingTrades = ({
               data={tradeData}
             />
           </div>
+          {tradeData.moneyProposed !== 0 && (
+            <div className="w-dull flex items-center justify-center rounded-xl bg-green-50 text-green-500">
+              + {tradeData.moneyProposed}DT
+            </div>
+          )}
+
           {tradeData.status === "requested" && (
             <div className="mt-3 flex justify-end space-x-2  ">
               <div className=" rounded-lg bg-green-500 p-1 text-white">

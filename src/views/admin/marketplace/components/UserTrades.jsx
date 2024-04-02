@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import useExchangeStore from "ZustStore/exchangeStore";
 import { IncomingTrades } from "components";
 import Project from "views/admin/profile/components/Project";
-import { Modal } from "components";
-import banner from "assets/img/nfts/banner7.jpg";
-import Banner1 from "./Banner";
 import { LatestTrades } from "components";
 import { ToastContainer } from "react-toastify";
 import useShowToast from "hooks/useShowToast";
@@ -63,7 +60,7 @@ function UserTrades() {
         <div className=" col-span-2 flex space-x-4">
           {showModal && (
             <div
-              className={`fixed right-0 top-0 z-40 h-screen w-full max-w-xs overflow-y-auto bg-white p-4 transition-opacity duration-300 ease-in-out dark:bg-navy-800`}
+              className={`fixed right-0 top-0 z-40 h-screen w-full max-w-xs space-y-3 overflow-y-auto bg-gray-200 p-4 transition-opacity duration-300 ease-in-out dark:bg-navy-800`}
             >
               <h1>Incoming trades</h1>
               <button
@@ -72,7 +69,7 @@ function UserTrades() {
               >
                 <XMarkIcon className="z-10 h-5 w-5 justify-end text-right text-black" />
               </button>
-              <div>
+              <div className="space-y-3">
                 {loading ? (
                   <LoadingSpinner />
                 ) : exchangesReceived.length > 0 ? (

@@ -11,6 +11,8 @@ function ExchangeModal({ instrument, onCloseModal }) {
   const [token, setToken] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+  const [includeMoney, setIncludeMoney] = useState(false);
+  const [moneyOffered, setMoneyOffered] = useState("");
 
   const navigate = useNavigate();
   const showToast = useShowToast();
@@ -39,6 +41,13 @@ function ExchangeModal({ instrument, onCloseModal }) {
   const handleSelectItem = (item) => {
     setSelectedItem(selectedItem === item ? null : item);
   };
+  const handleCheckboxChange = () => {
+    setIncludeMoney(!includeMoney);
+
+    if (!includeMoney) {
+      setMoneyOffered("");
+    }
+  };
 
   const handleNotification = () => {
     const message = "Someone is interested in exchanging instruments with you";
@@ -57,20 +66,30 @@ function ExchangeModal({ instrument, onCloseModal }) {
         showToast("Please select an item before requesting exchange.", "error");
         return;
       }
-      const exchangeData = {
+      if (
+        includeMoney &&
+        (!moneyOffered || isNaN(moneyOffered) || moneyOffered <= 0)
+      ) {
+        showToast("Please enter a valid amount of money.", "error");
+        return;
+      }
+      let exchangeData = {
         receiver: instrument.author[0]._id,
         senderInstrument: selectedItem,
         receiverInstrument: instrument,
       };
+      if (includeMoney && moneyOffered) {
+        exchangeData.moneyProposed = moneyOffered;
+      } else {
+        delete exchangeData.moneyProposed;
+      }
       const res = await createExchange(exchangeData, token);
       handleNotification();
-      // setSuccessMessage("Exchange request sent successfully.");
       showToast("Exchange request sent successfully.", "success");
       setTimeout(() => {
         onCloseModal();
       }, 1000);
     } catch (error) {
-      // setError(error.message);
       showToast(error.message, "error");
     }
   };
@@ -124,6 +143,38 @@ function ExchangeModal({ instrument, onCloseModal }) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="flex justify-start px-3 py-4">
+              <input
+                type="checkbox"
+                checked={includeMoney}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              <label>Include Money</label>
+              {includeMoney && (
+                <div className="relative w-full">
+                  <input
+                    type="number"
+                    placeholder="Enter price in dinars"
+                    value={moneyOffered}
+                    onChange={(e) => setMoneyOffered(e.target.value)}
+                    step=".10"
+                    min="0"
+                    oninput="this.value = Math.abs(this.value)"
+                    className="bg-light mb-1 mt-2 block w-full rounded-lg px-2 
+                    py-3 text-gray-500 placeholder-gray-400 placeholder-opacity-60   
+                    shadow focus:outline-none focus:ring-1 focus:ring-kindyorange"
+                  />
+
+                  <div class="pointer-events-none absolute inset-0 flex w-full items-center justify-between gap-2 pl-[1.1rem]">
+                    <span></span>
+                    <div class="text-2xs mr-3 mt-1 rounded-md bg-gray-200 px-3 py-2 font-bold text-gray-700">
+                      DT
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="bg-kindygray px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6  ">

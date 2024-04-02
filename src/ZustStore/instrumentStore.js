@@ -3,7 +3,7 @@ import DataService from "../services/marketplace/data.service";
 
 const useInstrumentStore = create((set) => ({
   instruments: [],
-  instrument: {},
+  instrument: null,
   loading: false,
   hasMorePages: true,
   setHasMorePages: (hasMore) => set({ hasMorePages: hasMore }),

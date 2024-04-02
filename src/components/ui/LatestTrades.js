@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "components/card";
 import { useNavigate } from "react-router-dom";
-import { CalendarDaysIcon } from "@heroicons/react/24/solid";
 import avatar1 from "assets/img/avatars/avatar1.png";
-import trade from "assets/img/trade.png";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 
 function LatestTrades({ trades }) {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("all");
+  const [userId, setUserId] = useState(null);
+
   const getStatusColor = (status) => {
     switch (status) {
       case "accepted":
@@ -19,10 +20,42 @@ function LatestTrades({ trades }) {
         return "bg-gray-500";
     }
   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get(
+          "http://localhost:3000/api/auth/validateSession",
+          config
+        );
+        setUserId(response.data.user._id);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const filtered = trades.filter((trade) => {
     if (filter === "all") return true;
     return trade.status === filter;
   });
+
+  const isCurrentUserReceiver = (trade) => {
+    console.log(trade.receiverInstrument.author === userId);
+    return trade.receiverInstrument.author === userId;
+  };
+
   return (
     <Card extra={"w-full h-full p-2  "}>
       <div className="max-h-[500px] overflow-y-scroll rounded-lg bg-white">
@@ -90,11 +123,65 @@ function LatestTrades({ trades }) {
                   </div>
 
                   <div className=" border-1 flex w-full flex-row justify-between rounded-lg p-3 ">
-                    <div className="w-full flex-col ">
+                    {trade.sender.id === userId ? (
+                      <div className=" border-1 flex w-full flex-row justify-between rounded-lg p-3 ">
+                        <div className="w-full flex-col ">
+                          <p className="text-sm text-gray-600">
+                            Your Instrument
+                          </p>
+                          <p className="text-base font-medium text-navy-700 dark:text-white">
+                            {trade.sender.senderInstrument.title} -{" "}
+                            {trade.sender.senderInstrument.brand}
+                          </p>
+                        </div>
+                        <div className="p-5">
+                          <ArrowsRightLeftIcon className="h-10 w-10 text-kindyblue" />
+                        </div>
+                        <div className="w-full flex-col text-right">
+                          <p className="text-sm text-gray-600">Swap For</p>
+                          <p className="text-base font-medium text-navy-700 dark:text-white">
+                            {trade.receiverInstrument.title} -{" "}
+                            {trade.receiverInstrument.brand}{" "}
+                            {trade.moneyProposed !== 0 && (
+                              <div>+ {trade.moneyProposed}DT</div>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className=" border-1 flex w-full flex-row justify-between rounded-lg p-3 ">
+                        <div className="w-full flex-col ">
+                          <p className="text-sm text-gray-600">
+                            Your Instrument
+                          </p>
+                          <p className="text-base font-medium text-navy-700 dark:text-white">
+                            {trade.receiverInstrument.title} -{" "}
+                            {trade.receiverInstrument.brand}{" "}
+                            {trade.moneyProposed && (
+                              <div>+ {trade.moneyProposed}DT</div>
+                            )}
+                          </p>
+                        </div>
+                        <div className="p-5">
+                          <ArrowsRightLeftIcon className="h-10 w-10 text-kindyblue" />
+                        </div>
+                        <div className="w-full flex-col text-right">
+                          <p className="text-sm text-gray-600">Swap For</p>
+                          <p className="text-base font-medium text-navy-700 dark:text-white">
+                            {trade.sender.senderInstrument.title} -{" "}
+                            {trade.sender.senderInstrument.brand}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {/* <div className="w-full flex-col ">
                       <p className="text-sm text-gray-600">Your Instrument</p>
                       <p className="text-base font-medium text-navy-700 dark:text-white">
                         {trade.receiverInstrument.title} -{" "}
-                        {trade.receiverInstrument.brand}
+                        {trade.receiverInstrument.brand}{" "}
+                        {trade.moneyProposed && (
+                          <div>+ {trade.moneyProposed}DT</div>
+                        )}
                       </p>
                     </div>
                     <div className="p-5">
@@ -106,7 +193,7 @@ function LatestTrades({ trades }) {
                         {trade.sender.senderInstrument.title} -{" "}
                         {trade.sender.senderInstrument.brand}
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                   {trade.status === "rejected" && (
                     <div className="flex w-full  justify-between p-3">
