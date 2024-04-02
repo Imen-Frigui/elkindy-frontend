@@ -13,13 +13,21 @@ const useExchangeStore = create((set) => ({
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 
-  updateTradeStatus: async (accessToken, exchangeId, newStatus) => {
+  updateTradeStatus: async (
+    accessToken,
+    exchangeId,
+    newStatus,
+    reason,
+    rating
+  ) => {
     try {
       set({ loading: true });
       const response = await ExchangeService.updateTradeStatus(
         accessToken,
         exchangeId,
-        newStatus
+        newStatus,
+        reason,
+        rating
       );
       set({ loading: false });
       return response;
