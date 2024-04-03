@@ -26,10 +26,7 @@ import {
     MdPerson,
     MdLock
 } from "react-icons/md";
-
-
-    import AssignTeachers from "./views/course/AssignTeachers";
-
+import AssignTeachers from "./views/course/AssignTeachers";
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";

@@ -18,6 +18,9 @@ import SignIn from "views/auth/SignIn";
 import RegisterPage from "views/auth/register";
 import ForgotPassword from "views/auth/Password/forgotPassword";
 import ResetPassword from "views/auth/Password/resetPassword";
+import StudentLayout from "layouts/student/index.jsx";
+import Student from "layouts/student";
+import Teacher from "layouts/teacher";
 
 
 
@@ -32,8 +35,15 @@ const App = () => {
   <Route path="auth/reset-password" element={<ResetPassword />} />
 
 
+
+
+  <Route path="teacher/*" element={<Teacher />}>
+          </Route>
+
       <Route element={<PrivateRoute allowedRoles={['admin',"student",'teacher']} />}>
-        
+      <Route path="student/*" element={<Student />}>
+          </Route>
+
         <Route path="admin/*" element={<AdminLayout />}>
           </Route>
           <Route path="courses"  element={<CoursesList />}/>
