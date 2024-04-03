@@ -31,6 +31,7 @@ const ProfileOverview = () => {
         };
 
         const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        console.log(response);
         setUserData(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);

@@ -40,7 +40,7 @@ const AddCourse = ({ onCourseAdded }) => {
             isInternship: name === 'startDate' || name === 'endDate' ? !!prevState.startDate && !!prevState.endDate : prevState.isInternship,
         }));
 
-        // Optionally, remove this alert to improve user experience and use visual indicators instead
+
         if ((name === 'startDate' || name === 'endDate') && inputValues.startDate && inputValues.endDate) {
             alert('Setting both start and end dates will categorize this course as an internship.');
         }
@@ -67,6 +67,9 @@ const AddCourse = ({ onCourseAdded }) => {
     const validateForm = () => {
         let formIsValid = true;
         let newErrors = { ...errors };
+        const today = new Date();
+        const startDate = new Date(inputValues.startDate);
+        const endDate = new Date(inputValues.endDate);
 
         if (!inputValues.courseName) {
             formIsValid = false;
@@ -79,6 +82,18 @@ const AddCourse = ({ onCourseAdded }) => {
         if (!inputValues.price) {
             formIsValid = false;
             newErrors["price"] = "Price is required.";
+        }
+        if (isInternship){
+            if (!inputValues.startDate || startDate <= today) {
+                formIsValid = false;
+                newErrors["startDate"] = "Must be in the future.";
+            }
+
+            if ( !inputValues.endDate || endDate <= today || endDate <= startDate) {
+                formIsValid = false;
+                newErrors["endDate"] = "Must be after the start date. Must be in the future.";
+            }
+
         }
 
         setErrors(newErrors);
@@ -226,6 +241,11 @@ const AddCourse = ({ onCourseAdded }) => {
                                    value={inputValues.startDate}
                                    onChange={handleOnChange}
                                    className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
+                            {errors.startDate && (
+                                <div className="error-message text-red-500 text-sm mt-1">
+                                    {errors.startDate}
+                                </div>
+                            )}
                         </div>
 
                         {/* End Date Input */}
@@ -237,6 +257,11 @@ const AddCourse = ({ onCourseAdded }) => {
                                    value={inputValues.endDate}
                                    onChange={handleOnChange}
                                    className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
+                            {errors.endDate && (
+                                <div className="error-message text-red-500 text-sm mt-1">
+                                    {errors.endDate}
+                                </div>
+                            )}
                         </div>
 
 
