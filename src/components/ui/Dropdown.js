@@ -8,7 +8,7 @@ function Dropdown({ options, onChange, value, className }) {
       <Listbox value={value} onChange={onChange}>
         <div className=" relative">
           <Listbox.Button
-            className="w-full mt-2 mb-1  cursor-pointer rounded-lg  bg-white py-3 pl-4 text-left   
+            className="mb-1 mt-2 w-full  cursor-pointer rounded-lg  bg-white py-3 pl-4 text-left   
                shadow focus:outline-none focus:ring-1 focus:ring-kindyorange"
           >
             <span className=" capitalize">{value}</span>
@@ -26,13 +26,13 @@ function Dropdown({ options, onChange, value, className }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="ring-black absolute mt-4 max-h-60 w-full divide-y divide-gray-200 overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-opacity-5 focus:outline-none sm:text-sm">
+            <Listbox.Options className="absolute mt-4 max-h-60 w-full divide-y divide-gray-200 overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {options.map((option, index) => (
                 <Listbox.Option
                   key={index}
                   className={({ active }) =>
                     `${active ? "bg-kindyblue text-white " : "text-gray-600"}
-                        relative cursor-pointer select-none py-3  px-6`
+                        relative cursor-pointer select-none px-6  py-3`
                   }
                   value={option}
                 >
