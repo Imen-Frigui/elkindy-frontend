@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { fetchCourses, archiveCourse, updateCourse } from '../../services/course/courseService';
+import {
+    fetchCourses,
+    archiveCourse,
+    updateCourse,
+    fetchStudentStats,
+    fetchTeacherStats
+} from '../../services/course/courseService';
 import { useNavigate} from "react-router-dom";
 import AddCourse from "./components/AddCourse";
 import ArchivedCourses from "./components/ArchivedCourses";
@@ -22,6 +28,9 @@ const CoursesList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [pageSize] = useState(10);
+
+    const [studentStats, setStudentStats] = useState(null);
+    const [teacherStats, setTeacherStats] = useState(null);
 
 
     const [steps] = useState([
@@ -191,6 +200,18 @@ const CoursesList = () => {
                 console.error("Failed to fetch courses:", error);
             }
         };
+        const getStudentStats = async () => {
+            const stats = await fetchStudentStats();
+            setStudentStats(stats);
+        };
+
+        const getTeacherStats = async () => {
+            const stats = await fetchTeacherStats();
+            setTeacherStats(stats);
+        };
+
+        getStudentStats();
+        getTeacherStats();
 
         getCourses();
     }, [ currentPage, pageSize, searchQuery]);
@@ -211,16 +232,9 @@ const CoursesList = () => {
 
     const handleArchiveCourse = async (courseId) => {
         try {
-            // Directly call the archiveCourse function imported from courseService
-
             const response = await archiveCourse(courseId);
-            if (response) {
-                // Refresh the courses list or update the state to reflect the change
-                const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery).then(setCourses);
-                setCourses(updatedCourses.data);
-            } else {
-                throw new Error('Failed to archive the course');
-            }
+            const updatedCourses = await fetchCourses(currentPage, pageSize, searchQuery);
+            setCourses(updatedCourses.data);
         } catch (error) {
             console.error("Failed to archive course:", error);
         }
@@ -261,14 +275,17 @@ const CoursesList = () => {
             <div className="flex flex-col mt-8">
                 {showStatCard &&
                     <div className="flex flex-row space-x-6 items-center">
-                        <StatCard title="Students" totalCount={308} stats={{malePercentage: 61, femalePercentage: 39}}/>
-                        <StatCard title="Teachers" totalCount={24} stats={{malePercentage: 80, femalePercentage: 20}}/>
+                        <StatCard title="Students" totalCount={studentStats?.totalCount} stats={{malePercentage: studentStats?.malePercentage, femalePercentage: studentStats?.femalePercentage
+                        }}/>
+                        <StatCard title="Teachers" totalCount={teacherStats?.totalCount} stats={{malePercentage: teacherStats?.malePercentage, femalePercentage: teacherStats?.femalePercentage
+                        }}/>
                     </div>
 
                 }
                 <div className="flex justify-between items-center">
                     {/* Search bar TextField */}
-                    <div style={{ backgroundColor: "white", borderRadius: '22px 0px' }} className="shadow-xl bg-white dark:!bg-gray-700 sm:w-fit">
+                    <div style={{backgroundColor: "white", borderRadius: '22px 0px'}}
+                         className="shadow-xl bg-white dark:!bg-gray-700 sm:w-fit">
                         <FontAwesomeIcon icon={faMagnifyingGlass}
                                          style={{
                                              color: '#FB9D37',
