@@ -46,6 +46,7 @@ function LatestTrades({ trades }) {
 
     fetchUserData();
   }, []);
+
   const filtered = trades.filter((trade) => {
     if (filter === "all") return true;
     return trade.status === filter;
@@ -63,21 +64,41 @@ function LatestTrades({ trades }) {
           <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
             Latest Trades
           </h4>
-          {/* <img src={trade} className="mr-3 h-6 w-6" alt="trade icon" /> */}
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-1 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          >
-            <option value="all">All Trades</option>
-            <option value="accepted">Accepted</option>
-            <option value="rejected">Rejected</option>
-          </select>
+          <div className="relative right-5 flex items-center">
+            <span class="relative left-8">
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+                class="text-gray-600"
+                height="20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </span>{" "}
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="select text-2xs select-sm select border-1 h-[40px] max-h-full w-full max-w-full rounded-md border-gray-300 bg-gray-100 bg-gray-200/70 pl-10 text-xs font-light  text-gray-600 hover:!text-gray-700 focus:outline-none focus:outline-offset-0 xl:w-fit"
+            >
+              <option value="all">All Trades</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 px-2">
           <div className="grid grid-cols-1 gap-4 px-2">
-            {trades.length === 0 ? (
+            {filtered.length === 0 ? (
               <div className="flex items-center justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
                 <p className="text-base font-medium text-navy-700 dark:text-white">
                   You haven't made any trades yet.

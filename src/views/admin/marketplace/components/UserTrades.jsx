@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import useShowToast from "hooks/useShowToast";
 import { LoadingSpinner } from "components";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { UserInstruments } from "components";
 
 function UserTrades() {
   const [token, setToken] = useState("");
@@ -46,7 +47,7 @@ function UserTrades() {
     <>
       <div className="mt-2 grid h-full grid-cols-1 gap-4 md:grid-cols-3">
         <div className="md:col-span-2 ">
-          <Project onInstrumentClick={handleInstrumentSelect} />
+          <UserInstruments onInstrumentClick={handleInstrumentSelect} />
         </div>
         <div className="md:col-span-1 ">
           {loading ? (
