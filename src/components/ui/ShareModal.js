@@ -11,32 +11,32 @@ const ShareModal = ({ isOpen, onClose }) => {
   return (
     <div>
       {isOpen && (
-        <div class="fixed inset-0 overflow-y-auto">
-          <div class="fixed inset-0 bg-black bg-opacity-25 opacity-100"></div>
-          <div class="flex min-h-full items-center justify-center p-4 text-center">
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="fixed inset-0 bg-black bg-opacity-25 opacity-100"></div>
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
             <div
-              class="\ scale-100 transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle opacity-100 shadow-xl transition-all"
+              className="\ scale-100 transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle opacity-100 shadow-xl transition-all"
               id="headlessui-dialog-panel-:r4:"
               data-headlessui-state="open"
             >
               <div
-                class="btn btn-sm btn-circle absolute right-2 top-2"
+                className="btn btn-sm btn-circle absolute right-2 top-2"
                 onClick={onClose}
               >
                 ✕
               </div>
               <h3
-                class="mb-2 text-lg font-bold leading-6"
+                className="mb-2 text-lg font-bold leading-6"
                 id="headlessui-dialog-title-:r5:"
                 data-headlessui-state="open"
               >
                 Share item
               </h3>
-              <div class="flex flex-wrap justify-center gap-6 py-4">
-                <span class="bg-transparent hover:bg-slate-50 flex cursor-pointer flex-col items-center rounded-2xl px-2 py-6 text-sm font-medium">
+              <div className="flex flex-wrap justify-center gap-6 py-4">
+                <span className="bg-transparent hover:bg-slate-50 flex cursor-pointer flex-col items-center rounded-2xl px-2 py-6 text-sm font-medium">
                   <button
                     id="copyButton"
-                    class="flex flex-col items-center justify-center text-blue-500"
+                    className="flex flex-col items-center justify-center text-blue-500"
                     onClick={handleCopyLink}
                   >
                     <svg
@@ -52,10 +52,10 @@ const ShareModal = ({ isOpen, onClose }) => {
                       <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z"></path>
                       <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z"></path>
                     </svg>
-                    <span class="text-3xs mt-1 text-black">Copy link</span>
+                    <span className="text-3xs mt-1 text-black">Copy link</span>
                   </button>
                   <span
-                    class="flex flex-col items-center justify-center text-green-500"
+                    className="flex flex-col items-center justify-center text-green-500"
                     id="copiedButton"
                     style={{ display: "none" }}
                   >
@@ -76,13 +76,13 @@ const ShareModal = ({ isOpen, onClose }) => {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="text-3xs mt-1">Copied</span>
+                    <span className="text-3xs mt-1">Copied</span>
                   </span>
                 </span>
 
                 <button
                   aria-label="facebook"
-                  class="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
+                  className="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
                   style={{
                     backgroundColor: "transparent",
                     border: "none",
@@ -99,11 +99,11 @@ const ShareModal = ({ isOpen, onClose }) => {
                       fill="white"
                     ></path>
                   </svg>
-                  <p class="mt-1">Facebook</p>
+                  <p className="mt-1">Facebook</p>
                 </button>
                 <button
                   aria-label="facebookmessenger"
-                  class="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
+                  className="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
                   style={{
                     backgroundColor: "transparent",
                     border: "none",
@@ -120,11 +120,11 @@ const ShareModal = ({ isOpen, onClose }) => {
                       fill="white"
                     ></path>
                   </svg>
-                  <p class="mt-1">Messenger</p>
+                  <p className="mt-1">Messenger</p>
                 </button>
                 <button
                   aria-label="whatsapp"
-                  class="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
+                  className="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
                   style={{
                     backgroundColor: "transparent",
                     border: "none",
@@ -141,29 +141,9 @@ const ShareModal = ({ isOpen, onClose }) => {
                       fill="white"
                     ></path>
                   </svg>
-                  <p class="mt-1">Whatsapp</p>
+                  <p className="mt-1">Whatsapp</p>
                 </button>
-                {/* <button
-                  aria-label="twitter"
-                  class="react-share__ShareButton !bg-transparent hover:!bg-slate-50 flex !cursor-pointer flex-col items-center !rounded-2xl !px-2 !py-6 !text-sm !font-medium"
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                    padding: "0px",
-                    font: "inherit",
-                    color: "inherit",
-                    cursor: "pointer",
-                  }}
-                >
-                  <svg viewBox="0 0 64 64" width="20" height="20">
-                    <circle cx="32" cy="32" r="31" fill="#00aced"></circle>
-                    <path
-                      d="M48,22.1c-1.2,0.5-2.4,0.9-3.8,1c1.4-0.8,2.4-2.1,2.9-3.6c-1.3,0.8-2.7,1.3-4.2,1.6 C41.7,19.8,40,19,38.2,19c-3.6,0-6.6,2.9-6.6,6.6c0,0.5,0.1,1,0.2,1.5c-5.5-0.3-10.3-2.9-13.5-6.9c-0.6,1-0.9,2.1-0.9,3.3 c0,2.3,1.2,4.3,2.9,5.5c-1.1,0-2.1-0.3-3-0.8c0,0,0,0.1,0,0.1c0,3.2,2.3,5.8,5.3,6.4c-0.6,0.1-1.1,0.2-1.7,0.2c-0.4,0-0.8,0-1.2-0.1 c2.9,1.9,6.4,2.9,10.1,2.9c12.1,0,18.7-10,18.7-18.7 c0-0.3,0-0.6,0-0.8C46,24.5,47.1,23.4,48,22.1z"
-                      fill="white"
-                    ></path>
-                  </svg>
-                  <p class="mt-1">Twitter</p>
-                </button> */}
+
               </div>
             </div>
           </div>
