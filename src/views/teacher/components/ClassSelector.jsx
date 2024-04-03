@@ -53,7 +53,7 @@ const ClassSelector = ({ teacherId, onSelectClass }) => {
         <div className="container flex flex-col items-center mt-8 mb-4 ">
             <select onChange={(e) => handleClassChange(e.target.value)}
                     className="mb-4 w-full max-w-md p-2 bg-white dark:bg-gray-700 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md">
-                <option value="" disabled>Select a Class</option>
+                <option value="" >Select a Class</option>
                 {classes.map((cls) => (
                     <option key={cls._id} value={cls._id}>{cls.name} - {cls.courseId?.title}</option>
                 ))}
