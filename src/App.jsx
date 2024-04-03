@@ -21,6 +21,9 @@ import ResetPassword from "views/auth/Password/resetPassword";
 import StudentLayout from "layouts/student/index.jsx";
 import Student from "layouts/student";
 import Teacher from "layouts/teacher";
+import StudentLayout from "layouts/student/index.jsx";
+import Student from "layouts/student";
+import Teacher from "layouts/teacher";
 
 
 
@@ -34,6 +37,11 @@ const App = () => {
   <Route path="auth/forgot-password" element={<ForgotPassword />} />  
   <Route path="auth/reset-password" element={<ResetPassword />} />
 
+
+
+
+  <Route path="teacher/*" element={<Teacher />}>
+          </Route>
 
 
   <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
