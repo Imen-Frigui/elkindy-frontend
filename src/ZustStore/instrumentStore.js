@@ -3,7 +3,7 @@ import DataService from "../services/marketplace/data.service";
 
 const useInstrumentStore = create((set) => ({
   instruments: [],
-  instrument: {},
+  instrument: null,
   loading: false,
   hasMorePages: true,
   setHasMorePages: (hasMore) => set({ hasMorePages: hasMore }),
@@ -47,8 +47,8 @@ const useInstrumentStore = create((set) => ({
   likePost: async (id, accessToken) => {
     try {
       // set({ loading: true });
-      const { response } = await DataService.likePost(id, accessToken);
-      return response;
+      const  response  = await DataService.likePost(id, accessToken);
+      return response.data;
       // set({ loading: false });
     } catch (error) {
       console.error(error);

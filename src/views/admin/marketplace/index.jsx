@@ -64,7 +64,6 @@ const Marketplace = () => {
       // }
     };
     fetchData();
-    console.log(instruments);
   }, [age, status, sort, searchQuery]);
 
   const isActiveAge = useCallback(

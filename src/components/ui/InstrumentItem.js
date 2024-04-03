@@ -23,7 +23,7 @@ function InstrumentItem({ item, selected, onSelectItem }) {
       <div>
         <div className="flex items-center justify-end bg-white">
           <div>
-            <img className="h-[83px] w-[83px] rounded-lg" src={guitar} alt="" />
+            <img className="h-22 w-full  rounded-lg" src={item.img} alt="" />
           </div>
           <div className="ml-4">
             <p className="text-base font-medium text-navy-700 dark:text-white">

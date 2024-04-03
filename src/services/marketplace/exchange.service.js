@@ -40,10 +40,16 @@ export default class ExchangeService {
       });
   }
 
-  static async updateTradeStatus(accessToken, exchangeId, newStatus) {
-    const requestBody = { status: newStatus };
+  static async updateTradeStatus(
+    accessToken,
+    exchangeId,
+    newStatus,
+    reason,
+    rating
+  ) {
+    const body = { status: newStatus, declineReason: reason, rating: rating };
     return await apiRoutes
-      .put(`/exchanges/${exchangeId}`, requestBody, apiHeader(accessToken))
+      .put(`/exchanges/${exchangeId}`, body, apiHeader(accessToken))
       .catch((error) => {
         throw new Error("Error fetching trades: " + error.message);
       });
