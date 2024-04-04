@@ -25,7 +25,7 @@ const RegisterPage = () => {
                     case 2: return <TeacherFormStep3 onNext={handleSubmit} onBack={handleBack} />;
                     default: return 'Unknown step';
                 }
-            case 'user':
+            case 'student':
                 return <StudentFormStep1 onNext={handleSubmit} />;
             default:
                 return null;
@@ -37,7 +37,7 @@ const RegisterPage = () => {
             <div className="flex border-b">
                 <div 
                     className={`mr-8 pb-2 cursor-pointer ${activeTab === 'user' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
-                    onClick={() => setActiveTab('user')}
+                    onClick={() => setActiveTab('student')}
                 >
                     As Student
                 </div>

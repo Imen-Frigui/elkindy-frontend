@@ -15,15 +15,15 @@ import {faCheck, faLock, faPhone} from '@fortawesome/free-solid-svg-icons';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
 import {useRegisterMutation} from 'slices/userApiSlice';
 import {TagsInput} from 'react-tag-input-component';
-import '../StudentRegistrationForm/tags.css';
+import '../../components/StudentRegistrationForm/tags.css';
 import {useNavigate, useParams} from 'react-router-dom';
 
-const StudentFormStep1 = ({ onNext }) => {
+const StudentEnroll = ({ onNext }) => {
   const Navigate = useNavigate();
     const dispatch = useDispatch();
     const formData = useSelector(state => state.studentRegistration.formData);
     const [errors, setErrors] = useState({});
-    const [register, { isLoading }] = useRegisterMutation();
+    const [registerEnroll, { isLoading }] = useRegisterMutation();
     const [selected, setSelected] = useState([]);
 
     let { courseId } = useParams();
@@ -47,10 +47,12 @@ const StudentFormStep1 = ({ onNext }) => {
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
             .required('Confirm password is required'),
             preferedInstrument: Yup.array().min(1, 'prefered Instrumens is required').required('prefered Instruments is required'),
+        courses: Yup.array().min(1, 'Course is required').required('Course is required'),
     });
 
     useEffect(() => {
         console.log(formData);
+        
         dispatch(setRole('student'));
     }, [dispatch, formData]);
 
@@ -61,6 +63,8 @@ const StudentFormStep1 = ({ onNext }) => {
       };
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(courseId);
+        dispatch(addCourse([courseId]));
 
         dispatch(updateFormData({ field: name, value }));
         setErrors(prevErrors => ({
@@ -127,7 +131,9 @@ const StudentFormStep1 = ({ onNext }) => {
 
 
             console.log(formData);
-            const result = await register(formData).unwrap();
+            console.log(courseId);
+            dispatch(addCourse([courseId]));
+            const result = await registerEnroll(formData).unwrap();
             dispatch(setCredentialsRegistration({ ...result }));
             Navigate('/student/default');
             onNext();
@@ -151,6 +157,8 @@ const StudentFormStep1 = ({ onNext }) => {
 
 
     return (
+        <div className=" my-20  p-5">
+        <div className=" mx-64 flex border-b">
         <div className="flex flex-col lg:grid lg:grid-cols-2 items-center">
             <div className="bg-lightblue ml-20 dark:bg-gray-800 shadow-lg p-8 max-w-xl w-full"
                  style={{ borderRadius: '30px 0 0 30px' }}>
@@ -223,7 +231,7 @@ const StudentFormStep1 = ({ onNext }) => {
                         name="dateOfBirth"
                         error={Boolean(errors.dateOfBirth)}
                         helperText={errors.dateOfBirth}
-                    />
+                        max="2004-12-31"                     />
     {errors.dateOfBirth && <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>}
                     <Input 
                         type="password"
@@ -326,7 +334,10 @@ const StudentFormStep1 = ({ onNext }) => {
             </div>
             <div className="h-full bg-cover bg-center shadow-lg" style={{ backgroundImage: `url(${authImg})`, borderRadius: '0 30px 30px 0' }} />
         </div>
+        </div>
+            
+        </div>
     );
 };
 
-export default StudentFormStep1;
+export default StudentEnroll;
