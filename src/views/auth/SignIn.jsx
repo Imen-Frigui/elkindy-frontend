@@ -56,7 +56,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className=" mt-60  grid sm:grid-cols-1  md:grid-cols-1 lg:grid-cols-2 lg:gap-0  ">
+    <div className=" my-64 grid sm:grid-cols-1  md:grid-cols-1 lg:grid-cols-2 lg:gap-0  ">
       <div
         className=" ml-20 w-full max-w-xl bg-lightblue p-8 shadow-lg dark:bg-gray-800 sm:rounded-lg "
         style={{

@@ -7,6 +7,8 @@ import Storage from "./components/Storage";
 import Upload from "./components/Upload";
 import axios from "axios";
 import EditProfileModal from "./components/EditProfile";
+import ScheduleComponent from "./components/SchedualComponent";
+import Loader from "components/button/Loader";
 
 const ProfileOverview = () => {
   const [userData, setUserData] = useState(null);
@@ -42,48 +44,34 @@ const ProfileOverview = () => {
   }, []);
 
   if (!userData) {
-    return <div>Loading...</div>; // Or any other fallback UI
+    return <div><Loader></Loader></div>; // Or any other fallback UI
   }
-
   return (
-    <div className="flex w-full flex-col gap-7">
-      <button
-        onClick={handleEditClick}
-        className=" mt-3 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
-      >
-        Edit Profile
-      </button>
+    <div className="flex w-full flex-col items-center gap-7">
+      <div className="self-start">
+        <button
+          onClick={handleEditClick}
+          className="mt-20 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
+       // Adjust as needed for the cube appearance
+        >
+          Edit Profile
+        </button>
+      </div>
       <EditProfileModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         userData={userData}
       />
-      <div className="w-full mt-3 flex flex-col gap-5 lg:grid lg:grid-cols-12">
-        <div className="col-span-3 lg:!mb-0 flex justify-between items-center">
+      <div className="w-full flex flex-col lg:flex-row gap-5">
+        <div className="flex-1">
           <Banner userData={userData} />
-
-
         </div>
-
-        <div className="col-span-3 lg:!mb-0">
-          <Storage />
+        <div className="flex-1">
+          <ScheduleComponent userData={userData.user} />
         </div>
-
-        <div className="z-0 col-span-5 lg:!mb-0">
-          <Upload />
-        </div>
-      </div>
-
-      <div className="grid h-full grid-cols-1 gap-5 lg:!grid-cols-12">
-        <div className="col-span-5 lg:col-span-6 lg:mb-0 3xl:col-span-4">
+        {/* Adjust the below components as needed based on your layout requirements */}
+        <div className="flex-1">
           <Project />
-        </div>
-        <div className="col-span-5 lg:col-span-6 lg:mb-0 3xl:col-span-5">
-          <General />
-        </div>
-
-        <div className="col-span-5 lg:col-span-12 lg:mb-0 3xl:!col-span-3">
-          <Notification />
         </div>
       </div>
     </div>
