@@ -1,7 +1,7 @@
-import React from "react";
-import avatar from "assets/img/avatars/avatar11.png";
+import React, { useState } from "react";
 import Card from "components/card";
 import TradeItem from "./TradeItem";
+import { useNavigate } from "react-router-dom";
 import {
   EnvelopeIcon,
   PhoneIcon,
@@ -10,24 +10,50 @@ import {
 } from "@heroicons/react/24/solid";
 import useExchangeStore from "ZustStore/exchangeStore";
 import useSocketStore from "ZustStore/socketStore";
+// import Modal from "./Modal";
+import { RatingComponent } from "react-rating-emoji";
+import "react-rating-emoji/dist/index.css";
 
-const IncomingTrades = ({ tradeData }) => {
+import Modal from "./Modal";
+
+const IncomingTrades = ({
+  tradeData,
+  onCloseModal,
+  showToast,
+  onOpenRatingModal,
+}) => {
   const { updateTradeStatus } = useExchangeStore();
   const { socket } = useSocketStore();
-
+  const [showModal, setShowModal] = useState(false);
+  const [showRating, setShowRating] = useState(false);
   const token = localStorage.getItem("token");
-  const handleAcceptTrade = async () => {
+  const [selectedReason, setSelectedReason] = useState("");
+  const [rating, setRating] = useState(0);
+  const navigate = useNavigate();
+
+  const handleRating = async (newRating) => {
     try {
-      await updateTradeStatus(token, tradeData._id, "accepted");
+      setRating(newRating);
+      await updateTradeStatus(
+        token,
+        tradeData._id,
+        "accepted",
+        null,
+        newRating
+      );
       handleNotification("accepted");
-    } catch (error) {}
+      onCloseModal();
+      showToast("Trade accepted", "success");
+    } catch (error) {
+      showToast("Error occurred try again later", "error");
+    }
+  };
+  const handleAcceptTrade = async () => {
+    setShowRating(true);
   };
 
   const handleRejectTrade = async () => {
-    try {
-      await updateTradeStatus(token, tradeData._id, "rejected");
-      handleNotification("rejected");
-    } catch (error) {}
+    setShowModal(true);
   };
 
   const handleNotification = (status) => {
@@ -36,48 +62,122 @@ const IncomingTrades = ({ tradeData }) => {
       status: status,
     });
   };
-
+  const handleSubmitDeclineReason = async () => {
+    await updateTradeStatus(token, tradeData._id, "rejected", selectedReason);
+    handleNotification("rejected");
+    onCloseModal();
+    showToast("Trade rejected", "warn");
+  };
+  const reasons = [
+    "Instrument not suitable",
+    "Unavailable for trade",
+    "Condition disagreement",
+    "Low money offer",
+    "Change of plans",
+    "Not interested anymore",
+    "Other",
+  ];
+  const handleReasonChange = (event) => {
+    const selectedReason = event.target.value;
+    setSelectedReason(selectedReason);
+  };
   return (
-    <Card
-      extra={"flex md:flex-row items-center w-auto h-full p-[5px] bg-cover"}
-    >
-      <div className="flex flex-col  items-center justify-center rounded-xl p-5 ">
-        <div className=" h-[87px] w-[87px] items-center justify-center rounded-full border-[4px] border-white bg-pink-400 dark:!border-navy-700">
-          <img
-            className="h-full w-full rounded-full"
-            src={avatar}
-            alt="User Avatar"
-          />
-        </div>
-        <div>
-          <p className="text-sm font-bold text-navy-700 dark:text-white">
-            {tradeData.sender.firstName} {tradeData.sender.lastName}
-          </p>
-        </div>
-        <div className="flex flex-col justify-center space-x-3  md:flex-row">
-          <EnvelopeIcon className="w-4 text-navy-700" />
-          <PhoneIcon className="w-4 text-navy-700" />
-        </div>
-      </div>
-      <div className="ml-3 ">
-        <div className=" mt-1 flex justify-center rounded-xl bg-cover">
-          <TradeItem
-            item={tradeData.sender.senderInstrument}
-            status={tradeData.status}
-          />
-        </div>
-        {tradeData.status === "requested" && (
-          <div className="mt-3 flex justify-end space-x-2  ">
-            <button onClick={handleAcceptTrade}>
-              <CheckIcon className="h-6 w-6 rounded-lg bg-green-500 text-white" />
-            </button>
-            <button onClick={handleRejectTrade}>
-              <XMarkIcon className="h-6 w-6 rounded-lg bg-red-500 text-white" />
-            </button>
+    <>
+      {showModal && (
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+          <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
+            <div className="rounded-t border-b border-solid border-gray-100 p-5">
+              <h3 className="text-lg font-semibold">Reason for Declining</h3>
+            </div>
+            <div className="relative flex-auto p-6">
+              {reasons.map((reason, index) => (
+                <div key={index} className="mb-2">
+                  <input
+                    type="radio"
+                    id={`reason-${index}`}
+                    value={reason}
+                    name="reason"
+                    onChange={handleReasonChange}
+                  />
+                  <label htmlFor={`reason-${index}`} className="ml-2">
+                    {reason}
+                  </label>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-end rounded-b border-t border-solid border-gray-200 p-6">
+              <button
+                className="mb-1 mr-1 rounded bg-red-600 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-red-700"
+                type="button"
+                onClick={handleSubmitDeclineReason}
+              >
+                Confirm Decline
+              </button>
+            </div>
           </div>
-        )}
-      </div>
-    </Card>
+        </Modal>
+      )}
+
+      <Card extra={"flex md:flex-row items-center w-auto h-full p-[5px]"}>
+        <div className="ml-3 ">
+          <div className=" mt-1 flex justify-center rounded-xl">
+            <TradeItem
+              item={tradeData.sender.senderInstrument}
+              status={tradeData.status}
+              data={tradeData}
+            />
+          </div>
+          {tradeData.moneyProposed !== 0 && (
+            <div className="w-dull flex items-center justify-center rounded-xl bg-green-50 text-green-500">
+              + {tradeData.moneyProposed}DT
+            </div>
+          )}
+
+          {tradeData.status === "requested" && (
+            <div className="mt-3 flex justify-end space-x-2  ">
+              <div className=" rounded-lg bg-green-500 p-1 text-white">
+                <button
+                  className="flex items-center"
+                  onClick={handleAcceptTrade}
+                >
+                  <CheckIcon className="h-4 w-4 rounded-lg bg-green-500 text-white" />
+                  Accept trade
+                </button>
+              </div>
+              <div className=" rounded-lg bg-red-500 p-1 text-white">
+                <button
+                  className="flex items-center "
+                  onClick={handleRejectTrade}
+                >
+                  <XMarkIcon className="h-4 w-4 rounded-lg bg-red-500 text-white" />
+                  Decline
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </Card>
+      {showRating && (
+        <Modal isOpen={showRating} onClose={() => setShowRating(false)}>
+          <div className="mt-3">
+            <p className="mb-2 text-lg font-semibold">
+              Rate your trading experience
+            </p>
+            <div className="mb-3">
+              <span>
+                This rating will help us enhance the trading experience for all
+                users.
+              </span>
+            </div>
+            <RatingComponent
+              rating={rating}
+              className={"flex justify-evenly"}
+              onClick={handleRating}
+            />
+          </div>
+        </Modal>
+      )}
+    </>
   );
 };
 

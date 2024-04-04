@@ -47,22 +47,22 @@ const ProfileOverview = () => {
 
   return (
     <div className="flex w-full flex-col gap-7">
-       <button 
-            onClick={handleEditClick} 
-            className=" mt-3 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
-          >
-            Edit Profile
-          </button>
-          <EditProfileModal 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-            userData={userData} 
-          />
+      <button
+        onClick={handleEditClick}
+        className=" mt-3 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
+      >
+        Edit Profile
+      </button>
+      <EditProfileModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        userData={userData}
+      />
       <div className="w-full mt-3 flex flex-col gap-5 lg:grid lg:grid-cols-12">
         <div className="col-span-3 lg:!mb-0 flex justify-between items-center">
           <Banner userData={userData} />
-          
-         
+
+
         </div>
 
         <div className="col-span-3 lg:!mb-0">

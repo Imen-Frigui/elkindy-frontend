@@ -2,18 +2,17 @@ import React, { useEffect, useState } from "react";
 import useInstrumentStore from "../../ZustStore/instrumentStore";
 import useExchangeStore from "../../ZustStore/exchangeStore";
 import { useNavigate } from "react-router-dom";
-import { InstrumentItem } from "..";
+import { InstrumentItem, LoadingSpinner } from "..";
 import useSocketStore from "../../ZustStore/socketStore";
 import useShowToast from "../../hooks/useShowToast";
-
-function ExchangeModal({
-  instrument,
-  onCloseModal,
-
-}) {
+import { ToastContainer } from "react-toastify";
+import { Spinner } from "@chakra-ui/react";
+function ExchangeModal({ instrument, onCloseModal }) {
   const [token, setToken] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+  const [includeMoney, setIncludeMoney] = useState(false);
+  const [moneyOffered, setMoneyOffered] = useState("");
 
   const navigate = useNavigate();
   const showToast = useShowToast();
@@ -22,11 +21,7 @@ function ExchangeModal({
   const loading = useInstrumentStore((state) => state.loading);
   const { socket } = useSocketStore();
 
-  const {
-    createExchange,
-    setError,
-    error,
-  } = useExchangeStore();
+  const { createExchange, setError, error } = useExchangeStore();
 
   const fetchUserInstruments = useInstrumentStore(
     (state) => state.fetchUserInstruments
@@ -46,6 +41,13 @@ function ExchangeModal({
   const handleSelectItem = (item) => {
     setSelectedItem(selectedItem === item ? null : item);
   };
+  const handleCheckboxChange = () => {
+    setIncludeMoney(!includeMoney);
+
+    if (!includeMoney) {
+      setMoneyOffered("");
+    }
+  };
 
   const handleNotification = () => {
     const message = "Someone is interested in exchanging instruments with you";
@@ -60,27 +62,51 @@ function ExchangeModal({
   const onRequestExchange = async () => {
     try {
       if (!selectedItem) {
-        setError("Please select an item before requesting exchange.");
+        // setError("Please select an item before requesting exchange.");
+        showToast("Please select an item before requesting exchange.", "error");
         return;
       }
-      const exchangeData = {
+      if (
+        includeMoney &&
+        (!moneyOffered || isNaN(moneyOffered) || moneyOffered <= 0)
+      ) {
+        showToast("Please enter a valid amount of money.", "error");
+        return;
+      }
+      let exchangeData = {
         receiver: instrument.author[0]._id,
         senderInstrument: selectedItem,
         receiverInstrument: instrument,
       };
+      if (includeMoney && moneyOffered) {
+        exchangeData.moneyProposed = moneyOffered;
+      } else {
+        delete exchangeData.moneyProposed;
+      }
       const res = await createExchange(exchangeData, token);
       handleNotification();
-      setSuccessMessage("Exchange request sent successfully.");
+      showToast("Exchange request sent successfully.", "success");
       setTimeout(() => {
         onCloseModal();
       }, 1000);
     } catch (error) {
-      setError(error.message);
       showToast(error.message, "error");
     }
   };
+  const activeInstruments = instruments.filter(
+    (item) => item.itemStatus === "active"
+  );
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+      />
       <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -103,10 +129,12 @@ function ExchangeModal({
                 </h3>
                 <div className="mt-2">
                   <div className="space-y-4">
-                    {instruments.length === 0 ? (
+                    {loading ? (
+                      <LoadingSpinner />
+                    ) : instruments.length === 0 ? (
                       <p>You don't have any instruments yet.</p>
                     ) : (
-                      instruments.map((item) => (
+                      activeInstruments.map((item) => (
                         <InstrumentItem
                           key={item._id}
                           item={item}
@@ -118,6 +146,38 @@ function ExchangeModal({
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="flex justify-start px-3 py-4">
+              <input
+                type="checkbox"
+                checked={includeMoney}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              <label>Include Money</label>
+              {includeMoney && (
+                <div className="relative w-full">
+                  <input
+                    type="number"
+                    placeholder="Enter price in dinars"
+                    value={moneyOffered}
+                    onChange={(e) => setMoneyOffered(e.target.value)}
+                    step=".10"
+                    min="0"
+                    oninput="this.value = Math.abs(this.value)"
+                    className="bg-light mb-1 mt-2 block w-full rounded-lg px-2 
+                    py-3 text-gray-500 placeholder-gray-400 placeholder-opacity-60   
+                    shadow focus:outline-none focus:ring-1 focus:ring-kindyorange"
+                  />
+
+                  <div class="pointer-events-none absolute inset-0 flex w-full items-center justify-between gap-2 pl-[1.1rem]">
+                    <span></span>
+                    <div class="text-2xs mr-3 mt-1 rounded-md bg-gray-200 px-3 py-2 font-bold text-gray-700">
+                      DT
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="bg-kindygray px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6  ">
@@ -136,20 +196,9 @@ function ExchangeModal({
               Cancel
             </button>
           </div>
-          {error && (
-            <div className=" m-8 rounded-lg bg-red-700 p-3 text-center text-lg text-white shadow">
-              <p>{error}</p>
-            </div>
-          )}
-          {successMessage && (
-            <div className="bg-green-700 m-8 rounded-lg p-3 text-center text-lg text-white shadow">
-              <p>{successMessage}</p>
-            </div>
-          )}
         </div>
       </div>
     </div>
-    
   );
 }
 
