@@ -56,7 +56,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
         </div>
         <div className="mb-3 flex items-center justify-between px-1 md:flex-col md:items-start lg:flex-row lg:justify-between xl:flex-col xl:items-start 3xl:flex-row 3xl:justify-between">
           <div className="mb-2">
-            <Link to={"/admin/marketplace/instrument/" + instrument._id}>
+            <Link to={"instrument/" + instrument._id}>
               <p className="text-lg font-bold text-navy-700 dark:text-white">
                 {instrument.title}
               </p>
