@@ -1,13 +1,15 @@
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import Card from "components/card";
-import useInstrumentStore from "store/instrumentStore";
+import useInstrumentStore from "../../ZustStore/instrumentStore";
 import { Link } from "react-router-dom";
 import { Button } from "../index";
 import { useNavigate } from "react-router-dom";
+import ReactTimeAgo from "react-time-ago";
 
 const InstrumentCard = ({ instrument, bidders, image }) => {
   const [liked, setLiked] = useState(instrument.liked || false);
+  const [likeScore, setLikeScore] = useState(instrument.likeScore);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
 
@@ -23,6 +25,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
   async function handleLikeClick() {
     const response = await likePost(instrument._id, token);
     setLiked(!liked);
+    setLikeScore(response.likeScore);
   }
   return (
     // <Link to={"/admin/marketplace/instrument/" + instrument._id}>
@@ -32,19 +35,22 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
       <div className="h-full w-full">
         <div className="relative w-full">
           <img
-            src={image}
+            src={instrument.img}
             className="mb-3 h-1/2 w-full rounded-xl 3xl:h-full 3xl:w-full"
             alt=""
           />
           <button
             onClick={handleLikeClick}
-            className="absolute top-3 right-3 flex items-center justify-center rounded-full bg-white p-2 text-red-600 hover:cursor-pointer"
+            className="absolute right-3 top-3 flex items-center justify-center rounded-full bg-white p-2 text-red-600 hover:cursor-pointer"
           >
-            <div className="flex h-full w-full items-center justify-center rounded-full text-xl hover:bg-gray-50 dark:text-navy-900">
+            <div className="flex h-full w-full items-center justify-center rounded-full text-lg hover:bg-gray-50 dark:text-navy-900">
               {!liked ? (
                 <IoHeartOutline />
               ) : (
-                <IoHeart className="text-red-600" />
+                <div>
+                  <IoHeart className="text-red-600" />
+                  <span className="text-xs">{likeScore}</span>
+                </div>
               )}
             </div>
           </button>
@@ -65,7 +71,7 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
             </p>
           </div>
 
-          <div className="flex flex-row-reverse md:mt-2 lg:mt-0">
+          {/* <div className="flex flex-row-reverse md:mt-2 lg:mt-0">
             <span className="z-0 ml-px inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#E0E5F2] text-xs text-navy-700 dark:!border-navy-800 dark:bg-gray-800 dark:text-white">
               +5
             </span>
@@ -81,16 +87,24 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
                 />
               </span>
             ))}
-          </div>
+          </div> */}
         </div>
 
         <div className="flex items-center justify-between md:flex-col md:items-start lg:flex-row lg:justify-between xl:flex-col 2xl:items-start 3xl:flex-row 3xl:items-center 3xl:justify-between">
           <div className="flex">
-            <Button
-              text={instrument.status}
-              className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
-            />
+            {instrument.status === "sell" ? (
+              <Button
+                text={`${instrument.price} DT `}
+                className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
+              />
+            ) : (
+              <Button
+                text={instrument.status}
+                className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
+              />
+            )}
           </div>
+          <ReactTimeAgo date={instrument.createdAt} className="text-gray-600" />{" "}
           {/* <button
             href=""
             className="linear rounded-[15px] bg-kindyorange px-4 py-2 text-base font-medium text-white transition duration-200 hover:bg-brand-800 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300 dark:active:opacity-90"
