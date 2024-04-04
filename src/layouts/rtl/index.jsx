@@ -7,6 +7,7 @@ import PromoSection from "../../views/rtl/default/components/front/PromoSection"
 import ClassSection from "../../views/rtl/default/components/front/ClassSection";
 import CourseDetails from "../../views/rtl/default/components/front/CourseDetails";
 import Dashboard from "../../views/rtl/default";
+import Footer from "components/footer/Footer";
 
 export default function RTL(props) {
   const { ...rest } = props;
