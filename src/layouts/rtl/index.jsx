@@ -5,7 +5,9 @@ import Sidebar from "components/sidebar/RTL";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
 import Header from "views/rtl/default/components/Header";
-
+import EvaluationList from "views/teacherExam/evaluation.jsx";
+import ExamClass from "views/teacherExam/examClass.jsx";
+import StudentExams from "views/studentExam/studentGrade.jsx";
 export default function RTL(props) {
   const { ...rest } = props;
   const location = useLocation();
@@ -57,14 +59,10 @@ export default function RTL(props) {
     });
   };
 
-  document.documentElement.dir = "rtl";
+ // document.documentElement.dir = "rtl";
   return (
     <div >
-      <h1>Paragraphs are the building blocks of papers. Many
-         students define paragraphs in terms of length: a paragraph is 
-         a group of at least five sentences, a paragraph is half a page long,
-          etc. In reality, though, the unity and coherence of ideas among senten
-          ces is what constitutes a paragraph. </h1>
+     
           <Header/>
      {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
       {/* Navbar & Main Content */}
@@ -98,6 +96,12 @@ export default function RTL(props) {
           </div>
         </main>
       </div> */}
+       <Routes>
+                {getRoutes(routes)}
+                <Route path={"/evaluations"} element={<EvaluationList />} />
+                <Route path={"/examClass"} element={<ExamClass />} />
+                <Route path={"/studentExams"} element={<StudentExams />} />
+              </Routes>
                   <div className="p-3">
 
           <Footer />

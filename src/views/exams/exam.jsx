@@ -60,8 +60,10 @@ const ExamsList = () => {
     const handleSendEmail = async (c) => {
         try {
             const result = await sendEmail(c);
-            if (result.success) {
+            if (result) {
+                console.log(result);
                 setAlertMessage('Email sent successfully');
+                alert('Email sent successfully');
             } else {
                 setAlertMessage('Failed to send email: ' + result.message);
             }
@@ -187,7 +189,7 @@ const ExamsList = () => {
     useEffect(() => {
         
 
-        //getGrades();
+          //getGrades();
           getExams();
           getClasses();
           getTeachers();
@@ -359,11 +361,11 @@ const ExamsList = () => {
                                     </ButtonComponent>
                                 </div>
                                 <div>    <ExamTimetablePDF className="mt-15" exams={exams} /></div>
-                                <div>
+                                {/* <div>
                                     <ButtonComponent className="mb-3" text="Student Grades" color="#006BBE" onClick={() => setIsDrawerOpen4(true)}>
                                         Show Grades
                                     </ButtonComponent>
-                                </div>
+                                </div> */}
 
                             </div>
 
@@ -540,7 +542,7 @@ const ExamsList = () => {
                                                                 onClick={() => {
                                                                     handleSendEmail(exam.classe)
                                                                 }}
-                                                                color="#F98100"
+                                                                color="#F99100"
                                                             />
                                                     </div>
                                                 </td>

@@ -192,3 +192,43 @@ export const fetchTeachers = async () => {
     }
 };
 
+
+export const fetchStudentsExam = async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/classes/studentsClass/6601738a95f6e1c274e23004`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+export const fetchClassExams = async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/examTeacher/6601738a95f6e1c274e23004`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+
+export const fetchStudentClasses = async (name) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/classes/StudentsByClass/${name}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};

@@ -15,6 +15,7 @@ import EventsList from "views/events/EventsList";
 
 import SignIn from "views/auth/SignIn";
 import ExamsList from "views/exams/exam.jsx"
+import EvaluationList from "views/teacherExam/evaluation.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
 import TicketsList from "views/tickets/TicketsList";
@@ -100,6 +101,16 @@ const routes = [
         component: <ExamsList />,
     },
 
+    {
+        name: "All Evaluations",
+        layout: "/rtl",
+        path: "evaluation",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+      
+        component: <EvaluationList />,
+      },
+
 {
     name: "Sign In",
         layout: "/auth",
@@ -142,6 +153,7 @@ const routes = [
 
   component: <RTLDefault />,
 },
+
 
 
 ];
