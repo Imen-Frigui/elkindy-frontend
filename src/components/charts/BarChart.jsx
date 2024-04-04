@@ -4,28 +4,73 @@ import Chart from 'react-apexcharts';
 class BarChart extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      chartData: [],
-      chartOptions: {},
+      options: {
+        chart: {
+          id: 'events-bar-chart',
+        },
+        colors: ['#7091F5'], 
+        xaxis: {
+          categories: props.chartData.labels,
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          },
+        },
+        fill: {
+          opacity: 1,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        title: {
+          align: 'center',
+          margin: 20,
+          style: {
+            fontSize: '24px',
+          },
+        },
+      },
+      series: [
+        {
+          name: 'Event Count',
+          data: props.chartData.datasets[0].data,
+        },
+      ],
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      chartData: this.props.chartData,
-      chartOptions: this.props.chartOptions,
-    });
+  componentDidUpdate(prevProps) {
+    if (prevProps.chartData !== this.props.chartData) {
+      this.setState({
+        options: {
+          ...this.state.options,
+          xaxis: {
+            categories: this.props.chartData.labels,
+          },
+        },
+        series: [
+          {
+            name: 'Event Count',
+            data: this.props.chartData.datasets[0].data,
+          },
+        ],
+      });
+    }
   }
 
   render() {
     return (
-      <Chart
-        options={this.state.chartOptions}
-        series={this.state.chartData}
-        type="bar"
-        width="100%"
-        height="100%"
-      />
+      <div>
+        <Chart
+          options={this.state.options}
+          series={this.state.series}
+          type="bar"
+          height="350"
+        />
+      </div>
     );
   }
 }

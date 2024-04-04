@@ -22,7 +22,7 @@ const Dashboard = () => {
     <div>
       {/* Card widget */}
 
-    <Header/>
+   <Header/>
     </div>
   );
 };
