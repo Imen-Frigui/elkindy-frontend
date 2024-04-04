@@ -104,7 +104,7 @@ const routes = [
     {
         name: "All Exams",
         layout: "/admin",
-        path: "exams",
+        path: "examClass",
         icon: <GiPapers className="h-6 w-6" />,
         component: <ExamsList />,
     },
@@ -112,11 +112,9 @@ const routes = [
     {
 
         name: "All Evaluations",
-        layout: "/rtl",
-        path: "evaluation",
-        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-        hide: true,
-      
+        layout: "/admin",
+        path: "evaluations",
+        icon: <MdBook className="h-6 w-6"  />,
         component: <EvaluationList />,
       },
 
