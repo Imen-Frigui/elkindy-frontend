@@ -16,15 +16,20 @@ import TaskCard from "views/rtl/default/components/TaskCard";
 import tableDataCheck from "./variables/tableDataCheck.json";
 import tableDataComplex from "./variables/tableDataComplex.json";
 import Header from "./components/Header";
+import Navbar from "./components/front/Navbar";
+import PromoSection from "./components/front/PromoSection";
+import ClassSection from "./components/front/ClassSection";
+import React from "react";
 
 const Dashboard = () => {
   return (
-    <div>
-      {/* Card widget */}
-
-   <Header/>
-    </div>
+      <div className="bg-[#F7F5EF]">
+          <Navbar />
+          <PromoSection />
+          <div id="class-section" className="my-4">
+            <ClassSection />
+          </div>
+      </div>
   );
 };
-
 export default Dashboard;

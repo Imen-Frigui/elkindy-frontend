@@ -151,7 +151,7 @@ export const createGrade = async (gradeData) => {
 
 export const fetchClasses = async () => {
     try {
-        const response = await fetch(`http://localhost:3000/api/class/classes`);
+        const response = await fetch(`http://localhost:3000/api/classes/Allclasses`);
         if (response.ok) {
             return await response.json();
         } else {
