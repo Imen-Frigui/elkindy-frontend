@@ -39,8 +39,9 @@ const App = () => {
 
 
 
-
+  <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
   <Route path="teacher/*" element={<Teacher />}>
+          </Route>
           </Route>
 
 
