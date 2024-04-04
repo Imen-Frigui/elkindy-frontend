@@ -60,8 +60,8 @@ function UserInstruments({ onInstrumentClick }) {
               </h4>
             </div>
             <p className="mt-2 text-base text-gray-600">
-              Explore and manage your posted instruments in the marketplace.
-              Find detailed information about each of your listings below.
+              Click on any instrument below to view incoming trade requests and
+              manage your listings.{" "}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-4 space-x-4 md:grid-cols-3">
@@ -84,12 +84,12 @@ function UserInstruments({ onInstrumentClick }) {
                   >
                     <label>
                       <div
-                        className="lg:card-hover group relative flex h-full rounded-md border-[1px]  border-gray-300 "
+                        className="lg:card-hover group relative flex h-full rounded-md border-[1px] border-gray-300 "
                         style={{ width: "210px", height: "350px" }}
                       >
-                        <div className="border-neutral-100 bg-neutral-100 aspect-grid flex h-full w-full  cursor-pointer  flex-col overflow-hidden rounded-md pb-2 transition-all">
-                          <div className="relative -mb-10  h-full w-full grow">
-                            <div className="aspect-video  w-full"></div>
+                        <div className="border-neutral-100 bg-neutral-100 aspect-grid flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-md pb-2 transition-all">
+                          <div className="relative -mb-10 h-full w-full grow">
+                            <div className="aspect-video w-full"></div>
                             <img
                               alt="instrument image"
                               loading="lazy"
@@ -107,7 +107,7 @@ function UserInstruments({ onInstrumentClick }) {
                             />
                             <div className="border-t-neutral-100 absolute -bottom-4 left-0 right-0 z-[2] h-16 w-full skew-y-6 scale-x-105 border-t bg-white"></div>
                           </div>
-                          <div className="false z-10 flex-none px-3 pb-2">
+                          <div className="false z-10 flex-none px-3 pb-2 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
                             <h2
                               className="card-title font-arabic my-2 line-clamp-2 min-w-full max-w-min text-sm font-medium leading-5 text-gray-800"
                               dir="auto"
@@ -134,7 +134,7 @@ function UserInstruments({ onInstrumentClick }) {
                               >
                                 <path d="M128,256A128,128,0,1,0,256,384,128,128,0,0,0,128,256Zm379-54.86L400.07,18.29a37.26,37.26,0,0,0-64.14,0L229,201.14C214.76,225.52,232.58,256,261.09,256H474.91C503.42,256,521.24,225.52,507,201.14ZM480,288H320a32,32,0,0,0-32,32V480a32,32,0,0,0,32,32H480a32,32,0,0,0,32-32V320A32,32,0,0,0,480,288Z"></path>
                               </svg>
-                              <span className=" text-3xs text-neutral-500 w-3/5 truncate font-medium md:text-xs lg:text-xs">
+                              <span className=" text-3xs text-neutral-500 w-3/5 truncate font-medium dark:text-white md:text-xs lg:text-xs">
                                 {instrument.status}
                               </span>
                             </div>
@@ -156,10 +156,10 @@ function UserInstruments({ onInstrumentClick }) {
                                   clip-rule="evenodd"
                                 ></path>
                               </svg>
-                              <span className="text-3xs text-neutral-500 line-clamp-1 w-3/5 truncate font-medium md:text-xs lg:text-xs">
-                                Ben Arous,
+                              <span className="text-3xs text-neutral-500 line-clamp-1 w-3/5 truncate font-medium dark:text-white md:text-xs lg:text-xs">
+                                Ben Arous
                               </span>
-                              <span className="text-3xs text-neutral-500 line-clamp-1 w-3/5 truncate font-medium md:text-xs lg:text-xs">
+                              <span className="text-3xs text-neutral-500 line-clamp-1 w-3/5 truncate font-medium dark:text-white md:text-xs lg:text-xs">
                                 {" "}
                                 <ReactTimeAgo
                                   date={instrument.createdAt}
@@ -167,6 +167,11 @@ function UserInstruments({ onInstrumentClick }) {
                                 />
                               </span>
                             </div>
+                            <button className="mt-3 flex-row w-full justify-center rounded-lg border border-gray-300 bg-gray-300 p-2">
+                              <span className="text-3xs line-clamp-1 font-medium md:text-xs lg:text-xs">
+                                View incoming trade requests
+                              </span>
+                            </button>
                           </div>
                         </div>
                       </div>
