@@ -7,6 +7,7 @@ import Storage from "./components/Storage";
 import Upload from "./components/Upload";
 import axios from "axios";
 import EditProfileModal from "./components/EditProfile";
+import { UserSearches } from "components";
 
 const ProfileOverview = () => {
   const [userData, setUserData] = useState(null);
@@ -79,7 +80,11 @@ const ProfileOverview = () => {
           <Project />
         </div>
         <div className="col-span-5 lg:col-span-6 lg:mb-0 3xl:col-span-5">
+          <UserSearches />
+        </div>
+        <div className="col-span-5 lg:col-span-6 lg:mb-0 3xl:col-span-5">
           <General />
+
         </div>
 
         <div className="col-span-5 lg:col-span-12 lg:mb-0 3xl:!col-span-3">

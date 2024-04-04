@@ -88,7 +88,7 @@ function InstrumentDetail() {
                 {instrument.title}
               </h1>
               <div>
-              <h2 className="font-bold text-kindyorange">{instrument.brand}</h2>
+                <h2 className="font-bold text-kindyorange">{instrument.brand}</h2>
 
               </div>
               <div className="mt-3  space-y-2">
@@ -109,6 +109,10 @@ function InstrumentDetail() {
                       className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
                     />
                   )}
+                  <Button
+                    text={"age " + instrument.age}
+                    className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
+                  />
                 </div>
               </div>
               <div class="items-left lg:items-lest flex w-full flex-col justify-between px-3 align-middle lg:flex-row ">

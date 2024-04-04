@@ -84,6 +84,10 @@ const InstrumentCard = ({ instrument, bidders, image }) => {
                 className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
               />
             )}
+            <Button
+                text={"age " + instrument.age}
+                className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
+              />
           </div>
           <ReactTimeAgo date={instrument.createdAt} className="text-gray-600" />{" "}
         </div>
