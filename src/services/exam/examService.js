@@ -129,7 +129,23 @@ export const createExam = async (examData) => {
     }
 };
 
-
+export const sendEmail = async (name) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/sendEmail/${name}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+           
+        });
+        if (response.ok) {
+            return { success: true, message: 'Email sent successfully' };
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+};
 
 export const createGrade = async (gradeData) => {
     try {
@@ -151,7 +167,7 @@ export const createGrade = async (gradeData) => {
 
 export const fetchClasses = async () => {
     try {
-        const response = await fetch(`http://localhost:3000/api/class/classes`);
+        const response = await fetch(`http://localhost:3000/api/classes/Allclasses`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -176,3 +192,43 @@ export const fetchTeachers = async () => {
     }
 };
 
+
+export const fetchStudentsExam = async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/classes/studentsClass/6601738a95f6e1c274e23004`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+export const fetchClassExams = async () => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/examTeacher/6601738a95f6e1c274e23004`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+
+export const fetchStudentClasses = async (name) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/classes/StudentsByClass/${name}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};

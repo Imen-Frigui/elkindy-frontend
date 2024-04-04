@@ -1,22 +1,19 @@
-import Banner from "./components/Banner";
 import guitar from "assets/img/nfts/acoustic-guitar-grey.jpg";
 import avatar1 from "assets/img/avatars/avatar1.png";
+import banner from "assets/img/nfts/banner7.jpg";
 
 import InstrumentCard from "components/card/InstrumentCard";
 
-import useInstrumentStore from "store/instrumentStore";
+import useInstrumentStore from "ZustStore/instrumentStore";
 import { useEffect, useCallback, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
 import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
 import { useQuery } from "../../../hooks/useQuery";
-import useShowToast from "../../../hooks/useShowToast";
 import { useNavigate } from "react-router-dom";
+import Banner1 from "./components/Banner";
 
-const Marketplace = ({ location }) => {
-  const { type } = useParams();
+const Marketplace = () => {
   const query = useQuery();
-  const showToast = useShowToast();
   const [token, setToken] = useState("");
 
   const [status, setStatus] = useState("All");
@@ -67,7 +64,6 @@ const Marketplace = ({ location }) => {
       // }
     };
     fetchData();
-    console.log(instruments);
   }, [age, status, sort, searchQuery]);
 
   const isActiveAge = useCallback(
@@ -119,8 +115,16 @@ const Marketplace = ({ location }) => {
   return (
     <div className=" z-500 mt-2 grid h-full grid-cols-1 gap-5 md:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-3">
       <div className="col-span-1 h-fit w-full md:col-span-5">
-        <Banner />
-        <div className=" mb-2 mt-2  flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue py-0 px-4 dark:bg-indigo-50 md:flex-row md:items-center">
+        <Banner1
+          backgroundImage={banner}
+          title="Discover Your Perfect Harmony: Instruments Marketplace"
+          subtitle="Exchange, Play, Repeat: Unleash Your Musical Potential"
+          button1Link="create"
+          button1Text="Post your instrument now"
+          button2Link="trades"
+          button2Text="My trades"
+        />
+        <div className=" mb-2 mt-2  flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue px-4 py-0 dark:bg-indigo-50 md:flex-row md:items-center">
           <h4 className="ml-1 text-2xl font-bold text-white dark:text-navy-700 ">
             Explore Instruments:
           </h4>
@@ -139,7 +143,7 @@ const Marketplace = ({ location }) => {
           </div>
           <button
             onClick={handleShowFilters}
-            className="border-transparent border-1 w-58 mb-3 flex items-center rounded-lg  bg-kindyorange py-2 px-4 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
+            className="border-transparent border-1 w-58 mb-3 flex items-center rounded-lg  bg-kindyorange px-4 py-2 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +162,6 @@ const Marketplace = ({ location }) => {
             Filter
           </button>
         </div>
-
         <div className=" grid grid-cols-1 gap-3 md:grid-cols-5">
           <div
             className={
@@ -198,7 +201,7 @@ const Marketplace = ({ location }) => {
             hidden={!showFilter}
           >
             <div className="grid grid-cols-1  ">
-              <div className=" h-15 md:h20 mb-2 flex items-baseline justify-between space-y-1 overflow-hidden rounded-[20px] bg-kindydarkblue py-5 px-6 dark:bg-indigo-50 md:flex-col  ">
+              <div className=" h-15 md:h20 mb-2 flex items-baseline justify-between space-y-1 overflow-hidden rounded-[20px] bg-kindydarkblue px-6 py-5 dark:bg-indigo-50 md:flex-col  ">
                 <p className=" text-left font-bold text-white  dark:text-navy-800">
                   El Kindy Marketplace
                 </p>
@@ -240,7 +243,7 @@ const Marketplace = ({ location }) => {
                     "Exchange",
                     "Maintenance",
                     "Available for borrow",
-                    "Buy",
+                    "Sell",
                   ].map((cat, i) => {
                     return (
                       <Button
@@ -261,13 +264,11 @@ const Marketplace = ({ location }) => {
             </div>
           </div>
         </div>
-
         <div className="mb-5 mt-5 flex items-center justify-between px-[26px]">
           <h4 className="text-2xl font-bold text-navy-700 dark:text-white">
             Recently Added
           </h4>
         </div>
-
         {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <InstrumentCard
             bidders={[avatar1, avatar2, avatar3]}

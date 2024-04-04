@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import AttendanceSheet from "./components/AttendanceSheet";
 import ClassSelector from "./components/ClassSelector";
-import TeacherSchedule from "./TeacherSchedule";
+//import TeacherSchedule from "./TeacherSchedule";
 
 const TeacherDashboard = () => {
     const [userData, setUserData] = useState(null);

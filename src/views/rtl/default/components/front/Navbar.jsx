@@ -17,8 +17,20 @@ const Navbar = () => {
             }}
         >
             <nav className="flex justify-between items-center px-28 py-10">
+                <Link to="/rtl" className="flex items-center">
+                    <img src={logo} alt="El Kindy Conservatoire" />
+                </Link>
+
+
+                <div className="flex justify-between md:flex gap-28">
+                    <Link to="/" className="hover:underline">Home</Link>
+                    <Link to="/about" className="hover:underline">About School</Link>
+                    <Link to="/gallery" className="hover:underline">Gallery</Link>
+                    <Link to="/elkindy-band" className="hover:underline">El Kindy Band</Link>
+                </div>
+
                 <Link
-                    to="/login"
+                    to="/auth/sign-in"
                     style={{
                         width: '135px',
                         height: '37px',
@@ -32,16 +44,6 @@ const Navbar = () => {
                     LOGIN
                 </Link>
 
-                <div className="flex justify-between md:flex gap-28">
-                    <Link to="/" className="hover:underline">Home</Link>
-                    <Link to="/about" className="hover:underline">About School</Link>
-                    <Link to="/gallery" className="hover:underline">Gallery</Link>
-                    <Link to="/elkindy-band" className="hover:underline">El Kindy Band</Link>
-                </div>
-
-                <Link to="/rtl" className="flex items-center">
-                    <img src={logo} alt="El Kindy Conservatoire" />
-                </Link>
             </nav>
             <div className="text-center absolute w-full mt-12">
                 <h1 className="text-5xl font-script text-yellow-400"

@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import { useSelector} from "react-redux";
 
+
 function SideBarr({ open, onClose }) {
   const [userData, setUserData] = useState(null);
 
@@ -58,11 +59,11 @@ function SideBarr({ open, onClose }) {
   }, [userData]);
 
   const isTeacher = userData?.user?.role === 'teacher';
-  console.log('isTeacher', isTeacher);
+  //console.log('isTeacher', isTeacher);
   return (
     <>
       <div
-        class={`sm:none  duration-175 linear fixed left-0 !z-50 flex h-screen items-center justify-center bg-kindygray  transition-all dark:!bg-navy-900 md:!z-50 lg:!z-50 xl:!z-0  ${
+        className={`sm:none  duration-175 linear fixed left-0 !z-50 flex h-screen items-center justify-center bg-kindygray  transition-all dark:!bg-navy-900 md:!z-50 lg:!z-50 xl:!z-0  ${
           open ? "translate-x-0" : "-translate-x-96"
         } `}
       >
@@ -86,11 +87,11 @@ function SideBarr({ open, onClose }) {
                   viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="h-6 w-6 cursor-pointer text-white hover:hover:text-kindyyellow"
+                className="h-6 w-6 cursor-pointer text-white hover:hover:text-kindyyellow"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
                 />
               </svg>

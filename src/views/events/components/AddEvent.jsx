@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { addEvent } from "../../../services/event/eventService";
-import ButtonComponent from "../../../components/button/ButtonComponnent";
-// import SuccessAlert from "../../../components/alert/AlertComponent";
-
-const AddEvent = ({ onEventAdded }) => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+import { Link } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Card from "components/card";
+import { FaRegCalendarPlus } from "react-icons/fa";
+import { IoArrowBackCircle, IoTicketSharp } from "react-icons/io5";
+import TicketManagementModal from "./TicketManagementModal";
+const AddEvent = () => {
+  // const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventLocation, setEventLocation] = useState("");
@@ -25,13 +29,26 @@ const AddEvent = ({ onEventAdded }) => {
   const [formValid, setFormValid] = useState(false);
   const [startTimeError, setStartTimeError] = useState("");
   const [endTimeError, setEndTimeError] = useState("");
-  // const [successMessage, setSuccessMessage] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
-  const handleDrawerClose = () => setIsDrawerOpen(false);
 
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+  }
+ 
+  };
   const handleAddEvent = async (event) => {
     event.preventDefault();
-    // Form validation
     if (
       !eventName ||
       !eventLocation ||
@@ -48,45 +65,45 @@ const AddEvent = ({ onEventAdded }) => {
       setEndDateError(endDate ? "" : "End date is required");
       return;
     }
-    const eventData = {
-      title: eventName,
-      location: eventLocation,
-      description: eventDescription,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      capacity,
-      eventType: eventType === "Other" ? eventTypeInput : eventType,
-      status: eventStatus,
-    };
+    // const eventData = {
+    //   title: eventName,
+    //   location: eventLocation,
+    //   description: eventDescription,
+    //   startDate,
+    //   endDate,
+    //   startTime,
+    //   endTime,
+    //   capacity,
+    //   eventType: eventType === "Other" ? eventTypeInput : eventType,
+    //   status: eventStatus,
+    //   image: imageFile 
+    //     };
+    const formData = new FormData();
+    formData.append('title', eventName);
+    formData.append('location', eventLocation);
+    formData.append('description', eventDescription);
+    formData.append('startDate', startDate);
+    formData.append('endDate', endDate);
+    formData.append('startTime', startTime);
+    formData.append('endTime', endTime);
+    formData.append('capacity', capacity);
+    formData.append('eventType', eventType === "Other" ? eventTypeInput : eventType);
+    formData.append('status', eventStatus);
+  
+    if (imageFile) { 
+      formData.append('image', imageFile);
+    }
 
     try {
-      await addEvent(eventData);
-      onEventAdded();
-      // setSuccessMessage("Event added successfully!");
-      handleDrawerClose();
-      // Reset form fields
-      // setEventName("");
-      // setEventDescription("");
-      // setEventLocation("");
-      // setStartDate("");
-      // setEndDate("");
-      // setStartTime("");
-      // setEndTime("");
-      // setCapacity("");
-      // setEventType("Other");
-      // setEventStatus("Scheduled");
+      await addEvent(formData);
       resetForm();
+      toast.success("Event added successfully!");
+
     } catch (error) {
       alert("Failed to add event");
       console.error(error);
     }
   };
-
-  // const handleAlertClose = () => {
-  //   setSuccessMessage("");
-  // };
 
   const resetForm = () => {
     setEventName("");
@@ -107,8 +124,8 @@ const AddEvent = ({ onEventAdded }) => {
     if (!eventName) {
       setTitleError("Title is required");
       setFormValid(false);
-    } else if (eventName.length > 20) {
-      setTitleError("Title cannot exceed 20 characters");
+    } else if (eventName.length > 30) {
+      setTitleError("Title cannot exceed 30 characters");
       setFormValid(false);
     } else {
       setTitleError("");
@@ -137,8 +154,8 @@ const AddEvent = ({ onEventAdded }) => {
     if (!eventDescription) {
       setDescriptionError("Description is required");
       setFormValid(false);
-    } else if (eventDescription.length > 200) {
-      setDescriptionError("Description cannot exceed 200 characters");
+    } else if (eventDescription.length > 300) {
+      setDescriptionError("Description cannot exceed 300 characters");
       setFormValid(false);
     } else {
       setDescriptionError("");
@@ -160,7 +177,7 @@ const AddEvent = ({ onEventAdded }) => {
   };
   const validateStartDate = () => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset hours to start of the day
+    today.setHours(0, 0, 0, 0);
     const selectedStartDate = new Date(startDate);
     selectedStartDate.setHours(0, 0, 0, 0);
   
@@ -209,276 +226,295 @@ const AddEvent = ({ onEventAdded }) => {
       setFormValid(true);
     }
   };
+
   return (
     <>
-      <ButtonComponent
-        className="mb-3"
-        text="Add Event"
-        color="#006BBE"
-        onClick={() => setIsDrawerOpen(true)}
+        <ToastContainer position="top-center" />
+      <Card extra={"mt-3 !z-5 overflow-hidden"}>
+      <div className="text-center">
+      <h1 className="relative mb-4 mt-2 text-2xl font-semibold">
+  <FaRegCalendarPlus
+    className="absolute top-0 right-0 mt-2 mr-3 cursor-pointer"
+  />
+    <Link to="/admin/events">
+            <IoArrowBackCircle
+              className="absolute top-0 left-0 mt-2 ml-3 cursor-pointer"
+              title="Back To Events List"
+            />
+          </Link>
+</h1>
+{/* Manage Tickets section */}
+          <div className="border border-gray-300 rounded-lg p-4 mb-4 inline-block mr-4">
+            <button
+              onClick={handleModalOpen}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center justify-center"
+            >
+              <IoTicketSharp className="mr-1" />
+              Manage Tickets For This Event
+            </button>
+          </div>
+<form onSubmit={handleAddEvent} className="inline-block mt-4 mb-4 w-full max-w-lg pt-2 pb-4 border-2 border-gray-300 shadow-lg rounded-xl p-2">
+        <h1 className="text-sm font-semibold uppercase text-blue-500 dark:text-gray-500 mt-2 mb-4">
+    Add New Event
+</h1>
+  <div className="space-y-4">
+    <div>
+              <label htmlFor="image" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                Event Image
+              </label>
+              <input
+                type="file"
+                id="image"
+                onChange={handleImageChange}
+                className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              />
+            </div>
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label
+        htmlFor="name"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
       >
-        Add Event
-      </ButtonComponent>
-      {/* {successMessage && (
-        <SuccessAlert message={successMessage} onClose={handleAlertClose} />
-      )} */}
-      {isDrawerOpen && (
-        <div
-          id="drawer-create-event"
-          className="fixed top-0 right-0 z-40 h-screen w-full max-w-xs transform-none overflow-y-auto bg-white p-4 transition-transform dark:bg-gray-800"
-        >
-          <h5
-            id="drawer-label"
-            className="mb-6 inline-flex items-center text-sm font-semibold uppercase text-gray-500 dark:text-gray-400"
-          >
-            New Event
-          </h5>
-          <button
-            onClick={handleDrawerClose}
-            className="bg-transparent absolute top-2.5 right-2.5 inline-flex items-center rounded-lg p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-          >
-            <span>Close</span>
-          </button>
-          <form onSubmit={handleAddEvent}>
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Event Title
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  placeholder="Enter your Event title"
-                  value={eventName}
-                  onChange={(e) => {
-                    setEventName(e.target.value);
-                    validateTitle();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    titleError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {titleError && (
-                  <p className="text-sm text-red-500">{titleError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="event-type"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Event Type
-                </label>
-                <select
-                  id="event-type"
-                  value={eventType}
-                  onChange={(e) => setEventType(e.target.value)}
-                  className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                  required
-                >
-                  <option value="Charity Concert">Charity Concert</option>
-                  <option value="Final Year Party">Final Year Party</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label
-                  htmlFor="description"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  rows="4"
-                  placeholder="write your description here ..."
-                  value={eventDescription}
-                  onChange={(e) => {
-                    setEventDescription(e.target.value);
-                    validateDescription();
-                  }}
-                  className={`focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    descriptionError ? "border-red-500" : ""
-                  }`}
-                  required
-                ></textarea>
-                {descriptionError && (
-                  <p className="text-sm text-red-500">{descriptionError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="status"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Status
-                </label>
-                <select
-                  id="status"
-                  value={eventStatus}
-                  onChange={(e) => setEventStatus(e.target.value)}
-                  className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                  required
-                >
-                  <option value="Scheduled">Scheduled</option>
-                  <option value="Active">Active</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Cancelled">Cancelled</option>
-                  <option value="Postponed">Postponed</option>
-                  <option value="Pending">Pending</option>
-                </select>
-              </div>
-              <div>
-                <label
-                  htmlFor="location"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Location
-                </label>
-                <input
-                  type="text"
-                  id="location"
-                  placeholder="Enter your location"
-                  value={eventLocation}
-                  onChange={(e) => {
-                    setEventLocation(e.target.value);
-                    validateLocation();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    locationError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {locationError && (
-                  <p className="text-sm text-red-500">{locationError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="startDate"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Start Date
-                </label>
-                <input
-                  type="date"
-                  id="startDate"
-                  value={startDate}
-                  onChange={(e) => {
-                    setStartDate(e.target.value);
-                    validateStartDate();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    startDateError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {startDateError && (
-                  <p className="text-sm text-red-500">{startDateError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="endDate"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  End Date
-                </label>
-                <input
-                  type="date"
-                  id="endDate"
-                  value={endDate}
-                  onChange={(e) => {
-                    setEndDate(e.target.value);
-                    validateEndDate();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    endDateError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {endDateError && (
-                  <p className="text-sm text-red-500">{endDateError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="startTime"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Start Time
-                </label>
-                <input
-                  type="time"
-                  id="startTime"
-                  value={startTime}
-                  onChange={(e) => {
-                    setStartTime(e.target.value);
-                    validateStartTime();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    startTimeError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {startTimeError && (
-                  <p className="text-sm text-red-500">{startTimeError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="endTime"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  End Time
-                </label>
-                <input
-                  type="time"
-                  id="endTime"
-                  value={endTime}
-                  onChange={(e) => {
-                    setEndTime(e.target.value);
-                    validateEndTime();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    endTimeError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {endTimeError && (
-                  <p className="text-sm text-red-500">{endTimeError}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="capacity"
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Capacity
-                </label>
-                <input
-                  type="number"
-                  id="capacity"
-                  placeholder="capacity"
-                  value={capacity}
-                  onChange={(e) => {
-                    setCapacity(e.target.value);
-                    validateCapacity();
-                  }}
-                  className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
-                    capacityError ? "border-red-500" : ""
-                  }`}
-                  required
-                />
-                {capacityError && (
-                  <p className="text-sm text-red-500">{capacityError}</p>
-                )}
-              </div>
-
+        Event Title
+      </label>
+      <input
+        type="text"
+        id="name"
+        placeholder="Enter your Event title"
+        value={eventName}
+        onChange={(e) => {
+          setEventName(e.target.value);
+          validateTitle();
+        }}
+        className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          titleError ? "border-red-500" : ""
+        }`}
+        required
+      />
+      {titleError && (
+        <p className="text-sm text-red-500">{titleError}</p>
+      )}
+    </div>
+    <div>
+      <label
+        htmlFor="location"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Location
+      </label>
+      <input
+        type="text"
+        id="location"
+        placeholder="Enter your location"
+        value={eventLocation}
+        onChange={(e) => {
+          setEventLocation(e.target.value);
+          validateLocation();
+        }}
+        className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          locationError ? "border-red-500" : ""
+        }`}
+        required
+      />
+      {locationError && (
+        <p className="text-sm text-red-500">{locationError}</p>
+      )}
+    </div>
+  </div>
+  <div>
+    <label
+      htmlFor="description"
+      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+    >
+      Description
+    </label>
+    <textarea
+      id="description"
+      rows="4"
+      placeholder="write your description here ..."
+      value={eventDescription}
+      onChange={(e) => {
+        setEventDescription(e.target.value);
+        validateDescription();
+      }}
+      className={`focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+        descriptionError ? "border-red-500" : ""
+      }`}
+      required
+    ></textarea>
+    {descriptionError && (
+      <p className="text-sm text-red-500">{descriptionError}</p>
+    )}
+  </div>
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label
+        htmlFor="event-type"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Event Type
+      </label>
+      <select
+        id="event-type"
+        value={eventType}
+        onChange={(e) => setEventType(e.target.value)}
+        className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        required
+      >
+        <option value="Charity Concert">Charity Concert</option>
+        <option value="Final Year Party">Final Year Party</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div>
+      <label
+        htmlFor="status"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Status
+      </label>
+      <select
+        id="status"
+        value={eventStatus}
+        onChange={(e) => setEventStatus(e.target.value)}
+        className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        required
+      >
+        <option value="Scheduled">Scheduled</option>
+        <option value="Active">Active</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Postponed">Postponed</option>
+        <option value="Pending">Pending</option>
+      </select>
+    </div>
+  </div>
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label
+        htmlFor="startDate"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Start Date
+      </label>
+      <input
+        type="date"
+        id="startDate"
+        value={startDate}
+        onChange={(e) => {
+          setStartDate(e.target.value);
+          validateStartDate();
+        }}
+        className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          startDateError ? "border-red-500" : ""
+        }`}
+        required
+      />
+      {startDateError && (
+        <p className="text-sm text-red-500">{startDateError}</p>
+      )}
+    </div>
+    <div>
+      <label
+        htmlFor="endDate"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        End Date
+      </label>
+      <input
+        type="date"
+        id="endDate"
+        value={endDate}
+        onChange={(e) => {
+          setEndDate(e.target.value);
+          validateEndDate();
+        }}
+        className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          endDateError ? "border-red-500" : ""
+        }`}
+        required
+      />
+      {endDateError && (
+        <p className="text-sm text-red-500">{endDateError}</p>
+      )}
+    </div>
+  </div>
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label
+        htmlFor="startTime"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Start Time
+      </label>
+      <input
+        type="time"
+        id="startTime"
+        value={startTime}
+        onChange={(e) => {
+          setStartTime(e.target.value);
+          validateStartTime();
+        }}
+        className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          startTimeError ? "border-red-500" : ""
+        }`}
+        required
+      />
+      {startTimeError && (
+        <p className="text-sm text-red-500">{startTimeError}</p>
+      )}
+    </div>
+    <div>
+      <label
+        htmlFor="endTime"
+        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+      >
+        End Time
+      </label>
+      <input
+        type="time"
+        id="endTime"
+        value={endTime}
+        onChange={(e) => {
+          setEndTime(e.target.value);
+          validateEndTime();
+        }}
+        className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+          endTimeError ? "border-red-500" : ""
+        }`}
+        required
+      />
+      {endTimeError && (
+        <p className="text-sm text-red-500">{endTimeError}</p>
+      )}
+    </div>
+  </div>
+  <div>
+    <label
+      htmlFor="capacity"
+      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+    >
+      Capacity
+    </label>
+    <input
+      type="number"
+      id="capacity"
+      placeholder="capacity"
+      value={capacity}
+      onChange={(e) => {
+        setCapacity(e.target.value);
+        validateCapacity();
+      }}
+      className={`focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+        capacityError ? "border-red-500" : ""
+      }`}
+      required
+    />
+    {capacityError && (
+      <p className="text-sm text-red-500">{capacityError}</p>
+    )}
+  </div>
+  
               <div className="flex justify-center space-x-4">
                 <button
                   type="submit"
@@ -487,17 +523,19 @@ const AddEvent = ({ onEventAdded }) => {
                 >
                   Add Event
                 </button>
-                <button
-                  onClick={handleDrawerClose}
-                  className="focus:shadow-outline rounded-lg border border-gray-200 bg-yellow-500 py-2 px-8 font-bold text-white hover:bg-yellow-600 focus:outline-none"
-                >
-                  Cancel
-                </button>
+                <Link
+              title="Cancel Adding"
+              to="/admin/events"
+              className="focus:shadow-outline rounded-lg border border-gray-200 bg-yellow-500 py-2 px-8 font-bold text-white hover:bg-yellow-600 focus:outline-none"
+              >
+              Cancel
+            </Link>
               </div>
             </div>
-          </form>
-        </div>
-      )}
+      </form>
+      </div>
+        </Card>
+        <TicketManagementModal open={modalOpen} onClose={handleModalClose} />
     </>
   );
 };
