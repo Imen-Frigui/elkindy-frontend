@@ -17,7 +17,7 @@ const NotificationStatus = ({ status, onClick }) => {
   };
 
   return (
-    <Link to={"/admin/marketplace/trades"}>
+    <Link to={"/marketplace/trades"}>
       <button
         className="flex w-full items-center rounded-lg bg-indigo-50 px-3"
         onClick={onClick}

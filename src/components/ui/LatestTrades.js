@@ -59,7 +59,7 @@ function LatestTrades({ trades }) {
 
   return (
     <Card extra={"w-full h-full p-2  "}>
-      <div className="max-h-[500px] overflow-y-scroll rounded-lg bg-white">
+      <div className="max-h-[500px] overflow-y-scroll rounded-xl bg-white dark:bg-navy-800">
         <div className="mb-8 mt-2 flex w-full justify-between p-3">
           <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
             Latest Trades
@@ -87,7 +87,7 @@ function LatestTrades({ trades }) {
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="select text-2xs select-sm select border-1 h-[40px] max-h-full w-full max-w-full rounded-md border-gray-300 bg-gray-100 bg-gray-200/70 pl-10 text-xs font-light  text-gray-600 hover:!text-gray-700 focus:outline-none focus:outline-offset-0 xl:w-fit"
+              className="select text-2xs select-sm select border-1 h-[40px] max-h-full w-full max-w-full rounded-md border-gray-300 bg-gray-100 bg-gray-200/70 pl-10 text-xs font-light  text-gray-600 hover:!text-gray-700 focus:outline-none focus:outline-offset-0 xl:w-fit dark:text-white"
             >
               <option value="all">All Trades</option>
               <option value="accepted">Accepted</option>

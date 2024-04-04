@@ -105,7 +105,7 @@ const Project = ({ onInstrumentClick }) => {
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="select text-2xs select-sm select border-1 h-[40px] max-h-full w-full max-w-full rounded-md border-gray-300 bg-gray-100 bg-gray-200/70 pl-10 text-xs font-light  text-gray-600 hover:!text-gray-700 focus:outline-none focus:outline-offset-0 xl:w-fit"
+                  className="select text-2xs select-sm select border-1 h-[40px] max-h-full w-full max-w-full rounded-md border-gray-300 bg-gray-100 bg-gray-200/70 pl-10 text-xs font-light  text-gray-600 hover:!text-gray-700 focus:outline-none focus:outline-offset-0 xl:w-fit dark:text-white"
                 >
                   <option value="all">Show all</option>
                   <option value="active">Show Active</option>
@@ -134,7 +134,7 @@ const Project = ({ onInstrumentClick }) => {
                   }
                   <div className="py-3 ">
                     <label>
-                      <div className="relative cursor-pointer rounded-md group h-full border-[1px] border-gray-300 lg:card-hover  flex " style={{ width: '210px', height: '350px' }}>
+                      <div className="relative  cursor-pointer rounded-md group h-full border-[1px] border-gray-300 lg:card-hover group-hover:opacity-100  flex " style={{ width: '210px', height: '350px' }}>
                         <div className="absolute top-[35%]  z-10 w-full  pointer-events-none ">
                           <div className="flex space-x-1">
                           </div>
@@ -151,7 +151,7 @@ const Project = ({ onInstrumentClick }) => {
                             </div>
                           ) : null}
                         </div>
-                        <div className="flex flex-col h-full w-full rounded-md overflow-hidden  pb-2  transition-all border-neutral-100 bg-neutral-100 aspect-grid cursor-pointer"><div className="relative w-full  h-full grow -mb-10"><div className="w-full  aspect-video"></div>
+                        <div className="flex flex-col h-full w-full rounded-md overflow-hidden  pb-2   border-neutral-100 bg-neutral-100 aspect-grid cursor-pointer"><div className="relative w-full  h-full grow -mb-10"><div className="w-full  aspect-video"></div>
                           <img alt="instrument image" loading="lazy" decoding="async" data-nimg="fill" className="bg-neutral-300 w-full h-full object-cover  " src={instrument.img} style={{
                             position: 'absolute',
                             height: '100%',
@@ -161,7 +161,7 @@ const Project = ({ onInstrumentClick }) => {
                           }} />
                           <div className="absolute skew-y-6 scale-x-105 -bottom-4 h-16 left-0 right-0 w-full z-[2] bg-white border-t border-t-neutral-100"></div>
                         </div>
-                          <div className="pb-2 px-3 z-10 flex-none false">
+                          <div className="pb-2 px-3 z-10 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110 flex-none false">
                             <h2 className="card-title font-arabic text-sm font-medium leading-5 text-gray-800 max-w-min min-w-full line-clamp-2 my-2" dir="auto">{instrument.title}</h2>
                             <span className="card-title text-xs font-light leading-5 text-gray-800 max-w-min min-w-full line-clamp-2 my-2" dir="auto">{instrument.brand}</span>
                             <div className="mt-1 mb-3 h-[1px] bg-black/5"></div>
@@ -169,13 +169,13 @@ const Project = ({ onInstrumentClick }) => {
                               <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" className="text-neutral-300 mr-1" height="11" width="11" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M128,256A128,128,0,1,0,256,384,128,128,0,0,0,128,256Zm379-54.86L400.07,18.29a37.26,37.26,0,0,0-64.14,0L229,201.14C214.76,225.52,232.58,256,261.09,256H474.91C503.42,256,521.24,225.52,507,201.14ZM480,288H320a32,32,0,0,0-32,32V480a32,32,0,0,0,32,32H480a32,32,0,0,0,32-32V320A32,32,0,0,0,480,288Z"></path>
                               </svg>
-                              <span className=" truncate text-3xs md:text-xs lg:text-xs w-3/5 font-medium text-neutral-500">{instrument.status}</span></div>
+                              <span className=" truncate text-3xs md:text-xs lg:text-xs w-3/5 font-medium text-neutral-500 dark:text-white">{instrument.status}</span></div>
                             <div className="flex items-center space-x-1 justify-start text-2xs font-light  text-gray-800">
                               <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" className="text-neutral-300 mr-1 " height="11" width="11" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                               </svg>
-                              <span className="line-clamp-1 truncate text-3xs md:text-xs lg:text-xs w-3/5 font-medium text-neutral-500">Ben Arous,</span>
-                              <span className="line-clamp-1 truncate text-3xs md:text-xs lg:text-xs w-3/5 font-medium text-neutral-500"> <ReactTimeAgo date={instrument.createdAt} className="text-neutral-500" /></span>
+                              <span className="line-clamp-1 truncate text-3xs md:text-xs lg:text-xs w-3/5 font-medium text-neutral-500 dark:text-white">Ben Arous,</span>
+                              <span className="line-clamp-1 truncate text-3xs md:text-xs lg:text-xs w-3/5 font-medium text-neutral-500 dark:text-white"> <ReactTimeAgo date={instrument.createdAt} className="text-neutral-500 dark:text-white" /></span>
                             </div>
 
                             <button onClick={toggleModal}
@@ -197,7 +197,6 @@ const Project = ({ onInstrumentClick }) => {
 
               ))
             )}
-
           </div >
         </Card>
       </div>
