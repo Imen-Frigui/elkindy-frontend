@@ -6,7 +6,7 @@ import InstrumentCard from "components/card/InstrumentCard";
 
 import useInstrumentStore from "ZustStore/instrumentStore";
 import { useEffect, useCallback, useState, useRef } from "react";
-import { Button, SortByDropdown, NoData, SearchBar } from "../../../components";
+import { Button, SortByDropdown, NoData, SearchBar, AlertModal } from "../../../components";
 import InstrumentSkeleton from "./components/InstrumentSkeleton";
 import { useQuery } from "../../../hooks/useQuery";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +17,10 @@ const Marketplace = () => {
   const [token, setToken] = useState("");
 
   const [status, setStatus] = useState("All");
-  const [age, setAge] = useState("3-5");
+  const [age, setAge] = useState("All");
   const [page, setPage] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const [sort, setSort] = useState("");
@@ -30,6 +32,7 @@ const Marketplace = () => {
     fetchInstruments,
     searchInstruments,
     hasMorePages,
+    addUserSearch
   } = useInstrumentStore();
 
   useEffect(() => {
@@ -46,6 +49,9 @@ const Marketplace = () => {
           status.toLocaleLowerCase() !== "all"
             ? status.toLocaleLowerCase()
             : "",
+          age.toLocaleLowerCase() !== "all"
+            ? age.toLocaleLowerCase()
+            : "",
           sort,
           searchQuery,
           page,
@@ -55,6 +61,9 @@ const Marketplace = () => {
         await fetchInstruments(
           status.toLocaleLowerCase() !== "all"
             ? status.toLocaleLowerCase()
+            : "",
+          age.toLocaleLowerCase() !== "all"
+            ? age.toLocaleLowerCase()
             : "",
           sort,
           page,
@@ -111,7 +120,19 @@ const Marketplace = () => {
     },
     [page, hasMorePages, status, searchQuery]
   );
+  const handleButtonClick = async () => {
+    try {
+      const searchData = { status, age, searchQuery: "" };
+      await addUserSearch(searchData, token);
+      setIsOpen(true);
+    } catch (error) {
+      console.error("Error adding user search:", error);
+    }
+  };
 
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
   return (
     <div className=" z-500 mt-2 grid h-full grid-cols-1 gap-5 md:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-3">
       <div className="col-span-1 h-fit w-full md:col-span-5">
@@ -141,26 +162,39 @@ const Marketplace = () => {
             </div>
             <SearchBar />
           </div>
-          <button
-            onClick={handleShowFilters}
-            className="border-transparent border-1 w-58 mb-3 flex items-center rounded-lg  bg-kindyorange px-4 py-2 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="mr-2 h-5 w-5"
+          <div className="flex space-x-2">
+            <button
+              onClick={handleShowFilters}
+              className="border-transparent border-1 w-58 mb-3 flex items-center rounded-lg  bg-kindyorange px-4 py-2 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-              />
-            </svg>
-            Filter
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="mr-2 h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                />
+              </svg>
+              Filter
+            </button>
+            <button onClick={handleButtonClick}
+              disabled={status === "All" && age === "All"} aria-label="add alert" className="border-transparent border-1 mb-3 flex items-center rounded-lg disabled:bg-kindyorange disabled:opacity-50 bg-kindyorange px-4 py-2 text-white transition duration-300  hover:border-gray-100 hover:bg-opacity-80 hover:text-white  focus:outline-none md:mb-0 "
+            >
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class=" text-white mx-auto" height="20" width="20" xmlns="http://www.w3.org/2000/svg"
+              ><path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm4-11c0 2.61 1.67 4.83 4 5.66V17h2v2H4v-2h2v-7c0-2.79 1.91-5.14 4.5-5.8v-.7c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v.7c.71.18 1.36.49 1.95.9A5.902 5.902 0 0014 9zm10-1h-3V5h-2v3h-3v2h3v3h2v-3h3V8z">
+                </path>
+              </svg>
+            </button>
+            <AlertModal isOpen={isOpen} status={status} age={age} onClose={handleCloseModal} />
+          </div>
+
         </div>
         <div className=" grid grid-cols-1 gap-3 md:grid-cols-5">
           <div
@@ -214,7 +248,7 @@ const Marketplace = () => {
                   Filter by age:
                 </p>
                 <div className=" flex flex-wrap rounded-lg bg-white md:w-72">
-                  {["3-5", "4-5", "4-6", "5-7", "7-9", "9-12", "Adult"].map(
+                  {["All", "3-5", "4-5", "4-6", "5-7", "7-9", "9-12", "Adult"].map(
                     (age, i) => {
                       return (
                         <Button

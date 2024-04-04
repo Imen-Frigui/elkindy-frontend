@@ -27,3 +27,5 @@ export { default as LoadingSpinner } from "./ui/LoadingSpinner";
 export { default as ShareModal } from "./ui/ShareModal";
 export { default as UserInstruments } from "./ui/UserInstruments";
 export { default as DeleteModal } from "./ui/DeleteModal";
+export { default as AlertModal } from "./ui/AlertModal";
+export { default as UserSearches } from "./ui/UserSearches";

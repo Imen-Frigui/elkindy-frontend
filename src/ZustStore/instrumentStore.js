@@ -7,12 +7,13 @@ const useInstrumentStore = create((set) => ({
   loading: false,
   hasMorePages: true,
   setHasMorePages: (hasMore) => set({ hasMorePages: hasMore }),
-  fetchInstruments: async (status, sort, page, accessToken) => {
+  fetchInstruments: async (status, age, sort, page, accessToken) => {
     try {
       set({ loading: true });
       const { data } = await DataService.getPublicContent(
         accessToken,
         status,
+        age,
         sort,
         "",
         page
@@ -36,7 +37,7 @@ const useInstrumentStore = create((set) => ({
   getInstrument: async (id, accessToken) => {
     try {
       set({ loading: true });
-      const { data } = await DataService.getInstrument(id,accessToken);
+      const { data } = await DataService.getInstrument(id, accessToken);
       set({ instrument: data.instrument });
       set({ loading: false });
     } catch (error) {
@@ -47,7 +48,7 @@ const useInstrumentStore = create((set) => ({
   likePost: async (id, accessToken) => {
     try {
       // set({ loading: true });
-      const  response  = await DataService.likePost(id, accessToken);
+      const response = await DataService.likePost(id, accessToken);
       return response.data;
       // set({ loading: false });
     } catch (error) {
@@ -65,11 +66,19 @@ const useInstrumentStore = create((set) => ({
       set({ loading: false });
     }
   },
-  searchInstruments: async (status, sort, searchQuery, page, accessToken) => {
+  searchInstruments: async (
+    status,
+    age,
+    sort,
+    searchQuery,
+    page,
+    accessToken
+  ) => {
     try {
       set({ loading: true });
       const { data } = await DataService.getPublicContent(
         accessToken,
+        age,
         status,
         sort,
         searchQuery
@@ -87,6 +96,39 @@ const useInstrumentStore = create((set) => ({
     try {
       set({ loading: true });
       const { data } = await DataService.deleteInstrument(instrumentId);
+      set({ loading: false });
+      return data;
+    } catch (error) {
+      set({ loading: false });
+    }
+  },
+  addUserSearch: async (searchData, accessToken) => {
+    try {
+      set({ loading: true });
+      const { data } = await DataService.addUserSearch(searchData, accessToken);
+      set({ loading: false });
+      return data;
+    } catch (error) {
+      set({ loading: false });
+    }
+  },
+  getUserSearches: async (accessToken) => {
+    try {
+      const { data } = await DataService.getUserSearches(accessToken);
+      return data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  deleteUserSearch: async (searchId, accessToken) => {
+    try {
+      set({ loading: true });
+      const data  = await DataService.deleteUserSearch(
+        searchId,
+        accessToken
+      );
+      console.log(data)
       set({ loading: false });
       return data;
     } catch (error) {
