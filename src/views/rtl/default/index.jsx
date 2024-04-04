@@ -7,12 +7,12 @@ import EventCards from "../../../layouts/rtl/eventFrontOffice/event";
 const Dashboard = () => {
   return (
 
-    <div>
-      {/* Card widget */}
+      /*   <div>
+       Card widget
 
 
     </div>
-
+*/
       <div className="bg-[#F7F5EF]">
           <Navbar />
           <PromoSection />

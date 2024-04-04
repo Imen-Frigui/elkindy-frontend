@@ -120,6 +120,8 @@ const routes = [
         component: <EvaluationList />,
       },
 
+    {
+
         //name: "Teacher Dashboard",
         layout: "/admin",
         path: "teacher",

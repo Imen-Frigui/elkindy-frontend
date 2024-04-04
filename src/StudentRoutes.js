@@ -3,7 +3,8 @@ import React from "react";
 import { MdHome, MdPerson } from "react-icons/md";
 import ProfileOverview from "views/admin/profile";
 import NFTMarketplace from "views/admin/marketplace";
-import { FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
+import { FaCalendarAlt, FaShoppingBasket, FaBook } from "react-icons/fa";
+import StudentDashboard from "./views/student/StudentDashboard";
 
 const routes = [
   {
@@ -36,6 +37,14 @@ const routes = [
     path: "marketplace",
     icon: <FaShoppingBasket className="h-6 w-6" />,
     component: <NFTMarketplace />,
+    secondary: true,
+  },
+  {
+    name: "ElKindy Courses",
+    layout: "/student",
+    path: "class",
+    icon: <FaBook className="h-6 w-6" />,
+    component: <StudentDashboard />,
     secondary: true,
   },
 

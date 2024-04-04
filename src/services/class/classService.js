@@ -330,3 +330,17 @@ export const fetchTeachersByClassId = async (classId) => {
         throw error;
     }
 };
+export const fetchAttendanceForStudent = async (studentId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/classes/attendance/student/${studentId}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error('Error fetching attendance data:', response.statusText);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error fetching attendance data:', error);
+        throw error;
+    }
+};
