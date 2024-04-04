@@ -24,6 +24,7 @@ import { ToastContainer } from "react-toastify";
 function CreateInstrument() {
   const { postInstrument, loading } = useInstrumentStore();
   const [category, setCategory] = useState("Exchange");
+  const [age, setAge] = useState("3-5");
   const [token, setToken] = useState("");
   const [brand, setBrand] = useState("");
   const [selectedImages, setSelectedImages] = useState(null);
@@ -96,6 +97,7 @@ function CreateInstrument() {
       title: values.title,
       details: values.details,
       status: category.toLowerCase(),
+      age: age.toLocaleLowerCase(),
       brand: brand,
       img: selectedImages,
     };
@@ -135,6 +137,7 @@ function CreateInstrument() {
             initialValues={{
               title: "",
               status: category,
+              age: age,
               brand: brand,
               details: "",
               price: 0,
@@ -172,6 +175,19 @@ function CreateInstrument() {
                         onChange={setBrand}
                         value={brand}
                         options={brands}
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <Label
+                        subtitle="Select the instrument brand"
+                        title="Instrument Brand"
+                      />
+                      <Dropdown
+                        onChange={setAge}
+                        value={age}
+                        options={[
+                          "3-5", "4-5", "4-6", "5-7", "7-9", "9-12", "Adult"
+                        ]}
                       />
                     </FormControl>
 
@@ -249,9 +265,9 @@ function CreateInstrument() {
                           type="button"
                           text="Cancel"
                           className="bg-indigo-200 "
-                          // onClick={() => {
-                          //   history.push("/admin/marketplace");
-                          // }}
+                        // onClick={() => {
+                        //   history.push("/admin/marketplace");
+                        // }}
                         />
                       )}
 

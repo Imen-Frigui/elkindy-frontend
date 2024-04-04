@@ -14,6 +14,7 @@ import EventsList from "views/events/EventsList";
 
 import SignIn from "views/auth/SignIn";
 import ExamsList from "views/exams/exam.jsx"
+import EvaluationList from "views/teacherExam/evaluation.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
 
@@ -25,10 +26,7 @@ import {
     MdOutlineNoteAlt,
     MdSchedule
 } from "react-icons/md";
-
-
-    import AssignTeachers from "./views/course/AssignTeachers";
-
+import AssignTeachers from "./views/course/AssignTeachers";
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";
@@ -112,6 +110,18 @@ const routes = [
     },
 
     {
+
+        name: "All Evaluations",
+        layout: "/rtl",
+        path: "evaluation",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+      
+        component: <EvaluationList />,
+      },
+
+    {
+
         //name: "Teacher Dashboard",
         layout: "/admin",
         path: "teacher",
@@ -126,6 +136,7 @@ const routes = [
         component: <TeacherSchedule />,
     },
 
+
 {
     name: "Sign In",
         layout: "/auth",
@@ -139,7 +150,7 @@ const routes = [
 {
     name: "registration",
         layout: "/auth",
-    path: "Register/:courseId",
+    path: "Register",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     component: <Register />,
@@ -186,6 +197,7 @@ const routes = [
 
         component: <CourseDetails />,
     },
+
 
 
 ];

@@ -48,7 +48,7 @@ export default function Admin(props) {
       await initializeSocket();
     };
     connectSocket();
-  },[]);
+  }, []);
 
   const getActiveRoute = (routes) => {
     let activeRoute = "Main Dashboard";
@@ -111,7 +111,7 @@ export default function Admin(props) {
               <Routes>
                 {getRoutes(routes)}
 
-                <Route path="/courses" element={<CoursesList />}/>
+                <Route path="/courses" element={<CoursesList />} />
                 <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
                 <Route path="/courses/:courseId/class/:classId" element={<ClassConfigPage />} />
 
@@ -140,13 +140,14 @@ export default function Admin(props) {
                   element={<AssignTeachers />}
                 />
 
-                <Route path="/events" element={<EventsList />} />  
+                <Route path="/events" element={<EventsList />} />
                 <Route path="/events/details/:eventId" element={<EventDetails />} />
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
                 <Route path="/events/archived" element={<ArchivedEventsList />} />
                 <Route path="/events/addevent" element={<AddEvent />} />
 
                 <Route path={"/exams"} element={<ExamsList />} />
+               
 
                 <Route
                   path="/marketplace/create"

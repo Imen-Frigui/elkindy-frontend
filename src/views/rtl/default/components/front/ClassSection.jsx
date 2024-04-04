@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
 import CourseCard from "./CourseCard";
 import {fetchTopThreeCourses, fetchCourses} from "../../../../../services/course/courseService";
-import ClassCard from "./ClassCard";
 
 const ClassSection = () => {
     const [courses, setCourses] = useState([]);

@@ -86,7 +86,7 @@ const IncomingTrades = ({
       {showModal && (
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
           <div className="relative flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
-            <div className="rounded-t border-b border-solid border-gray-200 p-5">
+            <div className="rounded-t border-b border-solid border-gray-100 p-5">
               <h3 className="text-lg font-semibold">Reason for Declining</h3>
             </div>
             <div className="relative flex-auto p-6">
@@ -161,8 +161,14 @@ const IncomingTrades = ({
         <Modal isOpen={showRating} onClose={() => setShowRating(false)}>
           <div className="mt-3">
             <p className="mb-2 text-lg font-semibold">
-              Rate your trading experience:
+              Rate your trading experience
             </p>
+            <div className="mb-3">
+              <span>
+                This rating will help us enhance the trading experience for all
+                users.
+              </span>
+            </div>
             <RatingComponent
               rating={rating}
               className={"flex justify-evenly"}
