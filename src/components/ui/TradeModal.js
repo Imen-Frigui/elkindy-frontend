@@ -93,6 +93,9 @@ function ExchangeModal({ instrument, onCloseModal }) {
       showToast(error.message, "error");
     }
   };
+  const activeInstruments = instruments.filter(
+    (item) => item.itemStatus === "active"
+  );
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <ToastContainer
@@ -131,7 +134,7 @@ function ExchangeModal({ instrument, onCloseModal }) {
                     ) : instruments.length === 0 ? (
                       <p>You don't have any instruments yet.</p>
                     ) : (
-                      instruments.map((item) => (
+                      activeInstruments.map((item) => (
                         <InstrumentItem
                           key={item._id}
                           item={item}

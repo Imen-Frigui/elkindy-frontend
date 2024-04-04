@@ -13,6 +13,9 @@ import useSocketStore from "../../ZustStore/socketStore";
 import SideBarrStudent from "components/sidebarrStudent";
 import Dashboard from "views/student/newview";
 import ProfileOverview from "views/admin/profile";
+import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
+import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
+import UserTrades from "views/admin/marketplace/components/UserTrades";
 
 export default function Student(props) {
   const { ...rest } = props;
@@ -36,7 +39,7 @@ export default function Student(props) {
       await initializeSocket();
     };
     connectSocket();
-  },[]);
+  }, []);
 
   const getActiveRoute = (routes) => {
     console.log(routes)
@@ -99,8 +102,21 @@ export default function Student(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
-              <Route path="profile" element={<ProfileOverview />} />
+                <Route path="profile" element={<ProfileOverview />} />
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route
+                  path="/marketplace/create"
+                  element={<CreateInstrument />}
+                />
+                <Route
+                  path="/marketplace/instrument/:id"
+                  element={<InstrumentDetail />}
+                />
+
+                <Route
+                  path="/marketplace/trades"
+                  element={<UserTrades />}
+                />
               </Routes>
             </div>
             <div className="p-3">
