@@ -1,44 +1,50 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet,PDFDownloadLink } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, PDFViewer,PDFDownloadLink } from '@react-pdf/renderer';
 
 
 // Component to generate PDF timetable for exams
 const ExamTimetablePDF = ({ exams }) => {
+  
   // Function to group exams by startDate and class, and eliminate duplicate classes
   const groupExamsByDateAndClass = () => {
     const groupedExams = {};
     exams.forEach((exam) => {
-      if (!groupedExams[exam.startDate]) {
-        groupedExams[exam.startDate] = {};
+      const examDateTime = `${exam.startDate} ${exam.startHour}`; // Combine date and startHour
+      if (!groupedExams[examDateTime]) {
+        groupedExams[examDateTime] = {};
       }
-      if (!groupedExams[exam.startDate][exam.classe]) {
-        groupedExams[exam.startDate][exam.classe] = [];
+      if (!groupedExams[examDateTime][exam.classe]) {
+        groupedExams[examDateTime][exam.classe] = [];
       }
-      groupedExams[exam.startDate][exam.classe].push(exam.name);
+      groupedExams[examDateTime][exam.classe].push(exam.name);
     });
     return groupedExams;
   };
+  
 
   // Function to render timetable rows
   // Function to render timetable rows
-const renderTimetableRows = () => {
+  const renderTimetableRows = () => {
     const groupedExams = groupExamsByDateAndClass();
-    return Object.keys(groupedExams).map((date) => {
-      const formattedDate = new Date(date).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Europe/London',
-      });
+    return Object.keys(groupedExams).map((dateTime) => {
+      const [date, startHour] = dateTime.split(' '); // Séparez la date et l'heure
       return (
-        <View key={date} style={styles.row}>
-          <View style={[styles.cell, styles.dateCell]}><Text  style={[styles.dateCell,{ color: '#fff1cc',fontSize:'10px' }]}>{formattedDate}</Text></View>
+        <View key={dateTime} style={styles.row}>
+          <View style={[styles.cell, styles.dateCell]}>
+            <Text style={[styles.dateCell, { color: '#fff1cc', fontSize: '10px' }]}>
+              {new Date(date).toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+              })}
+              {', '}
+              {startHour} {/* Utilisez startHour ici */}
+            </Text>
+          </View>
           {Array.from(new Set(exams.map((exam) => exam.classe))).map((classRoom) => (
             <View key={classRoom} style={styles.cell}>
-              {groupedExams[date][classRoom] ? (
-                <Text>{groupedExams[date][classRoom].join(', ')}</Text>
+              {groupedExams[dateTime][classRoom] ? (
+                <Text>{groupedExams[dateTime][classRoom].join(', ')}</Text>
               ) : (
                 <Text></Text> // Empty rectangle
               )}
@@ -48,6 +54,7 @@ const renderTimetableRows = () => {
       );
     });
   };
+  
   
 
   // PDF styles
@@ -69,33 +76,14 @@ const renderTimetableRows = () => {
     },
     dateCell: {
        fontSize :"8px",
-      backgroundColor: '#144b68',
        
+      },
+      dateCell: {
+        backgroundColor: '#144b68',
       },
      
   });
-  const savePDF = () => {
-    const pdfBlob = new Blob([<Document>
-      <Page size="A4" style={styles.page}>
-      <Text  style={[styles.dateCell,{ color: '#fff1cc',fontSize:'25px' ,textAlign: 'center', }]} >Exams TimeTable</Text>
-        <View style={styles.row}>
-          <View style={[styles.cell, styles.dateCell]}><Text style={[styles.dateCell,{ color: '#fff1cc' }]}>Date</Text></View>
-          {Array.from(new Set(exams.map((exam) => exam.classe))).map((classRoom) => (
-            <View key={classRoom} style={[styles.cell, styles.dateCell]}>
-              <Text  style={[styles.dateCell,{ color: '#fff1cc' }]} >{classRoom}</Text>
-            </View>
-          ))}
-        </View>
-        {renderTimetableRows()}
-      </Page>
-    </Document>], { type: 'application/pdf' });
-
-    // Create download link
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(pdfBlob);
-    link.download = 'ExamTimetable.pdf';
-    link.click();
-  };
+  
 
   return (
     <PDFDownloadLink style={{ backgroundColor: "#006BBE", borderRadius: '20px 0px',

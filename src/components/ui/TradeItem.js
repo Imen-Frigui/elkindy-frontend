@@ -17,10 +17,10 @@ function TradeItem({ item, status, data }) {
   };
   return (
     <div
-      className={` w-full cursor-pointer items-center justify-between rounded-2xl  p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none 
+      className={`w-auto cursor-pointer  items-center justify-between rounded-2xl p-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none 
       `}
     >
-      <div className=" w-full items-center justify-end ">
+      <div className="w-full items-center justify-end space-y-4 ">
         {new Date(data.createdAt).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
@@ -37,24 +37,36 @@ function TradeItem({ item, status, data }) {
         </div>
         <div>
           <img
-            className=" h-1/2 w-full rounded-xl 3xl:h-full 3xl:w-full"
+            className=" h-1/2 w-1/2  rounded-xl "
             src={item.img}
-            alt=""
+            alt="item image"
           />
         </div>
-        <div className="ml-4">
+        <div className="w-full flex-col">
           <p className="text-base font-medium text-navy-700 dark:text-white">
             {item.title}
           </p>
-          <p className="mt-2 overflow-hidden text-ellipsis text-sm text-gray-600">
-            {item.details}
-            <Link
-              className="ml-1 font-medium text-brand-500  hover:text-brand-500 dark:text-white"
-              to={"/admin/marketplace/instrument/" + item._id}
+          <Link
+            className="border-neutral-300 text-neutral-600 hover:bg-neutral-100 mr-4 flex w-full justify-center rounded-lg border py-2 font-medium"
+            to={"/admin/marketplace/instrument/" + item._id}
+          >
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              class="mr-6 self-center text-gray-600"
+              height="20"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              See instrument details
-            </Link>
-          </p>
+              <g>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M1.181 12C2.121 6.88 6.608 3 12 3c5.392 0 9.878 3.88 10.819 9-.94 5.12-5.427 9-10.819 9-5.392 0-9.878-3.88-10.819-9zM12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path>
+              </g>
+            </svg>
+            See instrument details
+          </Link>
         </div>
       </div>
     </div>

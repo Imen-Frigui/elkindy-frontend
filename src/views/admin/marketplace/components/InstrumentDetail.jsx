@@ -80,17 +80,20 @@ function InstrumentDetail() {
             <BackButton />
           </div>
           <div className=" grid md:mt-5 md:grid-cols-10 md:gap-2">
-            <div className="md:col-span-4">
+            <div className="md:col-span-4 ml-20">
               <Gallery images={instrument.img} />
             </div>
             <div className=" content-center px-5 md:z-30 md:col-span-5 md:px-0">
-              <h2 className="font-bold text-kindyorange">{instrument.brand}</h2>
-              <h1 className="my-2 text-3xl font-bold md:text-5xl">
+              <h1 className="my-2 text-3xl font-bold md:text-5xl dark:text-white">
                 {instrument.title}
               </h1>
+              <div>
+                <h2 className="font-bold text-kindyorange">{instrument.brand}</h2>
+
+              </div>
               <div className="mt-3  space-y-2">
                 <h4 className="font-bold">Description</h4>
-                <p className=" text-navy-800">{instrument.details}</p>
+                <p className=" text-navy-800 dark:text-white">{instrument.details}</p>
               </div>
 
               <div className="my-5 flex flex-wrap items-center">
@@ -106,6 +109,10 @@ function InstrumentDetail() {
                       className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
                     />
                   )}
+                  <Button
+                    text={"age " + instrument.age}
+                    className={"my-1 mr-2 bg-indigo-50 py-2 text-kindyblue"}
+                  />
                 </div>
               </div>
               <div class="items-left lg:items-lest flex w-full flex-col justify-between px-3 align-middle lg:flex-row ">
@@ -130,8 +137,8 @@ function InstrumentDetail() {
                                 User
                               </span>
                               <span class="text-center text-sm font-semibold capitalize text-gray-700 md:text-start lg:text-start">
-                                {/* {instrument.author[0].firstName}{" "}
-                            {instrument.author[0].lastName}{" "} */}
+                                {instrument.author[0].firstName}{" "}
+                                {instrument.author[0].lastName}{" "}
                               </span>
                               <div class="mb-1 flex flex-wrap items-center justify-center space-x-1 text-blue-800/60 md:justify-start lg:justify-start ">
                                 <span class="text-xs font-medium">

@@ -13,9 +13,7 @@ const PromoSection = () => {
                 paddingBottom: '100px',
                 height: '360px',
                 width:'1000px',
-                marginRight: '250px',
-                //right: '500px',
-                //top: '500px',
+                marginLeft: '250px',
                 backgroundImage: `url(${backgroundImg})`,
                 backgroundSize: 'cover',
             }}

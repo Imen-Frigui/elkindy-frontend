@@ -54,12 +54,10 @@ export function SidebarLinks(props) {
   const createLinks = (routes) => {
     return routes.map((route, index) => {
       if (
-        route.layout === "/admin" ||
-        route.layout === "/auth" ||
-        route.layout === "/rtl" ||
-        route.layout === "/teacher" ||
-        route.layout === "/student" 
-        
+          route.layout === "/admin" ||
+          route.layout === "/auth" ||
+          route.layout === "/rtl" ||
+          route.layout === "/student"
       ) {
         return (
             <Link key={index} to={route.layout + "/" + route.path}>

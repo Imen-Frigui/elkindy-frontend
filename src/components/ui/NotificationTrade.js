@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const TradeNotification = ({ notification, onClick }) => {
   return (
-    <Link to={"/admin/marketplace/trades"}>
+    <Link to={"marketplace/trades"}>
       <button
         className="flex w-full items-center rounded-lg bg-indigo-50 px-3"
         onClick={onClick}
@@ -18,7 +18,7 @@ const TradeNotification = ({ notification, onClick }) => {
               {notification.senderName} sent an exchange request for{" "}
               {notification.instrument.title}
             </p>
-            <Link to={"/admin/marketplace/trades"}>
+            <Link to={"marketplace/trades"}>
               <a className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
                 See more details
               </a>

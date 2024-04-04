@@ -1,3 +1,4 @@
+{/*}
 import Dashboard from "views/student/newview";
 import React from "react";
 import {
@@ -34,4 +35,4 @@ const routes = [
       component: <Dashboard />,
     },]
 
-    export default routes;
+    export default routes;*/}

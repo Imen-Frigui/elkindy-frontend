@@ -53,7 +53,7 @@ function UserTrades() {
           {loading ? (
             <LoadingSpinner className={"text-center"} />
           ) : (
-            <div className="grid grid-cols-1">
+            <div className="grid grid-cols-1 rounded-xl mt-6">
               <LatestTrades trades={recentTrades} />
             </div>
           )}
@@ -61,9 +61,9 @@ function UserTrades() {
         <div className=" col-span-2 flex space-x-4">
           {showModal && (
             <div
-              className={`fixed right-0 top-0 z-40 h-screen w-full max-w-xs space-y-3 overflow-y-auto bg-gray-200 p-4 transition-opacity duration-300 ease-in-out dark:bg-navy-800`}
+              className={`fixed right-0 top-0 z-40 h-screen w-full max-w-xs space-y-3 overflow-y-auto bg-gray-100 p-4 transition-opacity duration-300 ease-in-out dark:bg-navy-800`}
             >
-              <h1>Incoming trades</h1>
+              <h1 className="font-jost dark:text-white" >Incoming trades</h1>
               <button
                 onClick={() => setShowModal(false)}
                 className="bg-transparent absolute right-2.5 top-2.5 rounded-lg p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-navy-800 dark:hover:bg-gray-600 dark:hover:text-white"

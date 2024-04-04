@@ -20,12 +20,11 @@ const EventDetailsBanner = () => {
               Manage Events
             </button>
           </Link>
-          <button
-            href=" "
-            className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2"
-          >
-            Watch Video
-          </button>
+          <Link to="https://www.youtube.com/user/conservatoireelkindy" target="_blank">
+            <button className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2">
+              Watch Video
+            </button>
+          </Link>
         </div>
       </div>
     </div>

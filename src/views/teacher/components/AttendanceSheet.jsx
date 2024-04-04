@@ -3,6 +3,7 @@ import { fetchSessionsByClassId, fetchStudentsByClassId, manageAttendanceForSess
 import '../../../assets/css/Table.css'
 import ButtonComponent from "../../../components/button/ButtonComponnent";
 import { FaCheck, FaTimes } from 'react-icons/fa';
+import { FaMicrophone } from 'react-icons/fa';
 
 const AttendanceSheet = ({ classId }) => {
     const [sessions, setSessions] = useState([]);
@@ -146,7 +147,7 @@ const AttendanceSheet = ({ classId }) => {
     return (
         <div className="mx-auto">
             <div className="overflow-x-auto">
-                <button onClick={handleListenClick}>Start Listening</button>
+                <button onClick={handleListenClick} className="bg-navy-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center space-x-2"> <FaMicrophone className=" mr-2" /> Start Listening</button>
                 <table className="attendance-table min-w-full divide-y divide-gray-200 mb-4 table-auto">
                     <thead>
                     <tr>
@@ -159,13 +160,20 @@ const AttendanceSheet = ({ classId }) => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                     {students.map(student => (
-                        <tr key={student._id} style={{ backgroundColor: spokenName === student.username ? 'lightblue' :''}} >
-                            <td className="px-6 py-4 whitespace-nowrap" >{student.username}</td>
+                        <tr key={student._id}
+                            style={{backgroundColor: spokenName === student.username ? 'lightblue' : ''}}>
+                            <td className="px-6 py-4 whitespace-nowrap">{student.username}</td>
                             {sessions.map(session => (
                                 <td key={`${session._id}-${student._id}`}
                                     onClick={() => handleAttendanceChange(session._id, student._id)}
                                     className="px-6 py-4 whitespace-nowrap cursor-pointer">
-                                    {attendance[session._id]?.[student._id] || '-'}
+                                    {attendance[session._id]?.[student._id] === 'Present' ? (
+                                        < span >  <span
+                                            className="text-green-500 font-bold">P</span>resent</span>
+                                        ) : attendance[session._id]?.[student._id] === 'Absent' ? (
+                                        <span> <span className="text-red-500 font-bold">A</span>bsent</span>
+                                    ) : '-'}
+                                    {/*attendance[session._id]?.[student._id] || '-'*/}
                                 </td>
                             ))}
                         </tr>

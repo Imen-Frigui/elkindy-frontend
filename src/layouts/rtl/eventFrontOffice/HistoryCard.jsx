@@ -181,17 +181,12 @@ const HistoryCard = ({ events , handleReservationSubmit , handleParticipationSub
       email: participationFormData.email,
       eventId: selectedEvent._id,
     });
-
-    // Clear the form and close the modal on successful participation
     resetParticipationForm();
     setParticipationMode(false);
     setOpen(false);
-    toast.success("Participation confirmed. Check your email for details!");
+    toast.success("Participation confirmed. Check your email for more details!");
   } catch (error) {
-    // Log any errors related to the submission
     console.error("Error in participation:", error);
-
-    // Display a generic error message
     toast.error("Participation failed. Please try again.");
   }
 };
