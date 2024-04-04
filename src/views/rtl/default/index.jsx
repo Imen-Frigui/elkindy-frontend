@@ -29,6 +29,7 @@ const Dashboard = () => {
           <div id="class-section" className="my-4">
             <ClassSection />
           </div>
+          {/* <Header/> */}
       </div>
   );
 };

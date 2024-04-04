@@ -145,9 +145,6 @@ export default function Admin(props) {
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
                 <Route path="/events/archived" element={<ArchivedEventsList />} />
                 <Route path="/events/addevent" element={<AddEvent />} />
-                <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
-              
-              
 
                 <Route path={"/exams"} element={<ExamsList />} />
 
