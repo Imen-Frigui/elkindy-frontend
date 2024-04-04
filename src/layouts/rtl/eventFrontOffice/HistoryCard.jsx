@@ -440,7 +440,7 @@ useEffect(() => {
   return (
     <>
     <ToastContainer position="top-center" />
-    <Card extra={"mt-3 !z-5 overflow-hidden"}>
+    <Card extra={"mt-3 !z-5 overflow-hidden"} className="bg-[#F7F5EF]">
       <div className="flex items-center justify-between rounded-t-3xl p-3">
       <h1 className="text-2xl font-bold animate-bounce">Upcoming Events</h1>
     {/* Search Bar */}
