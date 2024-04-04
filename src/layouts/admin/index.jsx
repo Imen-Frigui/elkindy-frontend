@@ -7,7 +7,6 @@ import routes from "routes.js";
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
 import AddEvent from "views/events/components/AddEvent";
-import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
 import ArchivedEventsList from "../../views/events/components/ArchivedEventsList";
