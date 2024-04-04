@@ -7,8 +7,9 @@ import Storage from "./components/Storage";
 import Upload from "./components/Upload";
 import axios from "axios";
 import EditProfileModal from "./components/EditProfile";
-import ScheduleComponent from "./components/SchedualComponent";
+import { UserSearches } from "components";
 import Loader from "components/button/Loader";
+import ScheduleComponent from "./components/SchedualComponent";
 
 const ProfileOverview = () => {
   const [userData, setUserData] = useState(null);
@@ -48,33 +49,38 @@ const ProfileOverview = () => {
   }
   return (
     <div className="flex w-full flex-col items-center gap-7">
-      <div className="self-start">
-        <button
-          onClick={handleEditClick}
-          className="mt-20 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
-       // Adjust as needed for the cube appearance
-        >
-          Edit Profile
-        </button>
-      </div>
-      <EditProfileModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        userData={userData}
-      />
-      <div className="w-full flex flex-col lg:flex-row gap-5">
-        <div className="flex-1">
-          <Banner userData={userData} />
-        </div>
-        <div className="flex-1">
-          <ScheduleComponent userData={userData.user} />
-        </div>
-        {/* Adjust the below components as needed based on your layout requirements */}
-        <div className="flex-1">
-          <Project />
-        </div>
-      </div>
+    <div className="self-start">
+      <button
+        onClick={handleEditClick}
+        className="mt-20 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
+      >
+        Edit Profile
+      </button>
     </div>
+    <EditProfileModal
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      userData={userData}
+    />
+    {/* Grid container */}
+    <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
+      {/* Banner, Project, and UserSearches side by side */}
+     
+      <div className="lg:col-span-4">
+        <Banner userData={userData} />
+      </div>
+      <div className="lg:col-span-8">
+        <ScheduleComponent userData={userData.user} />
+      </div>
+      <div className="lg:col-span-4">
+        <Project />
+      </div>
+      <div className="lg:col-span-4">
+        <UserSearches />
+      </div>
+    
+    </div>
+  </div>
   );
 };
 
