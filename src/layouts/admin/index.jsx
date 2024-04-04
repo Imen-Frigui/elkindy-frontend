@@ -7,6 +7,8 @@ import routes from "routes.js";
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
 import AddEvent from "views/events/components/AddEvent";
+import Sidebarr from "../../components/sidebarr";
+
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
 import ArchivedEventsList from "../../views/events/components/ArchivedEventsList";
@@ -16,11 +18,14 @@ import CreateInstrument from "views/admin/marketplace/components/CreateInstrumen
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import EventsList from "views/events/EventsList";
 import ExamsList from "views/exams/exam";
+
 import ClassConfigPage from "../../views/course/ClassConfigPage";
+
+
+
+
+import useSocketStore from "../../ZustStore/socketStore";
 import UserTrades from "views/admin/marketplace/components/UserTrades";
-import useSocketStore from "ZustStore/socketStore";
-
-
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -110,6 +115,7 @@ export default function Admin(props) {
                 <Route path="/courses/assign-teachers/:courseId" element={<AssignTeachers />} />
                 <Route path="/courses/:courseId/class/:classId" element={<ClassConfigPage />} />
 
+
                 <Route
                   path="/marketplace/create"
                   element={<CreateInstrument />}
@@ -134,9 +140,7 @@ export default function Admin(props) {
                   element={<AssignTeachers />}
                 />
 
-                <Route path="/events" element={<EventsList />} />
-                <Route
-                    path="/events" element={<EventsList />}/>
+                <Route path="/events" element={<EventsList />} />  
                 <Route path="/events/details/:eventId" element={<EventDetails />} />
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
                 <Route path="/events/archived" element={<ArchivedEventsList />} />

@@ -16,8 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../slices/userApiSlice";
 
 import { logout } from "../../slices/authSlice";
+
 import NotificationStatus from "components/ui/NotificationStatus";
 import TradeNotification from "components/ui/NotificationTrade";
+
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [statusNotification, setStatusNotifications] = useState([]);

@@ -57,7 +57,7 @@ const EventCards = () => {
         }
     };
     return (
-        <div>
+        <div className="bg-[#F7F5EF]">
            
            <HistoryCard 
             events={events}  

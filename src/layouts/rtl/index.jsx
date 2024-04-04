@@ -3,12 +3,13 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "../../views/rtl/default/components/front/Navbar";
 
 import routes from "routes.js";
+
+import Footer from "../../components/footer/Footer";
+import EventCards from "./eventFrontOffice/event"; 
 import PromoSection from "../../views/rtl/default/components/front/PromoSection";
 import ClassSection from "../../views/rtl/default/components/front/ClassSection";
 import CourseDetails from "../../views/rtl/default/components/front/CourseDetails";
 import Dashboard from "../../views/rtl/default";
-import Footer from "components/footer/Footer";
-import EventCards from "./eventFrontOffice/event";
 
 export default function RTL(props) {
   const { ...rest } = props;
@@ -63,7 +64,8 @@ export default function RTL(props) {
 
   // document.documentElement.dir = "rtl";
   return (
-      < div className="bg-[#F7F5EF]">
+    <div>
+      <div div className="bg-[#F7F5EF]">
 
         <Routes>
           {getRoutes(routes)}
@@ -82,13 +84,12 @@ export default function RTL(props) {
           <Route path="/rtl/course/:courseId" element={<CourseDetails />} />
 
         </Routes>
-
-        {/* <h1>Paragraphs are the building blocks of papers. Many
-          students define paragraphs in terms of length: a paragraph is
-          a group of at least five sentences, a paragraph is half a page long,
-          etc. In reality, though, the unity and coherence of ideas among senten
-          ces is what constitutes a paragraph. </h1>
-        <Header/>
+</div>
+      {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
+      {/* Navbar & Main Content */}
+      {/*  <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
+       
+      
          <Sidebar open={open} onClose={() => setOpen(false)} />}
       {/* Navbar & Main Content */}
         {/*  <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
@@ -121,14 +122,11 @@ export default function RTL(props) {
           </div>
         </main>
       </div> */}
-        <EventCards />
-      <div className="p-3">
-        <Footer />
+        <EventCards className="bg-[#F7F5EF]"/>
+      <div className="p-3 bg-[#F7F5EF]">
+        <Footer className="bg-[#F7F5EF]"/>
       </div>
+    </div>
 
-          <Footer />
-
-
-      </div>
   );
 }

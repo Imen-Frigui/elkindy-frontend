@@ -69,7 +69,13 @@ const routes = [
   },
  
   
-
+ /* {
+    name: "RTL Admin",
+    layout: "/rtl",
+    path: "rtl",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <RTLDefault />,
+  },*/
   {
     name: "Events List",
     layout: "/admin",
