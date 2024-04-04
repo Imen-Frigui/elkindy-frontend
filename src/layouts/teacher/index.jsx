@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+{/* import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
 import Footer from "components/footer/Footer";
@@ -80,14 +80,14 @@ export default function Teacher(props) {
   return (
     <div className="flex h-full w-full">
       <SideBarrTeacher open={open} onClose={() => setOpen(false)} />
-      {/* <Sidebar open={open} onClose={() => setOpen(false)} /> */}
-      {/* Navbar & Main Content */}
+      {/* <Sidebar open={open} onClose={() => setOpen(false)} />
+      {/* Navbar & Main Content
       <div className="h-full w-full bg-kindygray dark:!bg-navy-900">
-        {/* Main Content */}
+        {/* Main Content
         <main
           className={`mx-[5px] h-full flex-none transition-all md:pr-2 xl:ml-[100px]`}
         >
-          {/* Routes */}
+          {/* Routes
           <div className="h-full">
             <Navbar
               onOpenSidenav={() => setOpen(true)}
@@ -113,3 +113,4 @@ export default function Teacher(props) {
     </div>
   );
 }
+*/}

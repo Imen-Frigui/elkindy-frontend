@@ -30,8 +30,13 @@ export default function SignIn() {
   useEffect(() => {
     console.log(userInfo)
     if (userInfo){
+      if(userInfo.user.role === 'teacher'){
+        navigate('/admin/default');
+      }else {
+        navigate(`/${userInfo.user.role}/default`);
+      }
       // Route to the appropriate layout based on the user's role
-      navigate(`/${userInfo.user.role}/default`);
+
     }
   }, [navigate, userInfo]);
 

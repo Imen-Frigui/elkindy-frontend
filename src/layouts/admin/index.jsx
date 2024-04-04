@@ -147,6 +147,7 @@ export default function Admin(props) {
                 <Route path="/events/addevent" element={<AddEvent />} />
 
                 <Route path={"/exams"} element={<ExamsList />} />
+               
 
                 <Route
                   path="/marketplace/create"

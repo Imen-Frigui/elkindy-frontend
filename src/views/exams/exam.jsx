@@ -9,9 +9,15 @@ import { fetchTeachers } from '../../services/exam/examService';
 import { fetchEvalStudent } from '../../services/exam/examService';
 import { FiSearch } from "react-icons/fi";
 import { fetchGrades } from '../../services/exam/examService';
+import { sendEmail } from '../../services/exam/examService';
 import { GiPapers } from "react-icons/gi";
 import ExamBanner from "./components/examBanner";
 import ExamTimetablePDF from "./components/emploipdf";
+import AddExam from './components/add';
+import UpdateExam from './components/update';
+import { useNavigate } from "react-router-dom";
+import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
+
 const ExamsList = () => {
     const [exams, setExams] = useState([]);
     const [filteredExams, setFilteredExams] = useState([]);
@@ -21,6 +27,7 @@ const ExamsList = () => {
     const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
     const [name, setExamName] = useState('');
     const [startDate, setExamStartDate] = useState('');
+    const [startHour, setExamStartHour] = useState('');
     const [duration, setExamDuration] = useState('');
     const [classe, setExamClass] = useState('');
     const [teacher, setExamTeacher] = useState('');
@@ -31,20 +38,73 @@ const ExamsList = () => {
     const [updatedExamDuration, setUpdatedExamDuration] = useState('');
     const [updatedExamClass, setUpdatedExamClass] = useState('');
     const [updatedExamTeacher, setUpdatedExamTeacher] = useState('');
+    const [updatedExamHour, setUpdatedExamHour] = useState('');
     const [selectedExamIdForUpdate, setSelectedExamIdForUpdate] = useState(null);
     const [studentEvaluations, setstudentEvaluations] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [searchTermstudent, setSearchTermstudent] = useState("");
     const [grades, setGrades] = useState([]);
     const [filteredgrades, setfilteredGrades] = useState([]);
-    const [studentName, setstudentName] = useState();
-    const [grade, setgrade] = useState();
-    const [level, setLevel] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+    const navigate = useNavigate();
+    const itemsPerPage = 5;
+    const [isOpen, setIsOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+  
     // Formater la date dans le format souhaité
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     };
+
+    const handleSendEmail = async (c) => {
+        try {
+            const result = await sendEmail(c);
+            if (result) {
+                console.log(result);
+                setAlertMessage('Email sent successfully');
+                alert('Email sent successfully');
+            } else {
+                setAlertMessage('Failed to send email: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            setAlertMessage('An error occurred while sending email');
+        }
+    };
+
+    const handleOpen = () => {
+        setIsOpen(true);
+      };
+      
+    // Pagination logic
+    const indexOfLastEvent = currentPage * itemsPerPage;
+    const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
+    const currentEvents = filteredExams.slice(
+        indexOfFirstEvent,
+        indexOfLastEvent
+    );
+
+    
+
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(filteredExams.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage);
+    };
+
+
+
+    const handlePageNumberClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+
+
 
 
     const getEvaluations = async () => {
@@ -112,69 +172,75 @@ const ExamsList = () => {
     };
     const options = classes;
 
-
+    const getExams = async () => {
+        try {
+            const fetchedExams = await fetchExams();
+            if (fetchedExams) {
+                console.log(fetchedExams);
+                setExams(fetchedExams);
+                setFilteredExams(fetchedExams);
+            }
+        } catch (error) {
+            console.error("Failed to fetch exams:", error);
+        } 
+    };
 
 
     useEffect(() => {
-        const getExams = async () => {
-            try {
-                const fetchedExams = await fetchExams();
-                if (fetchedExams) {
-                    console.log(fetchedExams);
-                    setExams(fetchedExams);
-                    setFilteredExams(fetchedExams);
-                }
-            } catch (error) {
-                console.error("Failed to fetch exams:", error);
-            }
-        };
+        
 
-        getGrades();
-        getExams();
-        getClasses();
-        getTeachers();
-        getEvaluations();
+          //getGrades();
+          getExams();
+          getClasses();
+          getTeachers();
+        //getEvaluations();
     }, []);
-    const handleUpdateClick = async (e, examId, exxx) => {
-        //  e.preventDefault(); // Empêcher le comportement par défaut du formulaire
-        setIsDrawerOpen2(true);
-        setSelectedExamIdForUpdate(examId);
-        const examData = {
-            name: updatedExamName,
-            startDate: updatedExamStartDate,
-            duration: updatedExamDuration,
-            classe: updatedExamClass,
-            teacher: updatedExamTeacher
-        };
 
+      
+
+    
+    const handleUpdateClick = async (e, examId, examData) => {
+        e.preventDefault(); // Prevent default form behavior
+        const fetchedExams = await fetchExams();
         try {
             const updatedExam = await updateExam(examId, examData);
             console.log('Updated exam:', updatedExam);
-
-            // Mettre à jour l'état local ou effectuer toute autre action nécessaire après la mise à jour réussie
+            //setExams(updatedExam);
+            if (fetchedExams) {
+            console.log("farahh")
+            // Update the local state of exams immediately after successful update
+            setExams(fetchedExams => fetchedExams.map(exam => exam._id === updatedExam._id ? updatedExam : exam));
+            getExams();
+            }
+            // Close the drawer after successful update
+            setIsDrawerOpen2(false);
         } catch (error) {
             console.error('Error updating exam:', error);
         }
     };
-
-    const handleSubmit = async (e, examId, exam) => {
-        //  e.preventDefault();
-
+    const handleSubmit = async (e, examId) => {
+        e.preventDefault(); // Empêcher le comportement par défaut du formulaire
+    
         const examData = {
             name: updatedExamName,
             startDate: updatedExamStartDate,
             duration: updatedExamDuration,
-            classe: updatedExamClass,
-            teacher: updatedExamTeacher
-        };
+            startHour: updatedExamHour,
 
+            
+            classe: updatedExamClass,
+            teacher: updatedExamTeacher,
+        };
+        
+    
         try {
             await handleUpdateClick(e, examId, examData);
-            setIsDrawerOpen2(false); // Fermer le tiroir après la soumission réussie
         } catch (error) {
             console.error('Error updating exam:', error);
         }
     };
+    
+
 
 
     const handleAddExam2 = async (examData) => {
@@ -205,7 +271,7 @@ const ExamsList = () => {
         }
         try {
             const type = "exam";
-            const examData = { name, startDate, duration, classe, teacher, type };
+            const examData = { name, startDate, duration, startHour, classe, teacher, type };
             // Utiliser les valeurs correctes des états
             const newExam = await handleAddExam2(examData);
             console.log('New exam added:', newExam);
@@ -244,7 +310,7 @@ const ExamsList = () => {
         setSearchTermstudent(term);
         const filtered = grades.filter(grade =>
             grade.studentName.toLowerCase().includes(term.toLowerCase())
-          
+
         );
         setfilteredGrades(filtered);
     };
@@ -255,17 +321,17 @@ const ExamsList = () => {
     const handleDrawerClose4 = () => setIsDrawerOpen4(false);
     return (
         <>
-     
 
-    
+
+
 
 
             <div className="flex flex-col mt-16">
 
-            <div>
-            <ExamBanner />   
-           
-        </div>
+                <div>
+                    <ExamBanner />
+
+                </div>
                 <div className="relative  left-[50%] transform -translate-x-1/2 mt-[20px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl  shadow-shadow-700 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[650px] xl:gap-2 flex justify-center mt-20">
                     <div className="relative mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-700 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[650px] xl:gap-2">
 
@@ -294,12 +360,12 @@ const ExamsList = () => {
                                         Add Exam
                                     </ButtonComponent>
                                 </div>
-                                   <div>    <ExamTimetablePDF  className="mt-15" exams={exams}  /></div>
-                                <div>
+                                <div>    <ExamTimetablePDF className="mt-15" exams={exams} /></div>
+                                {/* <div>
                                     <ButtonComponent className="mb-3" text="Student Grades" color="#006BBE" onClick={() => setIsDrawerOpen4(true)}>
                                         Show Grades
                                     </ButtonComponent>
-                                </div>
+                                </div> */}
 
                             </div>
 
@@ -308,213 +374,52 @@ const ExamsList = () => {
                             {isDrawerOpen2 && (
 
                                 <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md ">
-                                    <div className="flex items-center mb-6 ">
-                                        <div className="max-w-md w-96 mx-auto  relative overflow-hidden z-10 bg-white p-6 rounded-lg shadow-md before:w-24 before:h-24 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12 table-drawer">
-                                            <h2 className="text-2xl font-bold text-kindydarkblue mb-6">Update Exam  <img src="https://img.freepik.com/premium-vector/hand-drawn-headphones-music-notes-realistic-notebook-page_53562-7929.jpg?w=740" alt="Exam Image" className="w-full rounded-lg mb-6" /></h2>
-                                        </div>
-                                        <form onSubmit={(e) => handleSubmit(e, selectedExamIdForUpdate)}>
-                                            <div className="mb-4" >
-                                                <div
-                                                    class="group flex h-0 w-0 cursor-pointer items-center justify-center rounded-3xl  p-2 hover:bg-slate-200"
-                                                    onClick={handleDrawerClose2}
-                                                >
-                                                    <div class="space-y-2  p-1.5 absolute top-2.5 right-2.5 ">
-                                                        <span class="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
-                                                        <span class="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
-                                                    </div>
-
-                                                </div>
-                                                <div className="max-w-md w-full mx-auto -my-16 px-4 relative overflow-hidden z-10 bg-white p-8 rounded-lg shadow-md before:w-24 before:h-24 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12 table-drawer">
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                                    <div class="mb-4 flex flex-col ">
-  <label class="block text-sm font-medium text-navy-900" for="updatedName">Updated Name</label>
-  <input type="text" id="updatedName" value={updatedExamName} onChange={(e) => setUpdatedExamName(e.target.value)}
-         class="mt-1 p-2 w-full bg-transparent border-gray-600 rounded-md text-kindydarkblue" name="updatedName" />
-</div>
-
-
-
-
-                                                        <div className="mb-4">
-                                                            <label className="block text-sm font-medium text-navy-900" htmlFor="updatedStartDate">Updated Start Date</label>
-                                                            <input type="date" id="updatedStartDate" value={updatedExamStartDate} onChange={(e) => setUpdatedExamStartDate(e.target.value)}
-                                                                className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
-                                                                name="updatedStartDate"
-                                                            />
-                                                        </div>
-
-                                                        <div className="mb-4">
-                                                            <label className="block text-sm font-medium text-navy-900" htmlFor="updatedDuration">Updated Duration</label>
-                                                            <input type="text" id="updatedDuration" value={updatedExamDuration} onChange={(e) => setUpdatedExamDuration(e.target.value)}
-                                                                className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
-                                                                name="updatedDuration"
-                                                            />
-                                                        </div>
-
-                                                        <div className="mb-4">
-                                                            <label className="block text-sm font-medium text-navy-900" htmlFor="updatedClass">Updated Class</label>
-                                                            <input type="text" id="updatedClass" value={updatedExamClass} onChange={(e) => setUpdatedExamClass(e.target.value)}
-                                                                className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
-                                                                name="updatedClass"
-                                                            />
-                                                        </div>
-
-                                                        <div className="mb-4">
-                                                            <label className="block text-sm font-medium text-navy-900" htmlFor="updatedTeacher">Updated Teacher</label>
-                                                            <input type="text" id="updatedTeacher" value={updatedExamTeacher} onChange={(e) => setUpdatedExamTeacher(e.target.value)}
-                                                                className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
-                                                                name="updatedTeacher"
-                                                            />
-                                                        </div>
-
-                                                        <div class="flex justify-end">
-                                                            <button onClick={handleDrawerClose}
-                                                                class="bg-kindyyellowlight text-black px-2 py-1 font-semibold rounded-md hover:opacity-100 w-20 h-10" type="submit"
-                                                                style={{ borderRadius: '22px 0px' }}
-                                                            >
-                                                                Update
-                                                            </button>
-                                                        </div>
-                                                    </div></div>
-
-                                            </div>
-                                        </form>
-                                    </div> </div>
+                                    <UpdateExam handleSubmit={handleSubmit} selectedExamIdForUpdate={selectedExamIdForUpdate} handleDrawerClose2={handleDrawerClose2} updatedExamName={updatedExamName} setUpdatedExamName={setUpdatedExamName}  updatedExamStartDate={updatedExamStartDate}setUpdatedExamStartDate={setUpdatedExamStartDate} updatedExamDuration={updatedExamDuration} setUpdatedExamDuration={setUpdatedExamDuration} updatedExamHour={updatedExamHour} setUpdatedExamHour={setUpdatedExamHour} updatedExamClass={updatedExamClass} setUpdatedExamClass={setUpdatedExamClass} updatedExamTeacher={updatedExamTeacher} setUpdatedExamTeacher={setUpdatedExamTeacher} handleDrawerClose={handleDrawerClose}/>
+                                     </div>
                             )}
 
 
                             {isDrawerOpen && (
                                 <div id="drawer-create-course" className="fixed inset-0 flex  justify-center z-50 overflow-auto backdrop-blur-md">
-                                  
-                                            <div class="space-y-2  p-1.5 absolute top-2.5 right-2.5 group  h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200 " onClick={handleDrawerClose}>
-                                                <span class="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
-                                                <span class="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
-                                            </div>
-                                        
-                                    <div className="  dark:bg-gray-800 ">
-                                    <div className=" mt-6 max-w-md w-96 mx-auto  relative overflow-hidden z-10 bg-white p-6 rounded-lg shadow-md before:w-24 before:h-20 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-12 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-10 table-drawer mb-6">
-                                                                             <h2 className="text-2xl font-bold text-kindydarkblue  ml-24">Add an Exam   </h2>
-                                        </div>
-                                        <div className=" bg-white p-4 rounded-lg shadow-lg w-[500px]">
-                                        <img src="https://img.freepik.com/free-photo/pencil-mpty-pages-sheet-music_23-2147846239.jpg?t=st=1710294895~exp=1710298495~hmac=fab9842d293a30e7d4392c280c4701bc1a0cd7e274cd6299130a43e08b202d5c&w=996" alt="Exam Image" className="w-full rounded-lg mb-2 top-14" />
-                                        {/* <button onClick={handleDrawerClose} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <span>Close</span>
-                                        </button> */}
-                                       
 
-
-
-                                        <form onSubmit={handleAddExam}>
-                                            <div className="space-y-2">
-
-                                                <div class="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg w-full max-w-3xl">
-                                                    <input type="text" id="name" value={name} onChange={(e) => setExamName(e.target.value)} placeholder="Exam Name"
-                                                        class="peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-black-50" />
-
-                                                </div>
-
-
-
-                                                <div>
-                                                    <label htmlFor="startDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start Date</label>
-                                                    <input type="date" id="startDate" value={startDate} onChange={(e) => setExamStartDate(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="duration" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Duration (hh:mm)</label>
-                                                    <input
-                                                        type="text"
-                                                        id="duration"
-                                                        value={duration}
-                                                        onChange={(e) => setExamDuration(e.target.value)}
-                                                        placeholder="hh:mm"
-                                                        pattern="[0-9]{1,2}:[0-5][0-9]"
-                                                        title="Enter a valid duration in the format hh:mm (e.g., 01:30)"
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        required
-                                                    />
-                                                </div>
-
-
-
-
-
-                                                <div class="flex flex-row items-end">
-                                                    <label htmlFor="class" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose The Class  :</label>
-                                                    <select id="class" value={classe} onChange={(e) => setExamClass(e.target.value)} class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-e-0 border-gray-300 dark:border-gray-700 dark:text-white rounded-s-lg  hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button" style={{ marginLeft: '8px' }}>
-                                                        <option value="All classes">All Classes</option>
-                                                        {options.map((classe) => (
-                                                            <option key={classe} value={classe.name}>
-                                                                {classe.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="class">
-
-                                                        </ul>
-                                                    </div>
-
-                                                </div>
-
-
-                                                <div class="flex flex-row items-end">
-                                                    <label htmlFor="teacher" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose The Teacher  :</label>
-                                                    <select id="teacher" value={teacher} onChange={(e) => setExamTeacher(e.target.value)} class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-e-0 border-gray-300 dark:border-gray-700 dark:text-white rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" type="button" style={{ marginLeft: '8px' }}>
-                                                        <option value="All classes">All Teachers</option>
-                                                        {teachers.map((teacher) => (
-                                                            <option key={teacher} value={teacher.username}>
-                                                                {teacher.username}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="class">
-
-                                                        </ul>
-                                                    </div>
-
-                                                </div>
-
-                                                <ButtonComponent type="submit" text="Confirm" color="#0D6BBE"
-                                                >
-                                                    Confirm
-                                                </ButtonComponent>
-                                                {/* <button onClick={handleDrawerClose} className="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button> */}
-                                                <div class="group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl  p-2 hover:bg-slate-200">
-
-                                                    <button onClick={handleDrawerClose} className="ml-4 inline-flex justify-center items-center text-gray-500 bg-kindyyellowlight hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-navy-900 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div></div>
+                                    <div class="space-y-2  p-1.5 absolute top-2.5 right-2.5 group  h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200 " onClick={handleDrawerClose}>
+                                        <span class="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
+                                        <span class="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
                                     </div>
+
+                                    <AddExam  handleAddExam={handleAddExam} setIsDrawerOpen={setIsDrawerOpen} name={name} setExamName={setExamName} startDate={startDate} setExamStartDate={setExamStartDate} startHour={startHour} setExamStartHour={setExamStartHour} duration={duration} setExamDuration={setExamDuration} classes={classes} setClasses={setClasses}  teachers={teachers} setExamTeachers={setExamTeachers} teacher={teacher}  classe={classe} setExamClass={setExamClass} setExamTeacher={setExamTeacher}/>
+
+
+
+
+                                </div>
                             )}
+
 
                             {isDrawerOpen4 && (
                                 <div id="drawer-create-course" className="fixed inset-0 flex items-center justify-center z-50 overflow-auto backdrop-blur-md">
-                                 <div className="container mx-auto max-w-md w-full sm:w-3/4 md:w-1/2 lg:w-1/3"> 
-                                                                             <div className="max-w-md w-96 mx-auto  relative overflow-hidden z-10 bg-white p-6 rounded-lg shadow-md before:w-24 before:h-20 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-12 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-10 table-drawer mb-6">
-                                                                             <h2 className="text-2xl font-bold text-kindydarkblue  ml-16">Find Your Student   </h2>
+                                    <div className="container mx-auto max-w-md w-full sm:w-3/4 md:w-1/2 lg:w-1/3">
+                                        <div className="max-w-md w-96 mx-auto  relative overflow-hidden z-10 bg-white p-6 rounded-lg shadow-md before:w-24 before:h-20 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-12 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-10 table-drawer mb-6">
+                                            <h2 className="text-2xl font-bold text-kindydarkblue  ml-16">Find Your Student   </h2>
                                         </div>
- 
-                                     <div className=" top-10  mb-[10px] mt-[2px]  h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[450px] xl:gap-2 flex justify-center mt-20">
-                                     <div className=" mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[350px] xl:gap-2">
 
-                        <div className="flex h-full items-center rounded-full bg-white text-navy-700 dark:bg-navy-900 dark:text-white xl:w-[450px]">
+                                        <div className=" top-10  mb-[10px] mt-[2px]  h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[450px] xl:gap-2 flex justify-center mt-20">
+                                            <div className=" mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[350px] xl:gap-2">
 
-                            <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
+                                                <div className="flex h-full items-center rounded-full bg-white text-navy-700 dark:bg-navy-900 dark:text-white xl:w-[450px]">
 
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                value={searchTermstudent}
-                                onChange={handleSearchstudent}
-                                className="block h-full w-full rounded-full bg-white text-sm font-medium text-navy-700 outline-none placeholder-gray-400 xl:w-[650px] dark:placeholder-white sm:w-fit   focus:text-black"
-                            />
-                        </div>
-                    </div>
-                </div>
+                                                    <FiSearch className="h-4 w-4 text-gray-400 dark:text-white" />
+
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Search..."
+                                                        value={searchTermstudent}
+                                                        onChange={handleSearchstudent}
+                                                        className="block h-full w-full rounded-full bg-white text-sm font-medium text-navy-700 outline-none placeholder-gray-400 xl:w-[650px] dark:placeholder-white sm:w-fit   focus:text-black"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="grid grid-cols-2 gap-6 overflow-y-auto max-h-96">
                                             {filteredgrades.map((grade, index) => (
                                                 <div key={index} className="bg-white rounded-lg p-6 shadow-md">
@@ -553,6 +458,10 @@ const ExamsList = () => {
                                             </th>
                                             <th scope="col"
                                                 className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                                Start Hour
+                                            </th>
+                                            <th scope="col"
+                                                className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                                 Class
                                             </th>
                                             <th scope="col"
@@ -567,7 +476,7 @@ const ExamsList = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white dark:bg-gray-800">
-                                        {filteredExams.map(exam => (
+                                        {currentEvents.map(exam => (
                                             <tr key={exam._id} role="row">
                                                 <td role="cell"
                                                     className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
@@ -581,6 +490,12 @@ const ExamsList = () => {
                                                     <p>{exam.duration}</p>
                                                 </td>
 
+
+                                                <td role="cell"
+                                                    className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                                    <p>{exam.startHour}</p>
+                                                </td>
+
                                                 <td role="cell"
                                                     className="p-4 text-sm font-normal text-gray-500 whitespace-nowrap dark:text-gray-400">
                                                     <p>{exam.classe}</p>
@@ -592,38 +507,49 @@ const ExamsList = () => {
 
 
                                                 <td className="p-4">
-    <div className="flex items-center">
-        <div className="mr-4">
-            <ButtonComponent
-                text="Update"
-                color="#ffd26d"
-                onClick={() => {
-                    setIsDrawerOpen2(true);
-                    setSelectedExamIdForUpdate(exam._id);
-                    setUpdatedExamName(exam.name);
-                    setUpdatedExamStartDate(exam.startDate);
-                    setUpdatedExamDuration(exam.duration);
-                    setUpdatedExamClass(exam.classe);
-                    setUpdatedExamTeacher(exam.teacher);
-                }}
-            />
-        </div>
-        <div>
-            <ButtonComponent
-                text="Delete"
-                onClick={() => {
-                    setIsDrawerOpen3(true)
-                    setSelectedExamIdForUpdate(exam._id)
-                }}
-                color="#F98100"
-            />
-        </div>
-    </div>
-</td>
+                                                    <div className="flex items-center">
+                                                        <div className="mr-4">
+                                                            <ButtonComponent
+                                                                text="Update"
+                                                                color="#ffd26d"
+                                                                onClick={() => {
+                                                                    setIsDrawerOpen2(true);
+                                                                    setSelectedExamIdForUpdate(exam._id);
+                                                                    setUpdatedExamName(exam.name);
+                                                                    setUpdatedExamStartDate(exam.startDate);
+                                                                    setUpdatedExamDuration(exam.duration);
+                                                                    setUpdatedExamHour(exam.startHour);
+                                                                    setUpdatedExamClass(exam.classe);
+                                                                    setUpdatedExamTeacher(exam.teacher);
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <ButtonComponent
+                                                                text="Delete"
+                                                                onClick={() => {
+                                                                    setIsDrawerOpen3(true)
+                                                                    setSelectedExamIdForUpdate(exam._id)
+                                                                }}
+                                                                color="#F98100"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div> 
+                                                    <ButtonComponent
+                                                                text="Send Email"
+                                                                onClick={() => {
+                                                                    handleSendEmail(exam.classe)
+                                                                }}
+                                                                color="#F99100"
+                                                            />
+                                                    </div>
+                                                </td>
 
 
                                             </tr>
-
+                                           
 
 
 
@@ -634,8 +560,50 @@ const ExamsList = () => {
 
                                     </tbody>
                                 </table>
+                               
+                                <div className="mt-4 flex items-center justify-center gap-4">
+                                    <button
+                                        onClick={handlePreviousPage}
+                                        disabled={currentPage === 1}
+                                        className={`flex items-center gap-2 rounded-full px-4 py-2 text-white transition-colors ${currentPage === 1
+                                            ? "cursor-not-allowed bg-gray-300"
+                                            : "bg-[#f6a12d] hover:bg-blue-500"
+                                            }`}
+                                    >
+                                        <GrFormPreviousLink />
+                                        Previous
+                                    </button>
 
+                                    {Array.from(
+                                        { length: Math.ceil(filteredExams.length / itemsPerPage) },
+                                        (_, i) => i + 1
+                                    ).map((pageNumber) => (
+                                        <button
+                                            key={pageNumber}
+                                            onClick={() => handlePageNumberClick(pageNumber)}
+                                            className={`flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors ${currentPage === pageNumber
+                                                ? "bg-blue-500"
+                                                : "bg-[#f6a12d] hover:bg-blue-500"
+                                                }`}
+                                        >
+                                            {pageNumber}
+                                        </button>
+                                    ))}
 
+                                    <button
+                                        onClick={handleNextPage}
+                                        disabled={
+                                            currentPage === Math.ceil(filteredExams.length / itemsPerPage)
+                                        }
+                                        className={`flex items-center gap-2 rounded-full px-4 py-2 text-white transition-colors ${currentPage === Math.ceil(filteredExams.length / itemsPerPage)
+                                            ? "cursor-not-allowed bg-gray-300"
+                                            : "bg-[#f6a12d] hover:bg-blue-500"
+                                            }`}
+                                    >
+                                        Next
+                                        <GrFormNextLink />
+                                    </button>
+                                </div>
 
                                 {isDrawerOpen3 && (
                                     <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md ">
