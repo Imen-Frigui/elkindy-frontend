@@ -12,6 +12,7 @@ import { IoMdSearch } from "react-icons/io";
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { MdOutlineRestore, MdDelete } from "react-icons/md";
+import { GiArchiveResearch } from "react-icons/gi";
 const ArchivedEvents = () => {
   const [archivedEvents, setArchivedEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -96,13 +97,19 @@ const ArchivedEvents = () => {
 
   return (
     <div>
-<h1 className="cursor-pointer text-3xl font-bold mb-4 mx-auto text-center text-gray-700 hover:text-blue-700 transition-colors duration-300 bg-gray-200 hover:bg-blue-200 px-4 py-2 rounded-lg font-poppins transform hover:scale-105 transition-transform duration-300"
+{/* <h1 className="cursor-pointer text-3xl font-bold mb-4 mx-auto text-center text-gray-700 hover:text-blue-700 transition-colors duration-300 bg-gray-200 hover:bg-blue-200 px-4 py-2 rounded-lg font-poppins transform hover:scale-105 transition-transform duration-300"
 style={{ fontFamily: "Georgia, serif", maxWidth: "fit-content" }}
 >
   Review Archived Events
+</h1> */}
+
+<h1
+  className="flex items-center cursor-pointer text-2xl font-bold mb-4 mx-auto text-center text-gray-700 bg-white px-4 py-2 rounded-lg font-poppins"
+  style={{ maxWidth: "fit-content" }}
+>
+  <GiArchiveResearch className="mr-2" />
+  <span>Review Archived Events</span>
 </h1>
-
-
    
 <div className="mt-6 flex flex-col">
         <div className="overflow-x-auto rounded-lg">

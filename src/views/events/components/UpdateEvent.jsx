@@ -5,6 +5,7 @@ import {
   updateEvent,
 } from "../../../services/event/eventService";
 import { MdOutlineEditCalendar } from "react-icons/md";
+import { IoArrowBackCircle } from "react-icons/io5";
 import Card from "components/card";
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
@@ -31,7 +32,6 @@ const UpdateEvent = () => {
   const fetchEvent = async () => {
     try {
       const eventData = await fetchEventById(eventId);
-      // Parse date strings to Date objects
       eventData.startDate = new Date(eventData.startDate);
       eventData.endDate = new Date(eventData.endDate);
       setEvent(eventData);
@@ -50,29 +50,29 @@ const UpdateEvent = () => {
       setUpdated(true);
       console.log("Event updated:", event);
       toast.success('Event updated successfully!');
-      window.location.href = "/admin/events";
-      // toast.success('Event updated successfully!', {
-      //   onClose: () => {
-      //     setTimeout(() => {
-      //       window.location.href = "/admin/events"; // Redirect after 2 seconds
-      //     }, 1000); // Wait for 2 seconds before redirecting
-      //   }
-      // });
+      setEditable(false);
     } catch (error) {
       console.error("Error updating event:", error);
     }
   };
   const validateTitle = () => {
     const titleLength = event.title.trim().length;
-    setTitleValid(titleLength >= 3 && titleLength <= 20);
+    setTitleValid(titleLength >= 3 && titleLength <= 30);
   };
 
   const validateLocation = () => {
-    setLocationValid(event.location.trim().length > 0);
+    const location = event.location.trim();
+    const locationLength = location.length;
+    const containsForbiddenCharacters = /[#.]/.test(location);
+    setLocationValid(locationLength >= 5 && locationLength <= 50 && !containsForbiddenCharacters);
+    // setLocationValid(event.location.trim().length > 0);
   };
 
   const validateDescription = () => {
-    setDescriptionValid(event.description.trim().length > 0);
+    const description = event.description.trim();
+    const descriptionLength = description.length;
+    setDescriptionValid(descriptionLength >= 5 && descriptionLength <= 300);
+    // setDescriptionValid(event.description.trim().length > 0);
   };
 
   const validateCapacity = () => {
@@ -140,6 +140,12 @@ const UpdateEvent = () => {
     className="absolute top-0 right-0 mt-2 mr-3 cursor-pointer"
     onClick={handleEditToggle}
   />
+    <Link to="/admin/events">
+            <IoArrowBackCircle
+              className="absolute top-0 left-0 mt-2 ml-3 cursor-pointer"
+              title="Back To Events List"
+            />
+          </Link>
   <span className="inline-block mr-2">Edit</span>
   <span className="text-blue-500">{event?.title}</span>
 </h1>
@@ -178,7 +184,7 @@ const UpdateEvent = () => {
                 <p className="mt-1 text-xs text-red-500">
                   {event.title.trim().length === 0
                     ? "Event title is required"
-                    : "Title must be between 3 and 20 characters"}
+                    : "Title must be between 3 and 30 characters"}
                 </p>
               )}
             </div>
@@ -206,8 +212,10 @@ const UpdateEvent = () => {
               />
               {!locationValid && (
                 <p className="mt-1 text-xs text-red-500">
-                  Location is required
-                </p>
+                {event.location.trim().length === 0
+                  ? "Location is required"
+                  : "Location must be between 5 and 50 characters and cannot contain '#' or '.'"}
+              </p>
               )}
             </div>
           </div>
@@ -278,8 +286,10 @@ const UpdateEvent = () => {
             ></textarea>
             {!descriptionValid && (
               <p className="mt-1 text-xs text-red-500">
-                Description is required
-              </p>
+              {event.description.trim().length === 0
+                ? "Description is required"
+                : "Description must be between 5 and 300 characters"}
+            </p>
             )}
           </div>
           <div className="mb-5 flex">
@@ -432,6 +442,7 @@ const UpdateEvent = () => {
 
           <div className="mb-4 flex justify-center">
             <button
+              title="update Event"
               onClick={handleUpdate}
               className={`focus:shadow-outline mr-4 rounded bg-blue-500 py-2 px-8 font-bold text-white hover:bg-blue-600 focus:outline-none ${
                 !isFormValid() && "cursor-not-allowed opacity-50"
@@ -442,6 +453,7 @@ const UpdateEvent = () => {
               Update
             </button>
             <Link
+              title="Cancel Editing"
               to="/admin/events"
               className="focus:shadow-outline rounded bg-yellow-500 py-2 px-8 font-bold text-white hover:bg-yellow-600 focus:outline-none"
             >

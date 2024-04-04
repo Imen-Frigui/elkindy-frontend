@@ -3,6 +3,9 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "../../views/rtl/default/components/front/Navbar";
 
 import routes from "routes.js";
+
+import Header from "views/rtl/default/components/Header";
+import EventCards from "./eventFrontOffice/event"; 
 import PromoSection from "../../views/rtl/default/components/front/PromoSection";
 import ClassSection from "../../views/rtl/default/components/front/ClassSection";
 import CourseDetails from "../../views/rtl/default/components/front/CourseDetails";
@@ -59,8 +62,14 @@ export default function RTL(props) {
     });
   };
 
-  document.documentElement.dir = "rtl";
+  // document.documentElement.dir = "rtl";
   return (
+    <div>
+      <Header />
+      {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
+      {/* Navbar & Main Content */}
+      {/*  <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
+       
       < div className="bg-[#F7F5EF]">
 
         <Routes>
@@ -118,11 +127,12 @@ export default function RTL(props) {
             </div>
           </div>
         </main>
+      </div> */}
+        <EventCards />
+      <div className="p-3">
+        <Footer />
       </div>
+    </div>
 
-          <Footer />
-
-*/}
-      </div>
   );
 }
