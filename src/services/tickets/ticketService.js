@@ -75,8 +75,19 @@ export const deleteTicket = async (ticketId) => {
         }
     } catch (error) {
         console.error("Failed to delete ticket:", error);
-    }
+    }  
 };
 
-
+export const fetchTicketsByEventId = async (eventId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/tickets/event/${eventId}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("Failed to fetch tickets by event ID:", error);
+    }
+};
 

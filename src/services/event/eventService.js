@@ -5,7 +5,6 @@ export const fetchEvents = async () => {
         const response = await fetch(`${API_BASE_URL}/events`);
         if (response.ok) {
             const events = await response.json();
-            // Filter out archived events here if needed
             return events.filter(event => !event.isArchived); 
         } else {
             throw new Error('Network response was not ok.');
@@ -44,25 +43,43 @@ export const updateEvent = async (eventId, eventData) => {
 };
 
 
-export const addEvent = async (eventData) => {
+// export const addEvent = async (eventData) => {
+//     try {
+//         const response = await fetch(`${API_BASE_URL}/events/createEvent`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify(eventData),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok.');
+//         }
+
+//         return await response.json();
+//     } catch (error) {
+//         console.error("Failed to add event:", error);
+//     }
+// };
+export const addEvent = async (formData) => { 
     try {
-        const response = await fetch(`${API_BASE_URL}/events/createEvent`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(eventData),
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok.');
-        }
-
-        return await response.json();
+      const response = await fetch(`${API_BASE_URL}/events/createEvent`, {
+        method: 'POST',
+        body: formData, 
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      return await response.json();
     } catch (error) {
-        console.error("Failed to add event:", error);
+      console.error("Failed to add event:", error);
+      throw error;
     }
-};
+  };
+  
 
 
 export const deleteEvent = async (eventId) => {
@@ -128,3 +145,30 @@ export const restoreEvent = async (eventId) => {
       console.error("Failed to restore event:", error);
     }
   };
+
+
+  export const fetchMonthlyEventCount = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/events/monthlyEventCount`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Network response was not ok.');
+      }
+    } catch (error) {
+      console.error("Failed to fetch monthly event count:", error);
+    }
+  };
+
+  export const searchLocation = async (address) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/events/searchLocation?address=${encodeURIComponent(address)}`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw new Error('Network response was not ok.');
+      }
+    } catch (error) {
+      console.error("Failed to search location:", error);
+    }
+};

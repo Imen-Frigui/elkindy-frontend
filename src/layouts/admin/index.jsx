@@ -7,6 +7,7 @@ import routes from "routes.js";
 
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
+import AddEvent from "views/events/components/AddEvent";
 import Sidebarr from "../../components/sidebarr";
 import CoursesList from "../../views/course/CoursesList";
 import AssignTeachers from "../../views/course/AssignTeachers";
@@ -126,10 +127,9 @@ export default function Admin(props) {
                 <Route
                     path="/events" element={<EventsList />}/>
                 <Route path="/events/details/:eventId" element={<EventDetails />} />
-
                 <Route path="/events/edit/:eventId" element={<UpdateEvent />} />
                 <Route path="/events/archived" element={<ArchivedEventsList />} />
-
+                <Route path="/events/addevent" element={<AddEvent />} />
 
               <Route path={"/exams"} element={<ExamsList/>}/>
 
