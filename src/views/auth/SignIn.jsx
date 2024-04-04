@@ -28,8 +28,10 @@ export default function SignIn() {
     navigate("/auth/forgot-password");
   };
   useEffect(() => {
-    if (userInfo) {
-      navigate("/admin/default");
+    console.log(userInfo)
+    if (userInfo){
+      // Route to the appropriate layout based on the user's role
+      navigate(`/${userInfo.user.role}/default`);
     }
   }, [navigate, userInfo]);
 
@@ -46,7 +48,6 @@ export default function SignIn() {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate("/admin/default");
     } catch (err) {
       dispatch(
         setLoginError(err?.data?.message || "An error occurred during login.")

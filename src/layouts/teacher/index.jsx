@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
 import Footer from "components/footer/Footer";
-import routes from "StudentRoutes.js";
+import routes from "TeacherRoutes.js";
 
 import EventDetails from "views/events/components/EventDetails";
 import UpdateEvent from "views/events/components/UpdateEvent";
@@ -13,15 +13,13 @@ import useSocketStore from "../../ZustStore/socketStore";
 import SideBarrStudent from "components/sidebarrStudent";
 import Dashboard from "views/student/newview";
 import ProfileOverview from "views/admin/profile";
-import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
-import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
-import UserTrades from "views/admin/marketplace/components/UserTrades";
+import SideBarrTeacher from "components/sidebarrTeacher";
 
-export default function Student(props) {
+export default function Teacher(props) {
   const { ...rest } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
-  const [currentRoute, setCurrentRoute] = React.useState("student Dashboard");
+  const [currentRoute, setCurrentRoute] = React.useState("Teacher Dashboard");
   const { socket, initializeSocket } = useSocketStore();
   useEffect(() => {
     window.addEventListener("resize", () =>
@@ -39,11 +37,11 @@ export default function Student(props) {
       await initializeSocket();
     };
     connectSocket();
-  }, []);
+  },[]);
 
   const getActiveRoute = (routes) => {
     console.log(routes)
-    let activeRoute = "student Dashboard";
+    let activeRoute = "Teacher Dashboard";
     for (let i = 0; i < routes.length; i++) {
       if (
         window.location.href.indexOf(
@@ -68,7 +66,7 @@ export default function Student(props) {
   };
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/student") {
+      if (prop.layout === "/Teacher") {
         return (
           <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );
@@ -81,7 +79,7 @@ export default function Student(props) {
   document.documentElement.dir = "ltr";
   return (
     <div className="flex h-full w-full">
-      <SideBarrStudent open={open} onClose={() => setOpen(false)} />
+      <SideBarrTeacher open={open} onClose={() => setOpen(false)} />
       {/* <Sidebar open={open} onClose={() => setOpen(false)} /> */}
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-kindygray dark:!bg-navy-900">
@@ -102,21 +100,8 @@ export default function Student(props) {
             <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
-                <Route path="profile" element={<ProfileOverview />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route
-                  path="/marketplace/create"
-                  element={<CreateInstrument />}
-                />
-                <Route
-                  path="/marketplace/instrument/:id"
-                  element={<InstrumentDetail />}
-                />
-
-                <Route
-                  path="/marketplace/trades"
-                  element={<UserTrades />}
-                />
+              <Route path="profile" element={<ProfileOverview />} />
+                <Route path="default" element={<Dashboard />} />
               </Routes>
             </div>
             <div className="p-3">
