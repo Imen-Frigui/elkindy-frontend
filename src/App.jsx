@@ -18,10 +18,6 @@ import SignIn from "views/auth/SignIn";
 import RegisterPage from "views/auth/register";
 import ForgotPassword from "views/auth/Password/forgotPassword";
 import ResetPassword from "views/auth/Password/resetPassword";
-import StudentLayout from "layouts/student/index.jsx";
-import Student from "layouts/student";
-import Teacher from "layouts/teacher";
-import StudentLayout from "layouts/student/index.jsx";
 import Student from "layouts/student";
 import Teacher from "layouts/teacher";
 

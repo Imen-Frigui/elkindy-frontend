@@ -18,6 +18,8 @@ import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetai
 import EventsList from "views/events/EventsList";
 import ExamsList from "views/exams/exam";
 import ClassConfigPage from "../../views/course/ClassConfigPage";
+import UserTrades from "views/admin/marketplace/components/UserTrades";
+import useSocketStore from "ZustStore/socketStore";
 
 
 
