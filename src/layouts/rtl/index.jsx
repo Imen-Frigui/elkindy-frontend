@@ -4,12 +4,19 @@ import Navbar from "../../views/rtl/default/components/front/Navbar";
 
 import routes from "routes.js";
 
+import Header from "views/rtl/default/components/Header";
+import EvaluationList from "views/teacherExam/evaluation.jsx";
+import ExamClass from "views/teacherExam/examClass.jsx";
+import StudentExams from "views/studentExam/studentGrade.jsx";
+
+
 import Footer from "../../components/footer/Footer";
 import EventCards from "./eventFrontOffice/event"; 
 import PromoSection from "../../views/rtl/default/components/front/PromoSection";
 import ClassSection from "../../views/rtl/default/components/front/ClassSection";
 import CourseDetails from "../../views/rtl/default/components/front/CourseDetails";
 import Dashboard from "../../views/rtl/default";
+
 
 export default function RTL(props) {
   const { ...rest } = props;
@@ -62,6 +69,14 @@ export default function RTL(props) {
     });
   };
 
+
+ // document.documentElement.dir = "rtl";
+  return (
+    <div >
+     
+          <Header/>
+     {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
+
   // document.documentElement.dir = "rtl";
   return (
     <div>
@@ -86,6 +101,7 @@ export default function RTL(props) {
         </Routes>
 </div>
       {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
+
       {/* Navbar & Main Content */}
       {/*  <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
        
@@ -122,6 +138,19 @@ export default function RTL(props) {
           </div>
         </main>
       </div> */}
+
+       <Routes>
+                {getRoutes(routes)}
+                <Route path={"/evaluations"} element={<EvaluationList />} />
+                <Route path={"/examClass"} element={<ExamClass />} />
+                <Route path={"/studentExams"} element={<StudentExams />} />
+              </Routes>
+                  <div className="p-3">
+
+          <Footer />
+          </div>
+
+
 
       <div className="p-3 bg-[#F7F5EF]">
         <Footer className="bg-[#F7F5EF]"/>

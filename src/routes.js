@@ -14,6 +14,7 @@ import EventsList from "views/events/EventsList";
 
 import SignIn from "views/auth/SignIn";
 import ExamsList from "views/exams/exam.jsx"
+import EvaluationList from "views/teacherExam/evaluation.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
 
@@ -109,6 +110,16 @@ const routes = [
     },
 
     {
+
+        name: "All Evaluations",
+        layout: "/rtl",
+        path: "evaluation",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+      
+        component: <EvaluationList />,
+      },
+
         //name: "Teacher Dashboard",
         layout: "/admin",
         path: "teacher",
@@ -122,6 +133,7 @@ const routes = [
         icon: <MdSchedule  className="h-6 w-6" />,
         component: <TeacherSchedule />,
     },
+
 
 {
     name: "Sign In",
@@ -183,6 +195,7 @@ const routes = [
 
         component: <CourseDetails />,
     },
+
 
 
 ];
