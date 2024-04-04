@@ -110,7 +110,7 @@ const routes = [
 {
     name: "registration",
         layout: "/auth",
-    path: "Register/:courseId",
+    path: "Register",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     component: <Register />,

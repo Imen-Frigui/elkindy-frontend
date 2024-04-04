@@ -36,15 +36,18 @@ const App = () => {
 
 
 
-
+  <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
   <Route path="teacher/*" element={<Teacher />}>
           </Route>
-
-      <Route element={<PrivateRoute allowedRoles={['admin',"student",'teacher']} />}>
-      <Route path="student/*" element={<Student />}>
           </Route>
 
+      <Route element={<PrivateRoute allowedRoles={'student'} />}>
+      <Route path="student/*" element={<Student />}>
+          </Route>
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={'admin'} />}>
         <Route path="admin/*" element={<AdminLayout />}>
+          </Route>
           </Route>
           <Route path="courses"  element={<CoursesList />}/>
           <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
@@ -55,7 +58,6 @@ const App = () => {
             <Route path="events/archived" element={<ArchivedEventsList />} />
             <Route path="tickets" element={< TicketsList />} />
 
-        </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
         <Route path="evaluations" element={<EvaluationList />} />
 
