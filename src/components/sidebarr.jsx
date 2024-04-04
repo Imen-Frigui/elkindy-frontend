@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import { useSelector} from "react-redux";
 
+
 function SideBarr({ open, onClose }) {
   const [userData, setUserData] = useState(null);
 
@@ -85,7 +86,6 @@ function SideBarr({ open, onClose }) {
                   fill="none"
                   viewBox="0 0 24 24"
                 stroke-width="1.5"
-
                 stroke="currentColor"
                 className="h-6 w-6 cursor-pointer text-white hover:hover:text-kindyyellow"
               >

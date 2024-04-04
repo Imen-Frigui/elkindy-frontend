@@ -18,6 +18,8 @@ import SignIn from "views/auth/SignIn";
 import RegisterPage from "views/auth/register";
 import ForgotPassword from "views/auth/Password/forgotPassword";
 import ResetPassword from "views/auth/Password/resetPassword";
+import Student from "layouts/student";
+import Teacher from "layouts/teacher";
 
 
 
@@ -32,9 +34,25 @@ const App = () => {
   <Route path="auth/reset-password" element={<ResetPassword />} />
 
 
-      <Route element={<PrivateRoute allowedRoles={['admin',"student",'teacher']} />}>
-        
+
+  <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
+  <Route path="teacher/*" element={<Teacher />}>
+          </Route>
+          </Route>
+
+
+  <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
+  <Route path="teacher/*" element={<Teacher />}>
+          </Route>
+          </Route>
+
+      <Route element={<PrivateRoute allowedRoles={'student'} />}>
+      <Route path="student/*" element={<Student />}>
+          </Route>
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={'admin'} />}>
         <Route path="admin/*" element={<AdminLayout />}>
+          </Route>
           </Route>
           <Route path="courses"  element={<CoursesList />}/>
           <Route path="courses/assign-teachers/:courseId" element={<AssignTeachers />} />
@@ -46,7 +64,6 @@ const App = () => {
             <Route path="events/addevent" element={<AddEvent />} />
             <Route path="tickets" element={< TicketsList />} />
 
-        </Route>
         <Route path="rtl/*" element={<RtlLayout />} />
         <Route path="evaluations" element={<EvaluationList />} />
 
