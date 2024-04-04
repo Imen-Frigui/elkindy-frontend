@@ -59,7 +59,7 @@ function SideBarr({ open, onClose }) {
   }, [userData]);
 
   const isTeacher = userData?.user?.role === 'teacher';
-  console.log('isTeacher', isTeacher);
+  //console.log('isTeacher', isTeacher);
   return (
     <>
       <div

@@ -34,8 +34,7 @@ const App = () => {
   <Route path="auth/reset-password" element={<ResetPassword />} />
 
 
-
-  <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
+        {/*  <Route element={<PrivateRoute allowedRoles={'teacher'} />}>
   <Route path="teacher/*" element={<Teacher />}>
           </Route>
           </Route>
@@ -45,12 +44,14 @@ const App = () => {
   <Route path="teacher/*" element={<Teacher />}>
           </Route>
           </Route>
+        */}
+
 
       <Route element={<PrivateRoute allowedRoles={'student'} />}>
       <Route path="student/*" element={<Student />}>
           </Route>
           </Route>
-          <Route element={<PrivateRoute allowedRoles={'admin'} />}>
+          <Route element={<PrivateRoute allowedRoles={['admin', 'teacher']} />}>
         <Route path="admin/*" element={<AdminLayout />}>
           </Route>
           </Route>

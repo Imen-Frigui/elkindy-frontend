@@ -122,7 +122,7 @@ export default function RTL(props) {
           </div>
         </main>
       </div> */}
-        <EventCards className="bg-[#F7F5EF]"/>
+
       <div className="p-3 bg-[#F7F5EF]">
         <Footer className="bg-[#F7F5EF]"/>
       </div>
