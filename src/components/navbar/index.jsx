@@ -19,6 +19,7 @@ import { logout } from "../../slices/authSlice";
 
 import NotificationStatus from "components/ui/NotificationStatus";
 import TradeNotification from "components/ui/NotificationTrade";
+import axios from "axios";
 
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
@@ -30,11 +31,40 @@ const Navbar = (props) => {
 
   const navigate = useNavigate();
 
-  const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const [logoutApiCall] = useLogoutMutation();
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        console.log(response);
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
 
   const logoutHandler = async () => {
     try {
@@ -45,7 +75,7 @@ const Navbar = (props) => {
       console.log(props);
     }
   };
-  useEffect(() => {
+ /* useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
         setNotifications((prev) => [...prev, data]);
@@ -61,7 +91,7 @@ const Navbar = (props) => {
         setShowDropdown(true);
       });
     }
-  }, [socket]);
+  }, [socket]); */
 
   const markAllRead = () => {
     setNotifications([]);
@@ -237,7 +267,7 @@ const Navbar = (props) => {
           button={
             <img
               className="h-10 w-10 rounded-full"
-              src={avatar}
+              src={userData.user.image}
               alt="Elon Musk"
             />
           }
@@ -246,7 +276,7 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey,
+                    👋 Hey, {userData.user.username}
                   </p>{" "}
                 </div>
               </div>

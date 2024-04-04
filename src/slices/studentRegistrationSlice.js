@@ -12,12 +12,12 @@ const initialState = {
         gender: '',
         preferedInstrument: '',
         role:'',
-        courses: [], // Only for students// Removed additional fields for teachers
+        courses: [], // Only for students
     },
 };
 
-export const studentRegistrationSlice = createSlice({
-    name: 'studentRegistration',
+export const registrationSlice = createSlice({
+    name: 'registration',
     initialState,
     reducers: {
         updateFormData: (state, action) => {
@@ -29,9 +29,12 @@ export const studentRegistrationSlice = createSlice({
             }
         },
         addCourse: (state, action) => {
-            state.formData.courses.push({_id: action.payload});
+            if (state.formData.courses) {
+                state.formData.courses.push({_id: action.payload});
+            } else {
+                state.formData.courses = [{_id: action.payload}];
+            }
         },
-
         setCourses: (state, action) => {
             state.formData.courses = action.payload;
         },
@@ -49,6 +52,7 @@ export const studentRegistrationSlice = createSlice({
     },
 });
 
-export const { updateFormData, resetFormData, setRole, setCredentialsRegistration , addCourse, setCourses} = studentRegistrationSlice.actions;
+export const { updateFormData, resetFormData, setRole, setCredentialsRegistration, addCourse, setCourses } = registrationSlice.actions;
 
-export default studentRegistrationSlice.reducer;
+export default registrationSlice.reducer;
+
