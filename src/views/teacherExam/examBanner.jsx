@@ -57,7 +57,7 @@ const TeacherBanner = ({filteredStudents ,ButtonComponent ,setIsDrawerOpen2 , se
     </p>
 
     <div className="mt-[36px] flex items-center justify-center gap-4 sm:justify-start 2xl:gap-10">
-    <Link to="/rtl/examClass">
+    <Link to="/admin/teacher/examClass">
         <button className="text-black linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium transition duration-200 hover:!bg-white/80 active:!bg-white/70" onClick={() => { setIsDrawerOpenexam(true);}}>
         Exams grades
         </button>

@@ -26,10 +26,10 @@ const EditStatusPopup = ({ userId, currentStatus, onClose, fetchUsers }) => {
             onChange={(e) => setNewStatus(e.target.value)}
             className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           >
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-            <option value="Suspended">Suspended</option>
-            <option value="Offboarded">Offboarded</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="suspended">Suspended</option>
+            <option value="offboarded">Offboarded</option>
           </select>
         </label>
         <div className="flex justify-end">

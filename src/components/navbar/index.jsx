@@ -39,6 +39,21 @@ const Navbar = (props) => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
+    if (socket) {
+      socket.on("getNotification", (data) => {
+        setNotifications((prev) => [...prev, data]);
+        const sound = new Audio(messageSound);
+        sound.play();
+        setShowDropdown(true);
+      });
+
+      socket.on("getTradeStatus", (data) => {
+        setStatusNotifications((prev) => [...prev, data]);
+        const sound = new Audio(messageSound);
+        sound.play();
+        setShowDropdown(true);
+      });
+    }
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -61,7 +76,7 @@ const Navbar = (props) => {
     };
 
     fetchUserData();
-  }, []);
+  }, [socket]);
   if (!userData) {
     return <div>Loading...</div>;
   }
@@ -75,23 +90,7 @@ const Navbar = (props) => {
       console.log(props);
     }
   };
- /* useEffect(() => {
-    if (socket) {
-      socket.on("getNotification", (data) => {
-        setNotifications((prev) => [...prev, data]);
-        const sound = new Audio(messageSound);
-        sound.play();
-        setShowDropdown(true);
-      });
-
-      socket.on("getTradeStatus", (data) => {
-        setStatusNotifications((prev) => [...prev, data]);
-        const sound = new Audio(messageSound);
-        sound.play();
-        setShowDropdown(true);
-      });
-    }
-  }, [socket]); */
+  
 
   const markAllRead = () => {
     setNotifications([]);
