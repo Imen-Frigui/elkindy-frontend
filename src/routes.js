@@ -7,7 +7,6 @@ import { MdBook, MdEventNote } from "react-icons/md";
 import Profile from "views/admin/profile";
 import DataTables from "views/admin/tables";
 import RTLDefault from "views/rtl/default";
-import { GiTicket } from "react-icons/gi";
 import {  FaCalendarAlt, FaShoppingBasket } from "react-icons/fa";
 
 // Auth Imports
@@ -18,25 +17,28 @@ import ExamsList from "views/exams/exam.jsx"
 import EvaluationList from "views/teacherExam/evaluation.jsx"
 // Icon Imports
 import CoursesList from "views/course/CoursesList";
-import TicketsList from "views/tickets/TicketsList";
-import EventDetails from "views/events/components/EventDetails";
+
 import { GiPapers } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";
 import {
     MdHome,
     MdPerson,
-    MdLock
+    MdOutlineNoteAlt,
+    MdSchedule
 } from "react-icons/md";
-
-
-    import AssignTeachers from "./views/course/AssignTeachers";
-
+import AssignTeachers from "./views/course/AssignTeachers";
 import Register from "views/auth/register";
 import UnauthorizedPage from "views/auth/unauthorized";
 import UserList from "views/users/usersList";
+import TeacherDashboard from "./views/teacher/TeacherDashboard";
+import TeacherSchedule from "./views/teacher/TeacherSchedule";
+import CourseDetails from "./views/rtl/default/components/front/CourseDetails";
+import Dashboard from "views/rtl/default";
 
 
 const routes = [
+
+
   {
     name: "ElKindy Dashboard",
     layout: "/admin",
@@ -68,7 +70,13 @@ const routes = [
   },
  
   
-
+ /* {
+    name: "RTL Admin",
+    layout: "/rtl",
+    path: "rtl",
+    icon: <MdHome className="h-6 w-6" />,
+    component: <RTLDefault />,
+  },*/
   {
     name: "Events List",
     layout: "/admin",
@@ -85,7 +93,7 @@ const routes = [
   },
 
     {
-        name: "Courses List",
+        name: "Courses",
         layout: "/admin",
         path: "courses",
         icon: <MdBook className="h-6 w-6" />,
@@ -102,6 +110,7 @@ const routes = [
     },
 
     {
+
         name: "All Evaluations",
         layout: "/rtl",
         path: "evaluation",
@@ -110,6 +119,21 @@ const routes = [
       
         component: <EvaluationList />,
       },
+
+        //name: "Teacher Dashboard",
+        layout: "/admin",
+        path: "teacher",
+        icon: <MdOutlineNoteAlt  className="h-6 w-6" />,
+        component: <TeacherDashboard />,
+    },
+    {
+        //name: "Teacher Dashboard",
+        layout: "/admin",
+        path: "Schedule",
+        icon: <MdSchedule  className="h-6 w-6" />,
+        component: <TeacherSchedule />,
+    },
+
 
 {
     name: "Sign In",
@@ -124,7 +148,7 @@ const routes = [
 {
     name: "registration",
         layout: "/auth",
-    path: "Register/:courseId",
+    path: "Register",
     icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
 
     component: <Register />,
@@ -143,16 +167,34 @@ const routes = [
     hide: true,
     component: <UnauthorizedPage />,
 },
-  
-{
-  name: "RTL Admin",
-  layout: "/rtl",
-  path: "rtl",
-  icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-  hide: true,
 
-  component: <RTLDefault />,
-},
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "rtl",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <RTLDefault />,
+    },
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "/",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <Dashboard />,
+    },
+    {
+        name: "RTL Admin",
+        layout: "/rtl",
+        path: "course/:courseId",
+        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+        hide: true,
+
+        component: <CourseDetails />,
+    },
 
 
 

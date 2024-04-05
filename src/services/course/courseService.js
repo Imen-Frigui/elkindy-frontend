@@ -141,3 +141,65 @@ export const fetchAssignedTeachers = async (courseId) => {
         console.error("Failed to fetch assigned teachers:", error);
     }
 };
+
+export const fetchTopThreeCourses = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/popular`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch top three courses:", error);
+        throw error;
+    }
+};
+
+export const fetchStudentStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/students-stats`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch student stats:", error);
+        throw error;
+    }
+};
+
+export const fetchTeacherStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/teachers-stats`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch teacher stats:", error);
+        throw error;
+    }
+};
+
+export const uploadCourseImage = async (courseId, file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/${courseId}/upload-image`, {
+            method: 'PATCH',
+            body: formData,
+            // `fetch` will set it automaticallTheContentTYpeof the FormData object
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to upload course image:", error);
+        throw error;
+    }
+};
+

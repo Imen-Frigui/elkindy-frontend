@@ -64,7 +64,6 @@ const Marketplace = () => {
       // }
     };
     fetchData();
-    console.log(instruments);
   }, [age, status, sort, searchQuery]);
 
   const isActiveAge = useCallback(
@@ -120,9 +119,9 @@ const Marketplace = () => {
           backgroundImage={banner}
           title="Discover Your Perfect Harmony: Instruments Marketplace"
           subtitle="Exchange, Play, Repeat: Unleash Your Musical Potential"
-          button1Link="/admin/marketplace/create"
+          button1Link="create"
           button1Text="Post your instrument now"
-          button2Link="/admin/marketplace/trades"
+          button2Link="trades"
           button2Text="My trades"
         />
         <div className=" mb-2 mt-2  flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue px-4 py-0 dark:bg-indigo-50 md:flex-row md:items-center">

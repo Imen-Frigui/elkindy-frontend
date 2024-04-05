@@ -4,7 +4,7 @@ const initialState = {
   userInfo: localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null,
-    loginError: null, // Initial state for login error
+  loginError: null, // Initial state for login error
 };
 
 const authSlice = createSlice({
@@ -14,6 +14,7 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       const { user } = action.payload;
       state.userInfo = action.payload;
+
       localStorage.setItem('token', user.token); // Directly store the token in localStorage
     },
    
@@ -27,6 +28,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout ,updateRegistrationData,setLoginError} = authSlice.actions;
+export const { setCredentials, logout, setLoginError } = authSlice.actions;
 
 export default authSlice.reducer;

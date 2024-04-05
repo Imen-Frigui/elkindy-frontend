@@ -23,3 +23,7 @@ export { default as LatestTrades } from "./ui/LatestTrades";
 export { default as NotificationStatus } from "./ui/NotificationStatus";
 export { default as TradeNotification } from "./ui/NotificationTrade";
 export { default as ImageUploader } from "./ui/ImageUploader";
+export { default as LoadingSpinner } from "./ui/LoadingSpinner";
+export { default as ShareModal } from "./ui/ShareModal";
+export { default as UserInstruments } from "./ui/UserInstruments";
+export { default as DeleteModal } from "./ui/DeleteModal";

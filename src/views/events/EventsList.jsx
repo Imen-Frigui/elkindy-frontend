@@ -4,7 +4,9 @@ import {
   archiveEvent,
   deleteEvent,
 } from "../../services/event/eventService";
+import ButtonComponent from "../../components/button/ButtonComponnent";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import AddEvent from "./components/AddEvent";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
@@ -89,7 +91,7 @@ const EventsList = () => {
 
   const handleEventAdded = () => {
     fetchEvents().then(setEvents);
-    toast.success("Event added successfully!");
+    // toast.success("Event added successfully!");
   };
   const handleClick = () => {
     navigate("/admin/events/archived");
@@ -143,7 +145,6 @@ const EventsList = () => {
     handlePopoverClose();
   };
 
-  // Helper function to format date and time
   const formatDateTime = (isoString, onlyDate = false) => {
     const options = onlyDate
       ? { year: "numeric", month: "2-digit", day: "2-digit" }
@@ -157,7 +158,6 @@ const EventsList = () => {
         };
     return new Date(isoString).toLocaleString("en-US", options);
   };
-  // Function to prepare data for export
   const prepareDataForExport = (data) => {
     return data.map((event) => {
       const { _id, ...rest } = event;
@@ -227,7 +227,7 @@ const EventsList = () => {
     }
   };
   const handleGeneratePDF = () => {
-    const doc = new jsPDF('l', 'mm', [210, 297]); // Landscape format
+    const doc = new jsPDF('l', 'mm', [210, 297]);
   
     events.forEach((event, index) => {
       if (index !== 0) {
@@ -274,9 +274,9 @@ const EventsList = () => {
     doc.save("events.pdf");
   };
   
-  
-  
-
+  const handleAddEventButtonClick = () => {
+    navigate("/admin/events/addevent"); 
+  };
   return (
     <>
       <ToastContainer position="top-center" />
@@ -285,7 +285,15 @@ const EventsList = () => {
           <div className="inline-block min-w-full align-middle">
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center">
-                <AddEvent onEventAdded={handleEventAdded} />
+                {/* <AddEvent onEventAdded={handleEventAdded} /> */}
+                <ButtonComponent
+        className="mb-3"
+        text="Add Event"
+        color="#006BBE"
+        onClick={handleAddEventButtonClick}
+      >
+        Add Event
+      </ButtonComponent>
                 {/* Export Button */}
                 <button
                   className="m-2 mr-0  flex h-10 w-40 items-center justify-center bg-green-500 text-white"
@@ -539,26 +547,7 @@ const EventsList = () => {
                           <p>{event.capacity}</p>
                         </div>
                       </td>
-                      {/* <td className="p-4 whitespace-nowrap">
-                                                {editEventId === event._id ? (
-                                                    <TextField
-                                                        fullWidth
-                                                        variant="outlined"
-                                                        defaultValue={event.title}
-                                                        value={editEventName}
-                                                        onChange={(e) => setEditEventName(e.target.value)}
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                e.preventDefault();
-                                                                handleSaveClick(event._id, e.target.value).then(r => console.log(r));
-                                                            }
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <span
-                                                        onDoubleClick={() => handleEditClick(event)}>{event.title}</span>
-                                                )}
-                                            </td> */}
+
                       <td className="whitespace-nowrap p-4">
                         <IconButton
                           aria-describedby={
