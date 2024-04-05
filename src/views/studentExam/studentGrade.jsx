@@ -1,17 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import StudentBanner from './studentBanner.jsx';
-
+import { fetchStudentgrades } from '../../services/exam/examService';
+import nft1 from "assets/img/nfts/grades.jpg";
+import {fetchExamsGrades} from '../../services/exam/examService';
 const StudentExams = () => {
     const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
-    
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
+    const [grades, setGrades] = useState([]);
+    const [examgrades, setExamGrades] = useState([]);
+    const getEvalGrades = async () => {
+
+      try {
+          const fetchgradeEvaluations = await fetchStudentgrades('65de945086e6c9f4fcc6559f');
+          if (fetchgradeEvaluations) {
+              console.log(fetchgradeEvaluations);
+              setGrades(fetchgradeEvaluations);
+
+          }
+
+
+      } catch (error) {
+          console.error("Failed to fetch classes:", error);
+      }
+  };
+
+
+  const getExamGrades = async () => {
+
+    try {
+        const fetchgradeExam = await fetchExamsGrades('65de945086e6c9f4fcc6559f');
+        if (fetchgradeExam) {
+            console.log(fetchgradeExam);
+            setExamGrades(fetchgradeExam);
+
+        }
+
+
+    } catch (error) {
+        console.error("Failed to fetch classes:", error);
+    }
+};
+     
     useEffect(() => {
         // Effect hook code here if needed
+        getEvalGrades();
+        getExamGrades();
+       
     }, []);
 
     return (
         <>
             <div>
-                <StudentBanner/>
+                <StudentBanner setIsDrawerOpen={setIsDrawerOpen} setIsDrawerOpen2={setIsDrawerOpen2}/>
             </div>
 
             <div className="mt-10 flex justify-center">
@@ -54,6 +95,117 @@ const StudentExams = () => {
 </div>
 
             </div>
+
+            {isDrawerOpen && ( 
+
+<div id="drawer-create-course" className="fixed inset-0 flex items-center justify-center z-50 overflow-auto backdrop-blur-md  my-6">
+<div className="max-w-3xl sm:w-full md:w-3/4 lg:w-1/2 mx-auto relative overflow-hidden z-10 bg-white p-2 shadow-md rounded-[20px]">
+    <div className="relative">
+    <img src={nft1} alt="Exam Image" className="w-full rounded-t-lg mb-6" style={{ maxHeight: '200px', objectFit: 'cover', objectPosition:'50% 60%', filter: 'blur(1px)' }} />
+
+
+
+    </div>
+    <span className="bg-kindydarkblue mx-auto mb-4 inline-block h-1 w-[90px] rounded absolute bottom-0 left-1/2 transform -translate-x-1/2"></span>
+
+    <div className="overflow-y-auto max-h-96 overflow-x-hidden px-4 pb-8">
+<table className="w-full max-w-[550px] border-collapse border border-gray-700 mx-auto">
+<thead>
+    <tr>
+        
+       <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Evaluation Name</th>
+        <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Grade </th>
+    </tr>
+</thead>
+<tbody >
+    {grades.length > 0 ? (
+        grades.map((student, index) => (
+            <tr style={{ borderWidth: '2px', borderColor:'black' }} key={index}>
+
+                <td className="  text-center border-kindydarkblue p-4 text-sm font-normal text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                    <p>{student.examName}</p>
+                </td>
+                <td className="  text-center border-kindydarkblue p-4 text-sm font-normal text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                    <p>{student.grade}</p>
+                </td>
+               
+            </tr>
+        ))
+    ) : (
+        <tr>
+            <td colSpan="2" className="border border-kindydarkblue p-4">No grades found</td>
+        </tr>
+    )}
+</tbody>
+</table>
+</div>
+
+</div>
+<div className="space-y-2 p-1.5 absolute top-2.5 right-2.5 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpen(false)}>
+      <span className="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
+      <span className="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
+      {/* Title */}
+      <span className="block text-m text-center mx-5 text-orange-500">Close</span>
+    </div>
+</div>
+             )}
+     
+
+
+           {isDrawerOpen2 && ( 
+
+<div id="drawer-create-course" className="fixed inset-0 flex items-center justify-center z-50 overflow-auto backdrop-blur-md  my-6">
+<div className="max-w-3xl sm:w-full md:w-3/4 lg:w-1/2 mx-auto relative overflow-hidden z-10 bg-white p-2 shadow-md rounded-[20px]">
+    <div className="relative">
+    <img src={nft1} alt="Exam Image" className="w-full rounded-t-lg mb-6" style={{ maxHeight: '200px', objectFit: 'cover', objectPosition:'50% 60%', filter: 'blur(1px)' }} />
+
+
+
+    </div>
+    <span className="bg-kindydarkblue mx-auto mb-4 inline-block h-1 w-[90px] rounded absolute bottom-0 left-1/2 transform -translate-x-1/2"></span>
+
+    <div className="overflow-y-auto max-h-96 overflow-x-hidden px-4 pb-8">
+<table className="w-full max-w-[550px] border-collapse border border-gray-700 mx-auto">
+<thead>
+    <tr>
+        
+       <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Exam Name</th>
+        <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Grade </th>
+    </tr>
+</thead>
+<tbody >
+    {examgrades.length > 0 ? (
+        examgrades.map((student, index) => (
+            <tr style={{ borderWidth: '2px', borderColor:'black' }} key={index}>
+
+                <td className="  text-center border-kindydarkblue p-4 text-sm font-normal text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                    <p>{student.examName}</p>
+                </td>
+                <td className="  text-center border-kindydarkblue p-4 text-sm font-normal text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                    <p>{student.grade}</p>
+                </td>
+               
+            </tr>
+        ))
+    ) : (
+        <tr>
+            <td colSpan="2" className="border border-kindydarkblue p-4">No grades found</td>
+        </tr>
+    )}
+</tbody>
+</table>
+</div>
+
+</div>
+<div className="space-y-2 p-1.5 absolute top-2.5 right-2.5 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpen2(false)}>
+      <span className="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
+      <span className="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
+      {/* Title */}
+      <span className="block text-m text-center mx-5 text-orange-500">Close</span>
+    </div>
+</div>
+             )} 
+
         </>
     );
 }

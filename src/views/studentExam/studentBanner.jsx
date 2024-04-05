@@ -1,7 +1,7 @@
 import nft1 from "assets/img/nfts/Allstudents.jpg";
 import { Link } from 'react-router-dom';
 
-const StudentBanner = () => {
+const StudentBanner = ({setIsDrawerOpen , setIsDrawerOpen2}) => {
   return (
     <div className="mt-8 flex w-full flex-col rounded-[20px] bg-cover px-[30px] py-[30px] md:px-[30px] md:py-[56px] relative overflow-hidden">
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${nft1})`, filter: 'blur(4px)', borderRadius: '20px' }}></div>
@@ -15,15 +15,15 @@ const StudentBanner = () => {
         </p>
 
         <div className="mt-[36px] flex items-center justify-between gap-4 sm:justify-start 2xl:gap-10">
-          <Link to="">
-          <button
+          
+          <button onClick={() => setIsDrawerOpen2(true)}
             href=" "
             className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2"
           >
            Check your Exams Grades
           </button>
-          </Link>
-          <button
+         
+          <button onClick={() => setIsDrawerOpen(true)}
             href=" "
             className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2"
           >
@@ -31,12 +31,12 @@ const StudentBanner = () => {
           </button>
 
 
-          <button
+          {/* <button
             href=" "
             className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2"
           >
            Check your observations
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
