@@ -7,7 +7,7 @@ import { fetchEvalStudent } from '../../services/exam/examService';
 import { fetchStudents } from '../../services/exam/examService';
 import TeacherBanner from './examBanner.jsx';
 import { fetchStudentsExam } from '../../services/exam/examService';
-import { fetchStudentgrades } from '../../services/exam/examService';
+import { fetchStudentsgrades } from '../../services/exam/examService';
 import { FaBan } from 'react-icons/fa';
 const EvaluationList = () => {
 
@@ -83,7 +83,7 @@ const EvaluationList = () => {
     const getEvalGrades = async (username) => {
 
         try {
-            const fetchgradeEvaluations = await fetchStudentgrades(username);
+            const fetchgradeEvaluations = await fetchStudentsgrades(username);
             if (fetchgradeEvaluations) {
                 console.log(fetchgradeEvaluations);
                 setGrades(fetchgradeEvaluations);
@@ -111,7 +111,7 @@ const EvaluationList = () => {
             const fetchEvaluations = await fetchEvalStudent(username);
             if (fetchEvaluations) {
                 console.log(fetchEvaluations);
-                const fetchgradeEvaluations = await fetchStudentgrades(username);
+                const fetchgradeEvaluations = await fetchStudentsgrades(username);
                 console.log(fetchgradeEvaluations);
                 const updatedEvaluations = fetchEvaluations.map((evaluation, index) => {
                     // Assuming your evaluations array has some identifier like id to match with grades
@@ -290,7 +290,7 @@ const EvaluationList = () => {
 
                 <div id="drawer-create-course" className="fixed inset-0 flex items-center justify-center z-50 overflow-auto backdrop-blur-md mt-6 my-6">
 
-<div className="space-y-2 p-1.5 absolute top-2.5 right-2.5 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpen(false)}>
+<div className="space-y-2 p-1.5 absolute top-3.5 right-2.5 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpen(false)}>
       <span className="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
       <span className="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
       {/* Title */}
@@ -379,7 +379,7 @@ const EvaluationList = () => {
 
                                             </td>
                            
-                                            <td className="p-12 text-sm font-bold text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                                            <td  title="you can update the grade" className="p-12 text-sm font-bold text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
                                             <div 
         contentEditable 
         onBlur={(event) => evaluation.grade = event.target.textContent}
