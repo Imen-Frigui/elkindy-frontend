@@ -47,12 +47,11 @@ const StudentFormStep1 = ({ onNext }) => {
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
             .required('Confirm password is required'),
             preferedInstrument: Yup.array().min(1, 'prefered Instrumens is required').required('prefered Instruments is required'),
-        courses: Yup.array().min(1, 'Course is required').required('Course is required'),
     });
 
     useEffect(() => {
         console.log(formData);
-        dispatch(setRole('user'));
+        dispatch(setRole('student'));
     }, [dispatch, formData]);
 
     const handleTagsChange = (tags) => {
@@ -128,11 +127,9 @@ const StudentFormStep1 = ({ onNext }) => {
 
 
             console.log(formData);
-            console.log(courseId);
-            dispatch(addCourse([courseId]));
             const result = await register(formData).unwrap();
             dispatch(setCredentialsRegistration({ ...result }));
-            Navigate('/admin/default');
+            Navigate('/student/default');
             onNext();
         } catch (err) {
             if (err.inner) {

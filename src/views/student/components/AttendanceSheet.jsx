@@ -45,7 +45,7 @@ const AttendanceSheet = ({ studentId }) => {
                             <thead>
                             <tr>
                                 {records.map((record, index) => (
-                                    <th key={index} className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th key={index} className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {new Date(record.date).toLocaleDateString()}
                                     </th>
                                 ))}
@@ -54,7 +54,7 @@ const AttendanceSheet = ({ studentId }) => {
                             <tbody className="bg-white divide-y divide-gray-200">
                             <tr>
                                 {records.map((record, index) => (
-                                    <td key={index} className="px-6 py-4 whitespace-nowrap text-center">
+                                    <td key={index} className="px-6 py-3  whitespace-nowrap ">
                                         {record.status}
                                     </td>
                                 ))}

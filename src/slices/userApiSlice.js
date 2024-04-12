@@ -23,6 +23,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    registerEnroll: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/registerEnroll`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     updateUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/profile`,

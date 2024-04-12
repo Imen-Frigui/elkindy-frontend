@@ -16,6 +16,7 @@ import ProfileOverview from "views/admin/profile";
 import CreateInstrument from "views/admin/marketplace/components/CreateInstrument";
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import UserTrades from "views/admin/marketplace/components/UserTrades";
+import StudentExams from "../../views/studentExam/studentGrade";
 
 export default function Student(props) {
   const { ...rest } = props;
@@ -117,6 +118,7 @@ export default function Student(props) {
                   path="/marketplace/trades"
                   element={<UserTrades />}
                 />
+                 />
               </Routes>
             </div>
             <div className="p-3">

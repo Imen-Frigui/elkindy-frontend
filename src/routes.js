@@ -104,7 +104,7 @@ const routes = [
     {
         name: "All Exams",
         layout: "/admin",
-        path: "exams",
+        path: "examClass",
         icon: <GiPapers className="h-6 w-6" />,
         component: <ExamsList />,
     },
@@ -112,11 +112,9 @@ const routes = [
     {
 
         name: "All Evaluations",
-        layout: "/rtl",
-        path: "evaluation",
-        icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-        hide: true,
-      
+        layout: "/admin",
+        path: "evaluations",
+        icon: <MdBook className="h-6 w-6"  />,
         component: <EvaluationList />,
       },
 
@@ -136,39 +134,6 @@ const routes = [
         component: <TeacherSchedule />,
     },
 
-
-{
-    name: "Sign In",
-        layout: "/auth",
-    path: "sign-in",
-    icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-    component: <SignIn />,
-    hide: true,
-},
-
-
-{
-    name: "registration",
-        layout: "/auth",
-    path: "Register",
-    icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-
-    component: <Register />,
-    hide: true,
-
-},
-
-
-
-{
-    name: "unauthorized",
-        layout: "/auth",
-    path: "unauthorized",
-    icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
-
-    hide: true,
-    component: <UnauthorizedPage />,
-},
 
     {
         name: "RTL Admin",

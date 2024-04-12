@@ -5,6 +5,9 @@ import ProfileOverview from "views/admin/profile";
 import NFTMarketplace from "views/admin/marketplace";
 import { FaCalendarAlt, FaShoppingBasket, FaBook } from "react-icons/fa";
 import StudentDashboard from "./views/student/StudentDashboard";
+import {GiPapers} from "react-icons/gi";
+import ExamsList from "./views/exams/exam";
+import StudentExams from "./views/studentExam/studentGrade";
 
 const routes = [
   {
@@ -46,6 +49,13 @@ const routes = [
     icon: <FaBook className="h-6 w-6" />,
     component: <StudentDashboard />,
     secondary: true,
+  },
+  {
+    name: "All Exams",
+    layout: "/student",
+    path: "exams",
+    icon: <GiPapers className="h-6 w-6" />,
+    component: <StudentExams />,
   },
 
 ];
