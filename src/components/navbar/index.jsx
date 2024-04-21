@@ -23,6 +23,8 @@ import TradeNotification from "components/ui/NotificationTrade";
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [statusNotification, setStatusNotifications] = useState([]);
+  const [itemNotification, setItemNotification] = useState([]);
+
   const [showDropdown, setShowDropdown] = useState(false);
   const { onOpenSidenav, brandText, socket } = props;
   const [darkmode, setDarkmode] = React.useState(false);
@@ -60,6 +62,14 @@ const Navbar = (props) => {
         sound.play();
         setShowDropdown(true);
       });
+      socket.on("newInstrumentNotification", (data) => {
+        setItemNotification((prev) => [...prev, data]);
+        const sound = new Audio(messageSound);
+        sound.play();
+        setShowDropdown(true);
+      });
+
+
     }
   }, [socket]);
 
@@ -142,15 +152,22 @@ const Navbar = (props) => {
                 <TradeNotification
                   key={index}
                   notification={notification}
-                  onClick={() => {}}
+                  onClick={() => { }}
                 />
               ))}
               {statusNotification.map((notification, index) => (
                 <NotificationStatus
                   key={index}
                   status={notification.status}
-                  onClick={() => {}}
+                  onClick={() => { }}
                 />
+              ))}
+              {itemNotification.map((notification, index) => (
+                console.log(notification.instrument),
+                <div>
+                  <h1>New item posted with your search preferences</h1>
+                  <Link to={`/marketplace/instrument/${notification.instrument._id}`}>See Instrument</Link>
+                </div>
               ))}
 
               {/* <button className="flex w-full items-center">

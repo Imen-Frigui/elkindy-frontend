@@ -3,8 +3,9 @@ import React from "react";
 import { MdHome, MdPerson } from "react-icons/md";
 import ProfileOverview from "views/admin/profile";
 import NFTMarketplace from "views/admin/marketplace";
-import { FaCalendarAlt, FaShoppingBasket, FaBook } from "react-icons/fa";
+import { FaCalendarAlt, FaShoppingBasket, FaBook, FaFacebookMessenger } from "react-icons/fa";
 import StudentDashboard from "./views/student/StudentDashboard";
+import Conversation from "components/ui/Conversations";
 
 const routes = [
   {
@@ -14,7 +15,7 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />, // Make sure to import MdHome in the actual component file
     component: <Dashboard />, // Render Dashboard component for student layout
   },
-  
+
   {
     name: "ElKindy Dashboard",
     layout: "/admin",
@@ -40,6 +41,13 @@ const routes = [
     secondary: true,
   },
   {
+    name: "ElKindy Chat",
+    layout: "/admin",
+    path: "chat",
+    icon: <FaFacebookMessenger className="h-6 w-6" />,
+    component: <Conversation />,
+  },
+  {
     name: "ElKindy Courses",
     layout: "/student",
     path: "class",
@@ -47,7 +55,6 @@ const routes = [
     component: <StudentDashboard />,
     secondary: true,
   },
-
 ];
 
 export default routes;

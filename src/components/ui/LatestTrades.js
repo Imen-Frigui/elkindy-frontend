@@ -53,7 +53,6 @@ function LatestTrades({ trades }) {
   });
 
   const isCurrentUserReceiver = (trade) => {
-    console.log(trade.receiverInstrument.author === userId);
     return trade.receiverInstrument.author === userId;
   };
 

@@ -27,6 +27,7 @@
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/resource-timeline": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
+    "@google/model-viewer": "^3.5.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^3.0.1",
@@ -44,12 +45,9 @@
     "animate.css": "^4.1.1",
     "apexcharts": "3.35.5",
     "axios": "^1.6.7",
- 
-    "emailjs-com": "^3.2.0",
-
     "chart.js": "^4.4.2",
     "date-fns": "^3.6.0",
-
+    "emailjs-com": "^3.2.0",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "formik": "^2.4.5",
@@ -58,11 +56,9 @@
     "javascript-time-ago": "^2.5.9",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
-
-    "nodemailer": "^6.9.13",
-
     "leaflet": "^1.9.4",
-
+    "nodemailer": "^6.9.13",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-apexcharts": "1.4.0",
     "react-autosuggest": "^10.1.0",
@@ -77,6 +73,7 @@
     "react-formik-stepper": "^1.1.0",
     "react-icons": "^4.4.0",
     "react-joyride": "^2.7.4",
+    "react-lazyload": "^3.2.1",
     "react-leaflet": "^4.2.1",
     "react-paginate": "^8.2.0",
     "react-pdf-tailwind": "^2.3.0",

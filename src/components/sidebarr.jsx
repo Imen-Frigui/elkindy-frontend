@@ -22,7 +22,7 @@ function SideBarr({ open, onClose }) {
       const teacherPaths = ['default',  'teacher', 'Schedule'];
       return routes.filter(route => teacherPaths.includes(route.path));
     } else {
-      const adminPath = ['default',  'admin', 'marketplace', 'data-tables', 'profile', 'exams', 'events', 'courses', 'assign-teachers', 'class-config', 'create-instrument', 'instrument-detail', 'event-details', 'update-event', 'archived-events', 'users' ];
+      const adminPath = ['default',  'admin', 'marketplace', 'data-tables', 'profile', 'exams', 'events', 'courses', 'assign-teachers', 'class-config', 'create-instrument', 'instrument-detail', 'event-details', 'update-event', 'archived-events', 'users','chat' ];
       return routes.filter(route => adminPath.includes(route.path));
     }
     //return routes;

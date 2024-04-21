@@ -26,6 +26,8 @@ import ClassConfigPage from "../../views/course/ClassConfigPage";
 
 import useSocketStore from "../../ZustStore/socketStore";
 import UserTrades from "views/admin/marketplace/components/UserTrades";
+import InventoryList from "views/admin/marketplace/components/InventoryProducts";
+import Conversations from "views/chat/Conversations";
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -124,6 +126,11 @@ export default function Admin(props) {
                   path="/marketplace/instrument/:id"
                   element={<InstrumentDetail />}
                 />
+                <Route
+                  path="/marketplace/inventory"
+                  element={<InventoryList />}
+                />
+                <Route path="/chat" element={<Conversations />} />
 
                 <Route
                   path="/marketplace/trades"
@@ -147,7 +154,7 @@ export default function Admin(props) {
                 <Route path="/events/addevent" element={<AddEvent />} />
 
                 <Route path={"/exams"} element={<ExamsList />} />
-               
+
 
                 <Route
                   path="/marketplace/create"
