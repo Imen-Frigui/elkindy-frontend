@@ -32,6 +32,7 @@ const useChatStore = create((set) => ({
       );
       set({ messages: response.data });
       set({ loadingMessages: false });
+      return response.data
     } catch (error) {
       console.error("Error getting messages:", error);
     }

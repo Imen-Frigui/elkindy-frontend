@@ -27,7 +27,10 @@ const useSocketStore = create((set) => ({
         },
       });
       set({ socket });
-      console.log(socket);
+      socket.on("getOnlineUsers", (users) => {
+        set({ onlineUsers: users });
+        console.log(users);
+      });
       return () => socket && socket.close();
     }
   },

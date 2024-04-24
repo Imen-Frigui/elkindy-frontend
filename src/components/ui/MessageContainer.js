@@ -3,16 +3,36 @@ import useChatStore from "ZustStore/chatStore";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./Input";
 import axios from "axios";
+import useSocketStore from "ZustStore/socketStore";
+import messageSound from "assets/sound/message.mp3";
+import EmojiPicker from "emoji-picker-react";
+import Message from "./Message";
 
-function MessageContainer({ selectedConversation }) {
+function MessageContainer({
+  selectedConversation,
+  setSelectedConversation,
+  isOnline,
+}) {
   const { messages, loadingMessages, getMessagesWithUser, sendMessage } =
     useChatStore();
+  const [messagesList, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
+  const [openEmoji, setOpenEmoji] = useState(false);
+  const [filePreview, setFilePreview] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const { socket } = useSocketStore();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
+    setToken(token);
     getMessagesWithUser(token, selectedConversation.userId);
+    //  setMessages(messagesList)
   }, []);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -39,6 +59,64 @@ function MessageContainer({ selectedConversation }) {
 
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    socket.on("newMessage", (message) => {
+      if (selectedConversation._id === message.conversationId) {
+        const token = localStorage.getItem("token");
+        getMessagesWithUser(token, selectedConversation.userId);
+      }
+
+      if (!document.hasFocus()) {
+        const sound = new Audio(messageSound);
+        sound.play();
+      }
+
+      setSelectedConversation((prevConversation) => ({
+        ...prevConversation,
+        lastMessage: {
+          text: message.text,
+          sender: message.sender,
+        },
+      }));
+    });
+    socket.on("user-typing", (userId) => {
+      setIsTyping(true);
+    });
+
+    socket.on("stop-typing", (userId) => {
+      setIsTyping(false);
+    });
+    return () => {
+      socket.off("newMessage");
+      socket.off("user-typing");
+      socket.off("stop-typing");
+    };
+  }, [socket]);
+
+  const handleTyping = () => {
+    socket.emit("user-typing", selectedConversation.userId);
+  };
+  const handleStopTyping = () => {
+    socket.emit("stop-typing", selectedConversation.userId);
+  };
+
+  useEffect(() => {
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFilePreview(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setFilePreview(null);
+    }
+  }, [selectedFile]);
+
+  const handleSelectEmoji = (data) => {
+    setMessageText(data);
+  };
+
   const customStyles = {
     borderRadius: "21px",
     borderColor: "rgb(234, 234, 234)",
@@ -60,30 +138,37 @@ function MessageContainer({ selectedConversation }) {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+  };
+
   return (
     <div className=" hidden lg:col-span-2 lg:block">
       <div className="w-full">
         <div className="relative flex flex-wrap  items-center border-b border-gray-300 lg:flex-nowrap">
           <div className="my-0 ml-0 flex  w-full flex-col justify-center lg:my-2 lg:ml-4  ">
             <div className="flex h-[50px] lg:h-auto">
-              <div className="flex items-center justify-center">
-                <div className=" flex ">
-                  <span className=" h-3 w-3 rounded-full bg-green-600"></span>
-                </div>
-                <div className="flex flex-col">
-                  <span className=" w-50 ml-2 mt-2 block font-bold text-gray-600">
+              <div className="flex flex-col items-start justify-start">
+                <div className="flex flex-col items-start space-x-2">
+                  <span className=" w-50 ml-2  block font-bold text-gray-600">
                     {selectedConversation.username}
                   </span>
-                  <span className="w-50 mb-2 ml-2 block self-end text-xs font-bold text-blue-500 lg:text-sm ">
-                    Item 2
+                  <span className="w-50 font-sm mb-2 ml-2 block justify-start self-end text-xs text-black lg:text-sm ">
+                    Online
                   </span>
                 </div>
               </div>
+              {isOnline ? (
+                <span className=" ml-2 h-3 w-3 rounded-full bg-green-600"></span>
+              ) : (
+                <span className=" bg-grey-600 ml-2 h-3 w-3 rounded-full"></span>
+              )}
             </div>
           </div>
           <div className="flex h-[3rem] w-full border-l border-gray-300 lg:h-[5rem]">
             <button
-              aria-label="Voir l'annonce"
+              aria-label=""
               className="text-2xs flex h-full w-1/2  items-center justify-center self-center  bg-gray-200 p-[6px] font-semibold text-gray-700 hover:bg-gray-200/50 lg:text-base"
             >
               <svg
@@ -125,78 +210,83 @@ function MessageContainer({ selectedConversation }) {
           </div>
         </div>
         <div className="relative h-[320px] w-full overflow-y-auto bg-gray-100 p-6 lg:h-[480px]">
-          <ul className="space-y-4">
+          <ul className="space-y-1">
             {messages.map((message, index) => (
-              <>
-                {message.sender === userId ? (
-                  <li key={index} className="flex justify-end">
-                    <div className="relative flex max-w-xl rounded-lg bg-kindyblue  text-white shadow">
-                      <div className="p-3">
-                        <span className="font-jost flex whitespace-pre-line text-start text-sm text-white">
-                          {message.text}{" "}
-                        </span>
-                        <div className=" mt-1 flex justify-between">
-                          <span className="text-slate-700/80 self-center text-xs">
-                            {message.timestamp}{" "}
-                          </span>
-                        </div>
-                      </div>
-                      {/* <span className="hover:bg-red-500 flex h-full w-10 cursor-pointer items-center justify-center rounded-r-lg bg-white"></span> */}
-                    </div>
-                  </li>
-                ) : (
-                  <li key={index} className="flex justify-start">
-                    <div className="relative flex max-w-xl rounded-lg bg-white  text-gray-700 shadow justify-center ">
-                      <div className="p-3 item">
-                        <span className="font-jost flex whitespace-pre-line text-start text-sm text-gray-700">
-                          {message.text}{" "}
-                        </span>
-                        <div className="mt-1 flex justify-between">
-                          <span className="text-slate-700/80 self-center text-xs">
-                            {message.timestamp}{" "}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                )}
-              </>
+              <Message key={index} message={message} userId={userId} />
             ))}
+            {isTyping ? (
+              <div className="flex w-1/6 rounded-[22px] items-center justify-center bg-white p-2 text-gray-700 shadow space-x-1">
+                <p>Typing</p>
+                <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.2s]"></div>
+                <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.15s]"></div>
+                <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700"></div>
+              </div>
+            ) : null}
           </ul>
         </div>
         <div className="flex w-full items-center justify-between border-t border-gray-300 p-3 lg:mb-0">
           <div className="relative flex w-full items-center ">
-            <div className="react-input-emoji--container" style={customStyles}>
-              {/* <div className="react-input-emoji--wrapper">
-                <div className="react-input-emoji--placeholder">
-                  Type a message
-                </div>
-                <div
-                  tabindex="0"
-                  contenteditable="true"
-                  className="react-input-emoji--input"
-                  data-testid="react-input-emoji--input"
-                ></div>
-              </div> */}
+            <div
+              className="react-input-emoji--container"
+              style={customStyles}
+            ></div>
+
+            <div className="space-x-2">
+              <button onClick={() => setOpenEmoji((prev) => !prev)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 25"
+                  height="25"
+                  width="25"
+                  className=" text-red-500 "
+                >
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0m0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10"></path>
+                  <path d="M8 7a2 2 0 1 0-.001 3.999A2 2 0 0 0 8 7M16 7a2 2 0 1 0-.001 3.999A2 2 0 0 0 16 7M15.232 15c-.693 1.195-1.87 2-3.349 2-1.477 0-2.655-.805-3.347-2H15m3-2H6a6 6 0 1 0 12 0"></path>
+                </svg>
+              </button>
             </div>
-            {/* <div className="react-emoji-picker--container"></div>
-            <button type="button" className="react-input-emoji--button">
+            <EmojiPicker
+              open={openEmoji}
+              width={450}
+              onEmojiClick={(e) => handleSelectEmoji(e.emoji)}
+            />
+            <label htmlFor="imageUpload">
+              <input
+                id="imageUpload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />{" "}
               <svg
+                stroke="currentColor"
+                fill="currentColor"
+                strokeWidth="0"
+                viewBox="0 0 24 25"
+                height="25"
+                width="25"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                className="react-input-emoji--button--icon"
               >
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0m0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10"></path>
-                <path d="M8 7a2 2 0 1 0-.001 3.999A2 2 0 0 0 8 7M16 7a2 2 0 1 0-.001 3.999A2 2 0 0 0 16 7M15.232 15c-.693 1.195-1.87 2-3.349 2-1.477 0-2.655-.805-3.347-2H15m3-2H6a6 6 0 1 0 12 0"></path>
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"></path>
               </svg>
-            </button> */}
+            </label>
+            {filePreview && <img src={filePreview} alt="File Preview" />}
             <input
-              className="w-full"
+              className="focus:border-primary focus:ring-primary ml-3 mr-3 w-full rounded-[22px] border border-gray-300 px-6 py-2 focus:outline-none focus:ring-1"
               placeholder="Type a message"
-              onChange={(e) => setMessageText(e.target.value)}
               value={messageText}
+              onChange={(e) => {
+                setMessageText(e.target.value);
+                handleTyping();
+              }}
+              onBlur={handleStopTyping}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
             />
           </div>
           <button type="submit" onClick={handleSendMessage}>

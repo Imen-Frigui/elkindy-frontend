@@ -5,7 +5,8 @@ import selectDiscussion from "assets/svg/selectDiscussion.svg"
 import Conversation from "components/ui/Conversations";
 import MessageContainer from 'components/ui/MessageContainer';
 import { LoadingSpinner } from 'components';
-
+import useSocketStore from "ZustStore/socketStore";
+import messageSound from "assets/sound/message.mp3";
 function Conversations() {
     const { conversations, loadingConversations, getConversations } = useChatStore();
     const [userConversations, setConversations] = useState([]);
@@ -17,6 +18,8 @@ function Conversations() {
         username: "",
         userProfilePic: "",
     });
+    const { socket,onlineUsers } = useSocketStore();
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -26,7 +29,6 @@ function Conversations() {
             navigate("/auth/sign-in");
         }
         getConversations(token);
-        console.log(conversations)
     }, [getConversations]);
     const handleConversationClick = (conversation) => {
         setSelectedConversation({
@@ -37,19 +39,40 @@ function Conversations() {
         });
     };
 
+    useEffect(() => {
+        socket.on("newMessage", (message) => {
+            if (selectedConversation._id === message.conversationId) {
+                const token = localStorage.getItem("token");
+                getConversations(token);
+
+            }
+            if (!document.hasFocus()) {
+                const sound = new Audio(messageSound);
+                sound.play();
+            }
+            setSelectedConversation((prevConversation) => ({
+                ...prevConversation,
+                lastMessage: {
+                    text: message.text,
+                    sender: message.sender,
+                },
+            }));
+        });
+
+        return () => socket.off("newMessage");
+    }, [socket]);
+
     return (
         <div className="container-fluid mx-auto mt-25 lg:mt-15 bg-white">
             <div className="mt-20 lg:mt-12 min-w-full border rounded lg:grid lg:grid-cols-3">
                 <div className="border-r border-gray-300 lg:col-span-1">
                     <div className="mx-3 my-3"></div>
                     <h2 className="my-2 mb-4 ml-2 text-lg text-gray-600" >Conversations ({conversations?.length})</h2>
-                    {loadingConversations ? (
-                        <p><LoadingSpinner /></p>
-                    ) : conversations?.length > 0 ? (
+                    {conversations?.length > 0 ? (
                         conversations?.map(conversation => (
-
                             <div key={conversation._id} onClick={() => handleConversationClick(conversation)}>
-                                <Conversation conversation={conversation} />
+                                <Conversation conversation={conversation} isOnline={onlineUsers.includes(conversation.participants[0]._id)}
+                                />
                             </div>))
                     ) : (
                         <p>No conversations found.</p>
@@ -67,7 +90,7 @@ function Conversations() {
 
                             }
                         </div>
-                        {selectedConversation._id && <MessageContainer selectedConversation={selectedConversation} />}
+                        {selectedConversation._id && <MessageContainer selectedConversation={selectedConversation} setSelectedConversation={setSelectedConversation} isOnline={onlineUsers.includes(selectedConversation.userId)} />}
 
                     </div>
                 </div>

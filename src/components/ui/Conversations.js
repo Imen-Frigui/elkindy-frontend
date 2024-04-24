@@ -16,18 +16,20 @@ function Conversation({ conversation, isOnline }) {
         className="h-10 w-10 rounded-full object-cover"
       ></img>
       <div className="w-full pb-2">
-        <div class="flex justify-between">
-          <span class="ml-2 block font-semibold text-gray-600">
-            {user.username}
-          </span>
-          <span class="ml-2 block text-sm text-gray-600">8/14/2024</span>
+        <div className="flex justify-between">
+          <div className="flex space-x-2">
+            <span class="ml-2 block font-semibold text-gray-600">
+              {user.username}
+            </span>
+            {isOnline ? (
+              <span className=" h-3 w-3 rounded-full bg-green-600"></span>
+            ) : (
+              <span className=" bg-grey-600 h-3 w-3 rounded-full"></span>
+            )}
+          </div>
+          <span className="ml-2 block text-sm text-gray-600">8/14/2024</span>
         </div>
-        <span class="ml-2 block text-sm text-gray-600">
-          {/* {lastMessage.text.length > 18
-            ? lastMessage.text.substring(0, 18) + "..."
-            : lastMessage.text} */}
-            {lastMessage.text}
-        </span>
+        <span className="ml-2 block text-sm text-gray-600">{lastMessage.text}</span>
       </div>
     </div>
   );

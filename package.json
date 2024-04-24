@@ -48,6 +48,7 @@
     "chart.js": "^4.4.2",
     "date-fns": "^3.6.0",
     "emailjs-com": "^3.2.0",
+    "emoji-picker-react": "^4.9.2",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "formik": "^2.4.5",
