@@ -4,15 +4,20 @@ import { Link, useLocation } from "react-router-dom";
 import DashIcon from "components/icons/DashIcon";
 import axios from "axios";
 import routes from "../../../routes";
+import {fetchUserData} from "../../../slices/userSlice";
+import Loader from "../../button/Loader";
+import {useDispatch, useSelector} from "react-redux";
 // chakra imports
 
 export function SidebarLinks(props) {
   // Chakra color mode
   let location = useLocation();
+  const dispatch = useDispatch();
+    const [teacherId, setTeacherId] = useState(null);
+  const { userData, isLoading, error } = useSelector((state) => state.user);
 
   const { routes } = props;
 
-  const [userData, setUserData] = useState(null);
 
 
   // verifies if routeName is the one active (in browser input)
@@ -22,31 +27,18 @@ export function SidebarLinks(props) {
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+    dispatch(fetchUserData());
+    setTeacherId(userData?.user?._id);
+  }, [dispatch]);
 
-      try {
-        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
-        setUserData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-      }
-    };
+  if (isLoading) {
+    return <Loader />;
+  }
 
-    if (!userData) {
-      fetchUserData().then(r => console.log(r, 'userData', userData));
-    }
-
-  }, [userData]);
+  if (error) {
+    console.error("Error fetching user data:", error);
+    return <div>Error: {error}</div>;
+  }
 
   const isTeacher = userData?.user?.role === 'teacher';
   console.log('isTeacher', isTeacher);
@@ -69,7 +61,7 @@ export function SidebarLinks(props) {
                 <span
                     className={`${
                         activeRoute(route.path) === true
-                            ? `font-bold ${isTeacher ? "text-kindyblue" : "text-kindyorange"} dark:text-white`
+                            ? `font-bold ${teacherId ? "text-kindyblue" : "text-kindyorange"} dark:text-white`
                             : "font-medium text-white"
                     }`}
                 >

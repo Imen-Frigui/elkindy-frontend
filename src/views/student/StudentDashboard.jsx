@@ -1,39 +1,29 @@
 import Greeting from "./components/Greeting";
 import NextCourseCard from "./components/NextCourseCard";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import React, {useEffect} from "react";
 import AttendanceSheet from "./components/AttendanceSheet";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchUserData} from "../../slices/userSlice";
+import Loader from "../../components/button/Loader";
 
 
 const StudentDashboard = () => {
-    const [userData, setUserData] = useState(null);
+    const dispatch = useDispatch();
+    const { userData, isLoading, error } = useSelector((state) => state.user);
 
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found');
-                return;
-            }
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
+        dispatch(fetchUserData());
+    }, [dispatch]);
 
-            try {
-                const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Failed to fetch user data:', error);
-            }
-        };
+    if (isLoading) {
+        return <Loader />;
+    }
 
-        if (!userData) {
-            fetchUserData().then(r => console.log(r, 'userData', userData));
-        }
-    }, [userData]);
+    if (error) {
+        console.error("Error fetching user data:", error);
+        return <div>Error: {error}</div>;
+    }
 
     const isStudent = userData?.user?.role === 'student';
     const studentId = userData?.user?._id;
@@ -56,7 +46,7 @@ const StudentDashboard = () => {
                 )*/}
             </div>
             <div className="w-full mb-4">
-                { studentId && (<AttendanceSheet studentId={studentId}/>)}
+                { studentId && (<AttendanceSheet studentId={userData?.user?._id}/>)}
             </div>
         </div>
     )
