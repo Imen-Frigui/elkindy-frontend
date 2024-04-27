@@ -7,7 +7,9 @@ import useSocketStore from "ZustStore/socketStore";
 import messageSound from "assets/sound/message.mp3";
 import EmojiPicker from "emoji-picker-react";
 import Message from "./Message";
-import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon, FaceSmileIcon, PhoneIcon } from "@heroicons/react/24/solid";
+import { ZIM } from "zego-zim-web";
+import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 function MessageContainer({
   selectedConversation,
@@ -24,26 +26,13 @@ function MessageContainer({
   const [filePreview, setFilePreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-
+  const [userInfo, setUserInfo] = useState({
+    userName: "",
+    userIdd: "",
+  });
   const { socket } = useSocketStore();
   const messageEl = useRef(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setToken(token);
-    getMessagesWithUser(token, selectedConversation.userId);
-    //  setMessages(messagesList)
-  }, [selectedConversation]);
-
-  useEffect(() => {
-    if (messageEl) {
-      messageEl.current.addEventListener("DOMNodeInserted", (event) => {
-        const { currentTarget: target } = event;
-        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
-      });
-    }
-  }, []);
-
+  const zeroCloudInstance = useRef(null);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -69,6 +58,36 @@ function MessageContainer({
     };
 
     fetchUserData();
+  }, []);
+  async function init() {
+    const userID = userId;
+    const appID = 1024160343;
+    const serverSecret = "b6392353ca3b75fde33a9df0f805c8e5";
+    const userName = "aaa" + userID;
+    const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(
+      appID,
+      serverSecret,
+      null,
+      userID,
+      userName
+    );
+    zeroCloudInstance.current = ZegoUIKitPrebuilt.create(TOKEN);
+    zeroCloudInstance.current.addPlugins({ ZIM });
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+    getMessagesWithUser(token, selectedConversation.userId);
+  }, [selectedConversation]);
+
+  useEffect(() => {
+    if (messageEl) {
+      messageEl.current.addEventListener("DOMNodeInserted", (event) => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -128,12 +147,6 @@ function MessageContainer({
     setMessageText(data);
   };
 
-  const customStyles = {
-    borderRadius: "21px",
-    borderColor: "rgb(234, 234, 234)",
-    fontSize: "15px",
-    fontFamily: "sans-serif",
-  };
   const handleSendMessage = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -166,9 +179,33 @@ function MessageContainer({
   };
   const removeImage = (index) => {
     setSelectedFile(null);
-    setFilePreview(null)
+    setFilePreview(null);
   };
+  const [calleeId, setCalleeId] = useState(selectedConversation.userId);
 
+  function invite(callType) {
+    const callee = calleeId;
+    if (!callee) {
+      alert("userID cannot be empty!!");
+      return;
+    }
+
+    zeroCloudInstance.current
+      .sendCallInvitation({
+        callees: [{ userID: callee, userName: selectedConversation.username }],
+        callType: callType,
+        timeout: 60,
+      })
+      .then((res) => {
+        console.warn(res);
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  }
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <div className=" hidden lg:col-span-2 lg:block">
       <div className="w-full">
@@ -239,6 +276,11 @@ function MessageContainer({
               Block
             </button>
           </div>
+          <PhoneIcon
+            onClick={() => invite(ZegoUIKitPrebuilt.InvitationTypeVideoCall)}
+            className="h-10 w-10 text-gray-400"
+            aria-hidden="true"
+          />
         </div>
         <div
           className="relative h-[320px] w-full overflow-y-auto bg-gray-100 p-6 lg:h-[480px]"
