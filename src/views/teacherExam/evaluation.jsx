@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createExam } from '../../services/exam/examService';
+import { createExam, updateStudentgrades } from '../../services/exam/examService';
 import { createGrade } from '../../services/exam/examService';
 import { deleteExam } from '../../services/exam/examService';
 import ButtonComponent from "../../components/button/ButtonComponnent";
@@ -7,6 +7,8 @@ import { fetchEvalStudent } from '../../services/exam/examService';
 import { fetchStudents } from '../../services/exam/examService';
 import TeacherBanner from './examBanner.jsx';
 import { fetchStudentsExam } from '../../services/exam/examService';
+import { fetchStudentsgrades } from '../../services/exam/examService';
+import { FaBan } from 'react-icons/fa';
 const EvaluationList = () => {
 
     const [filteredStudents, setFilteredStudents] = useState();
@@ -15,6 +17,7 @@ const EvaluationList = () => {
     const [isDrawerOpenAdd, setIsDrawerOpenAdd] = useState(false);
     const [isDrawerOpen2, setIsDrawerOpen2] = useState(false);
     const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
+    const [isDrawerOpen4, setIsDrawerOpen4] = useState(false);
     const [examName, setExamName2] = useState('');
     const [studentName, setstudentName] = useState('');
     const [level, setlevel] = useState('');
@@ -29,7 +32,30 @@ const EvaluationList = () => {
     const [username, setUserName] = useState('');
     const [searchTerm, setSearchTerm] = useState("");
     const [grades, setGrades] = useState([]);
+    const [evalgrade, setevalgrade] = useState([]);
+    const [isButtonHovered, setIsButtonHovered] = useState(false);
+    const [editableContent, setEditableContent] = useState('Editable Content');
 
+    // Function to handle key press
+    const updategrade = (extraData,grade) =>  (event) => {
+      // Check if Enter key is pressed
+      if (event.key === 'Enter') {
+        // Perform the action (e.g., display the content)
+        try {
+            const updatedgrade =  updateStudentgrades(extraData,event.target.textContent);
+            if (updatedgrade) {
+                console.log(updatedgrade);
+              //  setGrades(fetchgradeEvaluations);
+                alert('updated successfully' );
+            }
+  
+  
+        } catch (error) {
+            console.error("Failed to fetch classes:", error);
+        }
+       
+      }
+    }
     // Formater la date dans le format souhaité
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -53,6 +79,23 @@ const EvaluationList = () => {
         }
     };
 
+
+    const getEvalGrades = async (username) => {
+
+        try {
+            const fetchgradeEvaluations = await fetchStudentsgrades(username);
+            if (fetchgradeEvaluations) {
+                console.log(fetchgradeEvaluations);
+                setGrades(fetchgradeEvaluations);
+  
+            }
+  
+  
+        } catch (error) {
+            console.error("Failed to fetch classes:", error);
+        }
+    };
+
     const handleClose = async () => {
         setIsDrawerOpen2(false)
     }
@@ -68,7 +111,21 @@ const EvaluationList = () => {
             const fetchEvaluations = await fetchEvalStudent(username);
             if (fetchEvaluations) {
                 console.log(fetchEvaluations);
-                setEvaluations(fetchEvaluations);
+                const fetchgradeEvaluations = await fetchStudentsgrades(username);
+                console.log(fetchgradeEvaluations);
+                const updatedEvaluations = fetchEvaluations.map((evaluation, index) => {
+                    // Assuming your evaluations array has some identifier like id to match with grades
+                    const matchingGrade = fetchgradeEvaluations.find(grade => grade.examName == evaluation.name);
+                    const grade = matchingGrade ? matchingGrade.grade : null;
+                    const gradeid = matchingGrade ? matchingGrade._id : null;
+                    console.log("tessstt");
+                    console.log(matchingGrade);
+                    // Assign grade to evaluation
+                    return { ...evaluation, grade , gradeid }; // Assuming your grade attribute is called "grade"
+                  });
+                  
+                  console.log(updatedEvaluations);
+                setEvaluations(updatedEvaluations);
 
             }
 
@@ -80,6 +137,7 @@ const EvaluationList = () => {
 
 
 
+    
 
 
     useEffect(() => {
@@ -98,11 +156,12 @@ const EvaluationList = () => {
 
         if (username !== '') {
             getEvaluations(username);
+          
         }
 
         getStudents();
         getEvaluationClass();
-
+        
     }, [username]);
 
 
@@ -220,49 +279,6 @@ const EvaluationList = () => {
             </div>
 
 
-            {/* <div className="realative" >
-                <div className="overflow-hidden shadow sm:rounded-lg mt-4">
-            <div className="overflow-hidden overflow-y-auto  max-h-96 ">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600  ">
-        <thead className="bg-gray-50 dark:bg-gray-700 ">
-            <tr>
-                <th scope="col" className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">UserName</th>
-                <th scope="col" className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">PhoneNumber</th>
-                <th scope="col" className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">Email</th>
-                <th scope="col" className="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">Evaluations</th>
-            </tr>
-        </thead>
-        <tbody className="bg-opacity-5 dark:bg-gray-800 max-h-96">
-            {filteredStudents.map(student => (
-                <tr key={student._id} role="row">
-                    <td role="cell" className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-kindydarkblue">
-                        <p className="font-bold">{student.username}</p>
-                    </td>
-                    <td role="cell" className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-kindydarkblue">
-                        <p>{student.phoneNumber}</p>
-                    </td>
-                    <td role="cell" className="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-kindydarkblue">
-                        <p>{student.email}</p>
-                    </td>
-                    <td className="p-4 whitespace-nowrap">
-                        <ButtonComponent text="Add." color="rgb(12 75 101 / var(--tw-text-opacity))" onClick={() => {
-                            setIsDrawerOpen2(true);
-                            setstudents(student.username);
-                        }}>
-                            Add Evaluation
-                        </ButtonComponent>
-                        <ButtonComponent text="Show" color="#ffd26d" onClick={() => {
-                            setUserName(student.username)
-                            setIsDrawerOpen(true);
-                        }}>
-                            Evaluations
-                        </ButtonComponent>
-                    </td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-</div></div> */}
 
 
 
@@ -270,7 +286,16 @@ const EvaluationList = () => {
 
             {isDrawerOpen && (
 
+                
+
                 <div id="drawer-create-course" className="fixed inset-0 flex items-center justify-center z-50 overflow-auto backdrop-blur-md mt-6 my-6">
+
+<div className="space-y-2 p-1.5 absolute top-3.5 right-2.5 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpen(false)}>
+      <span className="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
+      <span className="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
+      {/* Title */}
+      <span className="block text-m text-center mx-5 text-orange-500">Close</span>
+    </div>
                     <div className="max-w-3xl sm:w-full md:w-3/4 lg:w-1/2 rounded-[20px] mx-auto relative overflow-hidden z-10 bg-lightwhite  p-8 shadow-md before:w-24 before:h-24 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12">
                         <img src="https://img.freepik.com/free-photo/close-up-guitarist-hand-playing-guitar-copyspace-macro-shot_155003-42125.jpg?t=st=1712104055~exp=1712107655~hmac=4f7f9d07ef14773a139bdf281a761a6214d1db1c1991b4614939d1a072b63086&w=996" alt="Exam Image" className="w-full rounded-lg mb-6 mt-20" /> {/* Ajoutez la classe mt-4 pour déplacer l'image vers le bas */}
                         <div class="absolute w-24 h-24 bg-kindyyellow rounded-full -z-10 blur-2xl before:w-32 before:h-32 bg-sky-400   top-24 -right-12"></div>
@@ -287,6 +312,7 @@ const EvaluationList = () => {
                                         <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">StartHour</th>
                                         <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Delete</th>
                                         <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Grade</th>
+                                        <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">showGrades</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -335,20 +361,39 @@ const EvaluationList = () => {
                                                     }}
                                                     className="border border-violet-400 border-b-4 font-medium overflow-hidden relative rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group"
                                                     onClick={() => {
+                                                        
                                                         setIsDrawerOpen3(true);
                                                         setExamName2(evaluation.name);
                                                         setstudentName(evaluation.students[0]);
                                                     }}
+                                                    disabled={evaluation.grade != null}
+                                                    onMouseEnter={() => setIsButtonHovered(evaluation.grade == null)} // Set isButtonHovered to true on mouse enter
+                                                    onMouseLeave={() => setIsButtonHovered(false)}  
                                                 >
-                                                    <span className="bg-violet-400 shadow-violet-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-                                                    ADD Grade
+                                                    {
+                                                    evaluation.grade != null ? <FaBan /> :  "add grade"
+                                                    }
+                                                   
                                                 </button>
 
 
                                             </td>
+                           
+                                            <td  title="you can update the grade" className="p-12 text-sm font-bold text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                                            <div 
+        contentEditable 
+        onBlur={(event) => evaluation.grade = event.target.textContent}
+        onKeyPress={updategrade(evaluation.gradeid,evaluation.grade)}
+        style={{ border: '1px solid black', padding: '5px', marginBottom: '10px' }}
+      >
+        {evaluation.grade}
+      </div>
+                                           
+                                            </td>
 
 
                                         </tr>
+                                        
                                     ))}
                                 </tbody>
                             </table>

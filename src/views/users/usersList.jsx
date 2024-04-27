@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import EditStatusPopup from "./components/updateStatus";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/modal";
+import ScheduleComponentpopup from "./components/schedualPopup";
+import { Button } from "@chakra-ui/react";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
   const [search, setSearch] = useState("");
-
+ 
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -64,6 +68,7 @@ const UserList = () => {
 
     // Use filteredUsers to include all filtered results in the PDF
     const data = filteredUsers.map(user => [
+      user._id,
       user.username, 
       `${user.firstName} ${user.lastName}`, 
       user.email, 
@@ -81,8 +86,32 @@ const UserList = () => {
     doc.autoTable(content);
     doc.save("users_list.pdf");
 };
+const showDeleteConfirmation = (userId) => {
+  if (window.confirm("Are you sure you want to delete this user?")) {
+      deleteUser(userId);
+  }
+};
+const [selectedUser, setSelectedUser] = useState(null);
+const handleEditStatus = (user) => {
+  setSelectedUser(user);
+};
 
+const handleClosePopup = () => {
+  setSelectedUser(null);
+  fetchUsers(); // Reload the table after closing the popup
+};
 
+const [selectedUserData, setSelectedUserData] = useState(null); // State to store selected user data for modal
+const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+
+const handleViewAvailability = (user) => {
+  setSelectedUserData(user); // Set the selected user data for the availability modal
+  setIsScheduleModalOpen(true); // Open the modal
+};
+
+const handleCloseScheduleModal = () => {
+  setIsScheduleModalOpen(false); // Close the modal
+};
   return (
     <div className="container mx-auto mt-5">
       <div className="flex justify-between items-center">
@@ -102,30 +131,55 @@ const UserList = () => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="py-3 px-6">Action</th>
               <th scope="col" className="py-3 px-6">Username</th>
               <th scope="col" className="py-3 px-6">Name</th>
               <th scope="col" className="py-3 px-6">Email</th>
               <th scope="col" className="py-3 px-6">Role</th>
               <th scope="col" className="py-3 px-6">Status</th>
+              <th scope="col" className="py-3 px-6">Action</th>
+
             </tr>
           </thead>
           <tbody>
             {currentUsers.map((user) => (
               <tr key={user._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td className="py-4 px-6">
-                  <button className="bg-kindyblue rounded-md text-white font-bold py-1 px-3 rounded mr-2">Edit</button>
-                  <button onClick={() => deleteUser(user._id)} className="bg-red-500 rounded-md text-white font-bold py-1 px-3 rounded-tr-2xl rounded-bl-2xl">Delete</button>
+                
+                <td className="py-4 px-6 font-medium ">{user.username}</td>
+                <td className="py-4 px-6 font-medium" >{`${user.firstName} ${user.lastName}`}</td>
+                <td className="py-4 px-6 font-medium">{user.email}</td>
+                <td className="py-4 px-6 font-medium">{user.role}</td>
+                <td className="py-4 px-6 font-medium">{user.status}</td>
+                <td className="py-4 px-6 font-medium">
+                <button  className="mr-5 hover:bg-blue-500 rounded-md text-blue-500 hover:text-white font-bold py-1 px-3 rounded-tr-2xl rounded-bl-2xl" onClick={() => handleEditStatus(user)}>Edit</button>    
+                    <button onClick={() => showDeleteConfirmation(user._id)} className="hover:bg-red-500 rounded-md hover:text-white text-red-500 font-bold py-1 px-3 rounded-tr-2xl rounded-bl-2xl">Delete</button>
               </td>
-                <td className="py-4 px-6">{user.username}</td>
-                <td className="py-4 px-6">{`${user.firstName} ${user.lastName}`}</td>
-                <td className="py-4 px-6">{user.email}</td>
-                <td className="py-4 px-6">{user.role}</td>
-                <td className="py-4 px-6">{user.status}</td>
+             <td>
+             <button onClick={() => handleViewAvailability(user)}>View Availability</button>             </td>
               </tr>
             ))}
           </tbody>
         </table>
+        
+      {selectedUser && (
+        <EditStatusPopup
+          userId={selectedUser._id}
+          currentStatus={selectedUser.status}
+          onClose={handleClosePopup}
+          fetchUsers={fetchUsers} 
+        />
+      )}
+    <Modal isOpen={isScheduleModalOpen} onClose={handleCloseScheduleModal}>
+        <ModalOverlay />
+        <ModalContent maxW="400px" bg="gray.200" borderRadius="md">
+          <ModalCloseButton />
+          <ModalBody>
+            <ScheduleComponentpopup userData={selectedUserData}  onClose={handleCloseScheduleModal} />
+          </ModalBody>
+          <ModalFooter>
+         
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
         <nav className="mt-4">
           <ul className="inline-flex items-center -space-x-px">
             {pageNumbers.map(number => (
@@ -138,6 +192,7 @@ const UserList = () => {
           </ul>
         </nav>
       </div>
+   
     </div>
   );
 };

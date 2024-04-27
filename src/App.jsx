@@ -20,6 +20,7 @@ import ResetPassword from "views/auth/Password/resetPassword";
 import Student from "layouts/student";
 import Teacher from "layouts/teacher";
 import Conversations from "views/chat/Conversations";
+import StudentEnroll from "views/auth/StudentFormEnroll";
 
 
 
@@ -69,6 +70,9 @@ const App = () => {
             <Route path="rtl/*" element={<RtlLayout />} />
             <Route path="evaluations" element={<EvaluationList />} />
             <Route path="chat" element={<Conversations />} />
+            <Route path="auth/register/:courseId" element={<StudentEnroll />} />
+        <Route path="rtl/*" element={<RtlLayout />} />
+        <Route path="evaluations" element={<EvaluationList />} />
 
             {/* <Route path="/assign-teachers/:courseId" element={<AssignTeachers />} /> */}
         </Routes>

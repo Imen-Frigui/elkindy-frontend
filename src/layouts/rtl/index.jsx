@@ -74,7 +74,6 @@ export default function RTL(props) {
   return (
     <div >
      
-          <Header/>
      {/* <Sidebar open={open} onClose={() => setOpen(false)} />}
 
   // document.documentElement.dir = "rtl";
@@ -141,13 +140,12 @@ export default function RTL(props) {
 
        <Routes>
                 {getRoutes(routes)}
-                <Route path={"/evaluations"} element={<EvaluationList />} />
+            <Route path={"/evaluations"} element={<EvaluationList />} />
                 <Route path={"/examClass"} element={<ExamClass />} />
                 <Route path={"/studentExams"} element={<StudentExams />} />
               </Routes>
                   <div className="p-3">
 
-          <Footer />
           </div>
 
 

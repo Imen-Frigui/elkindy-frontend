@@ -28,6 +28,7 @@ import useSocketStore from "../../ZustStore/socketStore";
 import UserTrades from "views/admin/marketplace/components/UserTrades";
 import InventoryList from "views/admin/marketplace/components/InventoryProducts";
 import Conversations from "views/chat/Conversations";
+import ExamClass from "../../views/teacherExam/examClass";
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -154,6 +155,7 @@ export default function Admin(props) {
                 <Route path="/events/addevent" element={<AddEvent />} />
 
                 <Route path={"/exams"} element={<ExamsList />} />
+                <Route path={"teacher/examClass"} element={<ExamClass />} />
 
 
                 <Route

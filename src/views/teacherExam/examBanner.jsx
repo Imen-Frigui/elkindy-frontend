@@ -37,7 +37,7 @@ const TeacherBanner = ({filteredStudents ,ButtonComponent ,setIsDrawerOpen2 , se
               </div>
             </div>
             {/* Close button */}
-            <div className="space-y-2 p-1.5 absolute top-2.5 right-2.5 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpenAdd(false)}>
+            <div className="space-y-2 p-1.5 absolute top-32 right-40 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpenAdd(false)}>
               <span className="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
               <span className="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
               {/* Title */}
@@ -57,7 +57,7 @@ const TeacherBanner = ({filteredStudents ,ButtonComponent ,setIsDrawerOpen2 , se
     </p>
 
     <div className="mt-[36px] flex items-center justify-center gap-4 sm:justify-start 2xl:gap-10">
-    <Link to="/rtl/examClass">
+    <Link to="/admin/teacher/examClass">
         <button className="text-black linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium transition duration-200 hover:!bg-white/80 active:!bg-white/70" onClick={() => { setIsDrawerOpenexam(true);}}>
         Exams grades
         </button>

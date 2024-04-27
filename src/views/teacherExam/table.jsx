@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import TableEvalution from './examBanner.jsx';
+import getEvalGrades from './evaluation.jsx';
 
 const TableEvaluation = ({ filteredStudents, ButtonComponent, setIsDrawerOpen2, setUserName, setIsDrawerOpen ,setstudents , AllClasses }) => {
     const [currentPage, setCurrentPage] = useState(1);

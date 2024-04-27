@@ -1,10 +1,11 @@
 import Footer from "components/footer/FooterAuthDefault";
 import authImg from "assets/img/auth/blog12.jpg";
 import { Link, Routes, Route, Navigate } from "react-router-dom";
-import routes from "routes.js";
+import routes from "AuthRoutes.js";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
 import RegisterPage from "views/auth/register";
 import SignIn from "views/auth/SignIn";
+import StudentEnroll from "views/auth/StudentFormEnroll";
 export default function Auth() {
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
@@ -38,7 +39,8 @@ export default function Auth() {
                     path="/"
                     element={<Navigate to="/auth" replace />}/>
                   <Route path="/auth/sign-in" element={<SignIn />} />
-                  <Route path="/auth/register/:courseId" element={<RegisterPage />} />
+                  <Route path="/auth/register/:courseId" element={<StudentEnroll />} />
+                  <Route path="/auth/register/" element={<RegisterPage />} />
                   
                 </Routes>
               

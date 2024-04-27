@@ -7,7 +7,13 @@ import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import ButtonComponent from "../../components/button/ButtonComponnent";
 import nft1 from "assets/img/nfts/students.jpg";
 import { createGrade } from '../../services/exam/examService';
+import { createExam, updateStudentgrades } from '../../services/exam/examService';
+import { fetchStudentsexamsgrades } from '../../services/exam/examService';
+import { FaBan } from 'react-icons/fa';
+
+
 const ExamClass = () => {
+  
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [filteredExams, setFilteredExams] = useState([]);
     const [filteredStudent, setFilteredStudent] = useState({ students: [] });
@@ -19,6 +25,27 @@ const ExamClass = () => {
     const [grade, setgrade] = useState('');
     const [grades, setGrades] = useState([]);
     const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
+    const [isButtonHovered, setIsButtonHovered] = useState(false);
+    const [editableContent, setEditableContent] = useState('Editable Content');
+    const updategrade = (extraData,grade) =>  (event) => {
+        // Check if Enter key is pressed
+        if (event.key === 'Enter') {
+          // Perform the action (e.g., display the content)
+          try {
+              const updatedgrade =  updateStudentgrades(extraData,event.target.textContent);
+              if (updatedgrade) {
+                  console.log(updatedgrade);
+                //  setGrades(fetchgradeEvaluations);
+                  alert('updated successfully' );
+              }
+    
+    
+          } catch (error) {
+              console.error("Failed to fetch classes:", error);
+          }
+         
+        }
+      }
     const getExamClass = async () => {
 
         try {
@@ -39,9 +66,28 @@ const ExamClass = () => {
     const getStudentClasses = async () => {
         try {
             const fetchStudents = await fetchStudentClasses(name);
+
+            console.log("tessstt");
+            console.log(fetchStudents);
             if (fetchStudents) {
+                
+
+                const fetchgradeExams = await fetchStudentsexamsgrades(examName);
+                console.log("tessstt222");
                 console.log(fetchStudents);
-                setFilteredStudent(fetchStudents);
+                const updatedExamsstudents = fetchStudents
+                 updatedExamsstudents.studentss= fetchStudents.students.map((student, index) => {
+                    // Assuming your evaluations array has some identifier like id to match with grades
+                    const matchingGrade = fetchgradeExams.find(grade => (grade.examName == examName) && (grade.studentName == student ));
+                   const grade = matchingGrade ? matchingGrade.grade : null;
+                    const gradeid = matchingGrade ? matchingGrade._id : null;
+                 const studentname = student.toString();
+                    console.log(studentname);
+                    // Assign grade to evaluation
+                    return { ...{student:studentname, grade , gradeid} };
+            });
+            console.log(updatedExamsstudents);
+                setFilteredStudent(updatedExamsstudents);
             }
             
         } catch (error) {
@@ -210,17 +256,20 @@ const ExamClass = () => {
             <tr>
                 <th className="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">Students</th>
                 <th className="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">AddGrade</th>
+                <th class="w-1/4 border border-kindydarkblue p-3 text-white bg-kindydarkblue">showGrades</th>
             </tr>
         </thead>
         <tbody >
             {filteredStudent.students.length > 0 ? (
-                filteredStudent.students.map((student, index) => (
+                filteredStudent.studentss.map((student, index) => (
                     <tr style={{ borderWidth: '2px', borderColor:'black' }} key={index}>
                         <td className="  text-center border-kindydarkblue p-4 text-sm font-normal text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
-                            <p>{student}</p>
+                            <p>{student.student}</p>
                         </td>
                         <td className=" border-kindydarkblue p-4">
-                            <button
+                            <button  disabled={student.grade != null}
+                                                    onMouseEnter={() => setIsButtonHovered(student.grade == null)} // Set isButtonHovered to true on mouse enter
+                                                    onMouseLeave={() => setIsButtonHovered(false)} 
                                 style={{
                                     borderRadius: '22px 0px',
                                     padding: '8px 16px',
@@ -232,13 +281,26 @@ const ExamClass = () => {
                                 className="  ml-14 border-violet-400 border-b-4 font-medium overflow-hidden relative rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group"
                                 onClick={() => {
                                     setIsDrawerOpen3(true);
-                                    setstudentName(student);
+                                    setstudentName(student.student);
                                 }}
-                            >
+                            >  {
+                                student.grade != null ? <FaBan /> :  "add grade"
+                                }
                                 <span className="bg-violet-400  shadow-violet-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-                                ADD Grade
+                             
                             </button>
                         </td>
+                        <td className="p-12 text-sm font-bold text-kindydarkblue whitespace-nowrap dark:text-kindydarkblue">
+                                            <div  title="you can update the grade"
+        contentEditable 
+        onBlur={(event) => student.grade = event.target.textContent}
+        onKeyPress={updategrade(student.gradeid,student.grade)}
+        style={{ border: '1px solid black', padding: '5px', marginBottom: '10px' }}
+      >
+        {student.grade}
+      </div>
+                                           
+                                            </td>
                     </tr>
                 ))
             ) : (

@@ -19,7 +19,8 @@ import { logout } from "../../slices/authSlice";
 
 import NotificationStatus from "components/ui/NotificationStatus";
 import TradeNotification from "components/ui/NotificationTrade";
-
+import axios from "axios";
+import { fetchUserData } from '../../slices/userSlice';
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [statusNotification, setStatusNotifications] = useState([]);
@@ -32,21 +33,13 @@ const Navbar = (props) => {
 
   const navigate = useNavigate();
 
-  const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const [logoutApiCall] = useLogoutMutation();
 
-  const logoutHandler = async () => {
-    try {
-      dispatch(logout());
-      navigate("/auth/sign-in");
-    } catch (err) {
-      console.error(err);
-      console.log(props);
-    }
-  };
+  const userData = useSelector(state => state.user.userData);
+
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
@@ -71,7 +64,23 @@ const Navbar = (props) => {
 
 
     }
-  }, [socket]);
+   dispatch(fetchUserData());
+  }, [socket,dispatch]);
+  
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
+
+  const logoutHandler = async () => {
+    try {
+      dispatch(logout());
+      navigate("/auth/sign-in");
+    } catch (err) {
+      console.error(err);
+      console.log(props);
+    }
+  };
+  
 
   const markAllRead = () => {
     setNotifications([]);
@@ -254,7 +263,7 @@ const Navbar = (props) => {
           button={
             <img
               className="h-10 w-10 rounded-full"
-              src={avatar}
+              src={userData.user.image}
               alt="Elon Musk"
             />
           }
@@ -263,7 +272,7 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey,
+                    👋 Hey, {userData.user.username}
                   </p>{" "}
                 </div>
               </div>

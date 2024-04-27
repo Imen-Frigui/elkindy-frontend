@@ -232,3 +232,73 @@ export const fetchStudentClasses = async (name) => {
         console.error("There has been a problem with your fetch operation:", error);
     }
 };
+//check Evaluation grade for student 
+export const fetchStudentsgrades = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/studentEvalgrades/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+export const fetchStudentsexamsgrades = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/ExamsstudentsGrades/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+export const fetchStudentgrades = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/studentgrades/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+export const updateStudentgrades = async (examData,grade) => {
+    try {
+        const dataToSend = typeof examData === 'object' ? examData : { id: examData , grade : grade };
+        console.log(examData);
+        const response = await fetch(`http://localhost:3000/api/exam/updateEvalGrades`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataToSend)
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+//check Exam grade for student 
+
+export const fetchExamsGrades = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/studentgrades/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
