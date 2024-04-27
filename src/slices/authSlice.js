@@ -17,6 +17,13 @@ const authSlice = createSlice({
 
       localStorage.setItem('token', user.token); // Directly store the token in localStorage
     },
+    setGoogleCredentials: (state, action) => {
+      const { user } = action.payload;
+      state.userInfo = user; // Assuming user info from Google comes structured appropriately
+      if (user.token) { // Google might send a different kind of token, handle accordingly
+        localStorage.setItem('token', user.token);
+      }
+    },
    
     logout: (state, action) => {
       state.userInfo = null;
@@ -28,6 +35,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout, setLoginError } = authSlice.actions;
+export const { setCredentials, logout, setLoginError,setGoogleCredentials } = authSlice.actions;
 
 export default authSlice.reducer;
