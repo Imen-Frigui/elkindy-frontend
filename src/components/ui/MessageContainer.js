@@ -7,7 +7,7 @@ import useSocketStore from "ZustStore/socketStore";
 import messageSound from "assets/sound/message.mp3";
 import EmojiPicker from "emoji-picker-react";
 import Message from "./Message";
-import { FiKey } from "react-icons/fi";
+import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
 
 function MessageContainer({
   selectedConversation,
@@ -33,7 +33,7 @@ function MessageContainer({
     setToken(token);
     getMessagesWithUser(token, selectedConversation.userId);
     //  setMessages(messagesList)
-  }, []);
+  }, [selectedConversation]);
 
   useEffect(() => {
     if (messageEl) {
@@ -166,6 +166,7 @@ function MessageContainer({
   };
   const removeImage = (index) => {
     setSelectedFile(null);
+    setFilePreview(null)
   };
 
   return (
@@ -185,7 +186,7 @@ function MessageContainer({
                     {selectedConversation.username}
                   </span>
                   <span className="w-50 font-sm mb-2 ml-2 block justify-start self-start text-xs text-black lg:text-sm ">
-                    Online
+                    {isOnline ? "Online" : "Offline"}
                   </span>
                 </div>
               </div>
@@ -266,53 +267,35 @@ function MessageContainer({
             ) : null}
           </ul>
         </div>
-        <div className="flex w-full items-center justify-between border-t border-gray-300 p-3 lg:mb-0">
-          <div className="relative flex w-full items-center ">
-            <div
-              className="react-input-emoji--container"
-              style={customStyles}
-            ></div>
-
-            <div className="space-x-2">
-              <button onClick={() => setOpenEmoji((prev) => !prev)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 25"
-                  height="25"
-                  width="25"
-                  className=" text-red-500 "
-                >
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0m0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10"></path>
-                  <path d="M8 7a2 2 0 1 0-.001 3.999A2 2 0 0 0 8 7M16 7a2 2 0 1 0-.001 3.999A2 2 0 0 0 16 7M15.232 15c-.693 1.195-1.87 2-3.349 2-1.477 0-2.655-.805-3.347-2H15m3-2H6a6 6 0 1 0 12 0"></path>
-                </svg>
+        <div className="flex w-full items-center justify-between border-gray-300 p-3 md:mb-0">
+          <div className=" flex w-full flex-row items-center justify-center  ">
+            <div className="mt-2">
+              <button
+                className="p-0"
+                onClick={() => setOpenEmoji((prev) => !prev)}
+              >
+                <FaceSmileIcon
+                  className="h-6 w-6 text-gray-400"
+                  aria-hidden="true"
+                />
               </button>
             </div>
-            <EmojiPicker
-              open={openEmoji}
-              width={450}
-              onEmojiClick={(e) => handleSelectEmoji(e.emoji)}
-            />
-            <label htmlFor="imageUpload">
-              <input
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-              />{" "}
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 24 25"
-                height="25"
-                width="25"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path fill="none" d="M0 0h24v24H0z"></path>
-                <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"></path>
-              </svg>
-            </label>
+
+            <div className="">
+              <label htmlFor="imageUpload">
+                <input
+                  id="imageUpload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden cursor-pointer"
+                  onChange={handleFileChange}
+                />{" "}
+                <PhotoIcon
+                  className="h-6 w-6 cursor-pointer text-gray-400"
+                  aria-hidden="true"
+                />
+              </label>
+            </div>
             <input
               className="focus:border-primary focus:ring-primary ml-3 mr-3 w-full rounded-[22px] border border-gray-300 px-6 py-2 focus:outline-none focus:ring-1"
               placeholder="Type a message"
@@ -341,6 +324,11 @@ function MessageContainer({
             </svg>
           </button>
         </div>
+        <EmojiPicker
+          open={openEmoji}
+          width={450}
+          onEmojiClick={(e) => handleSelectEmoji(e.emoji)}
+        />
         <div
           data-rbd-droppable-id="imageList"
           data-rbd-droppable-context-id="0"

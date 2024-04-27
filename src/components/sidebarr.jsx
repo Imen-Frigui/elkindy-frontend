@@ -19,7 +19,7 @@ function SideBarr({ open, onClose }) {
 
   const getRoutesForRole = (routes, role) => {
     if (role === 'teacher') {
-      const teacherPaths = ['default',  'teacher', 'Schedule','evaluations', 'profile', 'marketplace', 'create-instrument', 'instrument-detail'];
+      const teacherPaths = ['default',  'teacher', 'Schedule','evaluations', 'profile', 'marketplace', 'create-instrument', 'instrument-detail','chat'];
       return routes.filter(route => teacherPaths.includes(route.path));
     } else {
       const adminPath = ['default',  'admin', 'marketplace', 'data-tables', 'profile', 'exams', 'events', 'courses', 'assign-teachers', 'class-config', 'create-instrument', 'instrument-detail', 'event-details', 'update-event', 'archived-events', 'users','examClass','chat' ];
