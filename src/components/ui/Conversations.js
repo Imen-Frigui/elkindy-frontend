@@ -1,17 +1,28 @@
 import { useState } from "react";
+import { format } from "date-fns";
 
 function Conversation({ conversation, isOnline }) {
   const user = conversation.participants[0];
   const lastMessage = conversation.lastMessage;
+  const updatedAt = conversation.updatedAt;
+  const formattedDate = format(new Date(updatedAt), "MMMM do yyyy, h:mm:ss a");
+  const [isTruncated, setIsTruncated] = useState(true);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
+  const toggleTruncation = () => {
+    setIsTruncated(!isTruncated);
+  };
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  };
   return (
     <div
-      className="hover:bg-sky-100 bg-sky-100 active flex cursor-pointer items-center border-b border-gray-300 
-    px-3 py-2 text-sm transition duration-150 
-    ease-in-out focus:outline-none"
+      className="hover:bg-sky-100 bg-sky-100 active flex cursor-pointer items-center rounded-xl border-b 
+    border-gray-300 bg-gray-200 px-3 py-2 text-sm 
+    transition duration-150 ease-in-out focus:outline-none "
     >
       <img
+        src={user.image}
         alt="user-image"
         className="h-10 w-10 rounded-full object-cover"
       ></img>
@@ -27,9 +38,22 @@ function Conversation({ conversation, isOnline }) {
               <span className=" bg-grey-600 h-3 w-3 rounded-full"></span>
             )}
           </div>
-          <span className="ml-2 block text-sm text-gray-600">8/14/2024</span>
+          <span className="ml-2 block text-sm text-gray-600">
+            {formattedDate}
+          </span>
         </div>
-        <span className="ml-2 block text-sm text-gray-600">{lastMessage.text}</span>
+        <span
+          className="ml-2 block text-sm text-gray-600"
+          style={{
+            maxWidth: "200px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {lastMessage.text.length > 50
+            ? lastMessage.text.slice(0, 50) + "..."
+            : lastMessage.text}
+        </span>
       </div>
     </div>
   );

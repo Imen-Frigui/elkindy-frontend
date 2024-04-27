@@ -101,6 +101,7 @@ function CreateInstrument() {
       brand: brand,
       img: selectedImages,
     };
+    console.log(postData)
     if (category.toLowerCase() === "sell") {
       postData.price = values.price;
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useChatStore from "ZustStore/chatStore";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./Input";
@@ -7,6 +7,7 @@ import useSocketStore from "ZustStore/socketStore";
 import messageSound from "assets/sound/message.mp3";
 import EmojiPicker from "emoji-picker-react";
 import Message from "./Message";
+import { FiKey } from "react-icons/fi";
 
 function MessageContainer({
   selectedConversation,
@@ -25,12 +26,22 @@ function MessageContainer({
   const [isTyping, setIsTyping] = useState(false);
 
   const { socket } = useSocketStore();
+  const messageEl = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setToken(token);
     getMessagesWithUser(token, selectedConversation.userId);
     //  setMessages(messagesList)
+  }, []);
+
+  useEffect(() => {
+    if (messageEl) {
+      messageEl.current.addEventListener("DOMNodeInserted", (event) => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -129,18 +140,32 @@ function MessageContainer({
       await sendMessage(token, {
         message: messageText,
         recipientId: selectedConversation.userId,
+        img: filePreview,
       });
-      console.log(messageText);
       setMessageText("");
+      setFilePreview(null);
       getMessagesWithUser(token, selectedConversation.userId);
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imageDataURL = reader.result;
+        setFilePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedFile(null);
+    }
+  };
+  const removeImage = (index) => {
+    setSelectedFile(null);
   };
 
   return (
@@ -149,12 +174,17 @@ function MessageContainer({
         <div className="relative flex flex-wrap  items-center border-b border-gray-300 lg:flex-nowrap">
           <div className="my-0 ml-0 flex  w-full flex-col justify-center lg:my-2 lg:ml-4  ">
             <div className="flex h-[50px] lg:h-auto">
-              <div className="flex flex-col items-start justify-start">
+              <img
+                src={selectedConversation.userProfilePic}
+                alt="user-image"
+                className="h-10 w-10 rounded-full object-cover"
+              ></img>
+              <div className="flex flex-col items-start text-left">
                 <div className="flex flex-col items-start space-x-2">
                   <span className=" w-50 ml-2  block font-bold text-gray-600">
                     {selectedConversation.username}
                   </span>
-                  <span className="w-50 font-sm mb-2 ml-2 block justify-start self-end text-xs text-black lg:text-sm ">
+                  <span className="w-50 font-sm mb-2 ml-2 block justify-start self-start text-xs text-black lg:text-sm ">
                     Online
                   </span>
                 </div>
@@ -209,13 +239,26 @@ function MessageContainer({
             </button>
           </div>
         </div>
-        <div className="relative h-[320px] w-full overflow-y-auto bg-gray-100 p-6 lg:h-[480px]">
+        <div
+          className="relative h-[320px] w-full overflow-y-auto bg-gray-100 p-6 lg:h-[480px]"
+          ref={messageEl}
+        >
           <ul className="space-y-1">
             {messages.map((message, index) => (
-              <Message key={index} message={message} userId={userId} />
+              <div key={index}>
+                <Message
+                  message={message}
+                  userId={userId}
+                  isLastMessage={
+                    index === messages.length - 1 ||
+                    (message.sender === userId &&
+                      messages[index + 1]?.sender !== userId)
+                  }
+                />
+              </div>
             ))}
             {isTyping ? (
-              <div className="flex w-1/6 rounded-[22px] items-center justify-center bg-white p-2 text-gray-700 shadow space-x-1">
+              <div className="flex w-1/6 items-center justify-center space-x-1 rounded-[22px] bg-white p-2 text-gray-700 shadow">
                 <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.2s]"></div>
                 <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.15s]"></div>
                 <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700"></div>
@@ -270,7 +313,6 @@ function MessageContainer({
                 <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"></path>
               </svg>
             </label>
-            {filePreview && <img src={filePreview} alt="File Preview" />}
             <input
               className="focus:border-primary focus:ring-primary ml-3 mr-3 w-full rounded-[22px] border border-gray-300 px-6 py-2 focus:outline-none focus:ring-1"
               placeholder="Type a message"
@@ -298,6 +340,40 @@ function MessageContainer({
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
             </svg>
           </button>
+        </div>
+        <div
+          data-rbd-droppable-id="imageList"
+          data-rbd-droppable-context-id="0"
+          className="relative mt-4 grid w-full grid-cols-4 gap-3"
+        >
+          {filePreview && (
+            <div className="relative">
+              <img src={filePreview} className="h-15 w-full rounded-lg " />
+              <div className="absolute right-1 top-1 -translate-y-1/2 translate-x-1/2">
+                <button
+                  onClick={() => removeImage()}
+                  className="rounded-full bg-kindyorange p-1 text-white"
+                >
+                  <svg
+                    stroke="#FFFFFF"
+                    fill="#FFFFFF"
+                    strokeWidth="0"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                    height="14"
+                    width="14"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

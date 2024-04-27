@@ -8,6 +8,7 @@ const useChatStore = create((set) => ({
   loadingMessages: false,
   sendMessage: async (accessToken, messageData) => {
     try {
+      console.log(messageData)
       await ChatService.sendMessage(accessToken, messageData);
     } catch (error) {
       console.error("Error sending message:", error);

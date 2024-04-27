@@ -11,6 +11,7 @@ function Conversations() {
     const { conversations, loadingConversations, getConversations } = useChatStore();
     const [userConversations, setConversations] = useState([]);
     const [token, setToken] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
     const [selectedConversation, setSelectedConversation] = useState({
         _id: "",
@@ -18,8 +19,14 @@ function Conversations() {
         username: "",
         userProfilePic: "",
     });
-    const { socket,onlineUsers } = useSocketStore();
+    const { socket, onlineUsers } = useSocketStore();
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
+    };
 
+    const filteredConversations = conversations.filter(conversation =>
+        conversation.participants[0].username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -35,7 +42,7 @@ function Conversations() {
             _id: conversation._id,
             userId: conversation.participants[0]._id,
             username: conversation.participants[0].username,
-            userProfilePic: "",
+            userProfilePic: conversation.participants[0].image,
         });
     };
 
@@ -67,15 +74,27 @@ function Conversations() {
             <div className="mt-20 lg:mt-12 min-w-full border rounded lg:grid lg:grid-cols-3">
                 <div className="border-r border-gray-300 lg:col-span-1">
                     <div className="mx-3 my-3"></div>
-                    <h2 className="my-2 mb-4 ml-2 text-lg text-gray-600" >Conversations ({conversations?.length})</h2>
-                    {conversations?.length > 0 ? (
-                        conversations?.map(conversation => (
-                            <div key={conversation._id} onClick={() => handleConversationClick(conversation)}>
+                    <div className='p-3'>
+                        <input
+                            type="text"
+                            placeholder="Search users..."
+                            value={searchQuery}
+                            onChange={handleSearch}
+                            className="p-2 pr-10 rounded-xl border border-grey-400 w-full focus:outline-none "
+                        />
+                    </div>
+
+                    <h2 className="my-2 mb-4 ml-2 text-lg text-gray-600" >Conversations ({filteredConversations?.length})</h2>
+                    {filteredConversations?.length > 0 ? (
+                        filteredConversations?.map(conversation => (
+                            <div className="p-3" key={conversation._id} onClick={() => handleConversationClick(conversation)}>
                                 <Conversation conversation={conversation} isOnline={onlineUsers.includes(conversation.participants[0]._id)}
                                 />
                             </div>))
                     ) : (
-                        <p>No conversations found.</p>
+                        <div className="flex flex-col items-center justify-center py-8">
+                            <p className="text-gray-600">No conversations found.</p>
+                        </div>
                     )
                     }
                 </div>

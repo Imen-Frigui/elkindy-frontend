@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useInstrumentStore from "ZustStore/instrumentStore";
+import useChatStore from "ZustStore/chatStore";
+import { fetchUserData } from 'slices/userSlice';
+import { useDispatch, useSelector } from "react-redux";
+
 import Gallery from "./InstrumentGallery";
 import {
   Button,
@@ -15,6 +19,9 @@ import { UserIcon, ClockIcon } from "@heroicons/react/24/solid";
 function InstrumentDetail() {
   const { id } = useParams();
   const { getInstrument, instrument } = useInstrumentStore();
+  const { sendMessage } = useChatStore();
+  const userData = useSelector(state => state.user.userData);
+
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [token, setToken] = useState("");
@@ -22,6 +29,8 @@ function InstrumentDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     console.log(id);
     const token = localStorage.getItem("token");
@@ -70,6 +79,15 @@ function InstrumentDetail() {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+  const handleStartChat = async () => {
+    dispatch(fetchUserData());
+    const user = userData.user._id;
+    const token = localStorage.getItem("token");
+    await sendMessage(token, {
+      message: "Hello, I'm interested in your instrument. Can we discuss further? Here is the instrument i want: "+  window.location.href,
+      recipientId: instrument.author[0]._id,
+    });
+  }
 
   return (
 
@@ -175,6 +193,7 @@ function InstrumentDetail() {
                 </div>
                 <div class="ml-0 mr-0 flex w-[80vw] flex-col justify-center gap-y-1  px-0 md:col-[none] lg:ml-auto lg:w-[25vw]">
                   <button
+                    onClick={handleStartChat}
                     aria-label="Chat with the seller"
                     className="btn btn !border-slate-200 !bg-transparent hover:!bg-slate-100 !my-1 !w-full rounded-lg border-none bg-blue-100  p-3 !px-2  font-bold  normal-case  text-blue-500 hover:bg-blue-200"
                   >
