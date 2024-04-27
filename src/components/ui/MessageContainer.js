@@ -216,7 +216,6 @@ function MessageContainer({
             ))}
             {isTyping ? (
               <div className="flex w-1/6 rounded-[22px] items-center justify-center bg-white p-2 text-gray-700 shadow space-x-1">
-                <p>Typing</p>
                 <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.2s]"></div>
                 <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.15s]"></div>
                 <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700"></div>

@@ -79,7 +79,7 @@ function Conversations() {
                     )
                     }
                 </div>
-                <div className=" hidden lg:col-span-2 lg:block">
+                <div className=" hidden md:col-span-2 md:block">
                     <div className="w-full" >
                         <div className=" flex flex-col justify-center items-center align-middle mt-15 mx-auto">
                             {!selectedConversation._id &&
