@@ -85,7 +85,7 @@ function Conversations() {
                             placeholder="Search users..."
                             value={searchQuery}
                             onChange={handleSearch}
-                            className="p-2 pr-10 rounded-[22px] border border-grey-400 w-full focus:outline-none "
+                            className="p-2 pr-10 rounded-[22px] border border-grey-400 w-full focus:outline-none  focus:ring-primary focus:ring-1"
                         />
                     </div>
 

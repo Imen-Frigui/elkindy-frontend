@@ -7,9 +7,25 @@ import useSocketStore from "ZustStore/socketStore";
 import messageSound from "assets/sound/message.mp3";
 import EmojiPicker from "emoji-picker-react";
 import Message from "./Message";
-import { PhotoIcon, FaceSmileIcon, PhoneIcon } from "@heroicons/react/24/solid";
+import {
+  PhotoIcon,
+  FaceSmileIcon,
+  PhoneIcon,
+  VideoCameraIcon,
+  PlayCircleIcon,
+  StopIcon,
+  MicrophoneIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import { ZIM } from "zego-zim-web";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import ringtone from "assets/sound/ringtone.mp3";
+import unmute from "assets/sound/unmute.mp3";
+
+import { useRecordWebcam } from "react-record-webcam";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 function MessageContainer({
   selectedConversation,
@@ -18,18 +34,32 @@ function MessageContainer({
 }) {
   const { messages, loadingMessages, getMessagesWithUser, sendMessage } =
     useChatStore();
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+  const {
+    createRecording,
+    openCamera,
+    startRecording,
+    stopRecording,
+    downloadRecording,
+    activeRecordings,
+  } = useRecordWebcam();
   const [messagesList, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [userId, setUserId] = useState(null);
+  const [userID, setUserID] = useState(null);
   const [token, setToken] = useState(null);
   const [openEmoji, setOpenEmoji] = useState(false);
   const [filePreview, setFilePreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    userName: "",
-    userIdd: "",
-  });
+  const [userInfo, setUserInfo] = useState();
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingId, setRecordingId] = useState(null);
   const { socket } = useSocketStore();
   const messageEl = useRef(null);
   const zeroCloudInstance = useRef(null);
@@ -52,18 +82,20 @@ function MessageContainer({
           config
         );
         setUserId(response.data.user._id);
+        setUserInfo(response.data.user.username);
+        init(response.data.user._id, response.data.user.username);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
     };
 
     fetchUserData();
+    // init();
   }, []);
-  async function init() {
-    const userID = userId;
+  async function init(userID, userName) {
     const appID = 1024160343;
     const serverSecret = "b6392353ca3b75fde33a9df0f805c8e5";
-    const userName = "aaa" + userID;
+    // const userName = "aaa" + userID;
     const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -144,7 +176,7 @@ function MessageContainer({
   }, [selectedFile]);
 
   const handleSelectEmoji = (data) => {
-    setMessageText(data);
+    setMessageText((previousValue) => previousValue + data);
   };
 
   const handleSendMessage = async () => {
@@ -189,7 +221,12 @@ function MessageContainer({
       alert("userID cannot be empty!!");
       return;
     }
-
+    zeroCloudInstance.current.setCallInvitationConfig({
+      ringtoneConfig: {
+        incomingCallFileName: ringtone,
+        outgoingCallFileName: ringtone,
+      },
+    });
     zeroCloudInstance.current
       .sendCallInvitation({
         callees: [{ userID: callee, userName: selectedConversation.username }],
@@ -203,9 +240,44 @@ function MessageContainer({
         console.warn(err);
       });
   }
+  // const recordVideo = async () => {
+  //   setIsRecording(true);
+  //   const recording = await createRecording();
+  //   await openCamera(recording.id);
+  //   await startRecording(recording.id);
+  //   await new Promise((resolve) => setTimeout(resolve, 3000));
+  //   const recorded = await stopRecording(recording.id);
+  //   setIsRecording(false);
+  //   await downloadRecording(recording.id);
+  //   const formData = new FormData();
+  //   formData.append("file", recorded.blob, "recorded.webm");
+  // };
+  const handleStartRecording = async () => {
+    setIsRecording(true);
+    const recording = await createRecording();
+    await openCamera(recording.id);
+    await startRecording(recording.id);
+    setRecordingId(recording.id);
+  };
+  const handleStopRecording = async () => {
+    setIsRecording(false);
+    const recorded = await stopRecording(recordingId);
+    const formData = new FormData();
+    formData.append("file", recorded.blob, "recorded.webm");
+  };
+
+  async function handleStartListening() {
+    const sound = new Audio(unmute);
+    sound.play();
+    SpeechRecognition.startListening({
+      continuous: false,
+    }).then((e) => {
+    });
+  }
   useEffect(() => {
-    init();
-  }, []);
+    setMessageText(transcript);
+  }, [transcript]);
+
   return (
     <div className=" hidden lg:col-span-2 lg:block">
       <div className="w-full">
@@ -234,8 +306,18 @@ function MessageContainer({
               )}
             </div>
           </div>
-          <div className="flex h-[3rem] w-full border-l border-gray-300 lg:h-[5rem]">
-            <button
+          <div className="mr-2 flex h-[3rem] w-full items-center justify-end space-x-4 self-end border-gray-300 md:h-[5rem]">
+            <PhoneIcon
+              onClick={() => invite(ZegoUIKitPrebuilt.InvitationTypeVoiceCall)}
+              className="h-6 w-6 text-gray-400"
+              aria-hidden="true"
+            />
+            <VideoCameraIcon
+              onClick={() => invite(ZegoUIKitPrebuilt.InvitationTypeVideoCall)}
+              className="h-6 w-6 text-gray-400"
+              aria-hidden="true"
+            />
+            {/* <button
               aria-label=""
               className="text-2xs flex h-full w-1/2  items-center justify-center self-center  bg-gray-200 p-[6px] font-semibold text-gray-700 hover:bg-gray-200/50 lg:text-base"
             >
@@ -254,8 +336,8 @@ function MessageContainer({
                 <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
               </svg>
               Show Item
-            </button>
-            <button className="text-primary bg-primary/10 hover:bg-primary/5 flex h-full w-1/2 items-center justify-center self-center text-xs font-semibold  lg:text-base ">
+            </button> */}
+            {/* <button className="text-primary bg-primary/10 hover:bg-primary/5 flex h-full w-1/2 items-center justify-center self-center text-xs font-semibold  lg:text-base ">
               <svg
                 stroke="currentColor"
                 fill="currentColor"
@@ -274,14 +356,16 @@ function MessageContainer({
                 ></path>
               </svg>
               Block
-            </button>
+            </button> */}
           </div>
-          <PhoneIcon
-            onClick={() => invite(ZegoUIKitPrebuilt.InvitationTypeVideoCall)}
-            className="h-10 w-10 text-gray-400"
-            aria-hidden="true"
-          />
         </div>
+        {/* <button onClick={recordVideo}>Record Video</button>;
+        {activeRecordings.map((recording) => (
+          <div key={recording.id}>
+            <video ref={recording.webcamRef} autoPlay />
+            <video ref={recording.previewRef} autoPlay loop />
+          </div>
+        ))} */}
         <div
           className="relative h-[320px] w-full overflow-y-auto bg-gray-100 p-6 lg:h-[480px]"
           ref={messageEl}
@@ -322,7 +406,6 @@ function MessageContainer({
                 />
               </button>
             </div>
-
             <div className="">
               <label htmlFor="imageUpload">
                 <input
@@ -338,6 +421,21 @@ function MessageContainer({
                 />
               </label>
             </div>
+
+            {isRecording ? (
+              <StopIcon
+                onClick={handleStopRecording}
+                className="h-7 w-7 cursor-pointer text-gray-400"
+                aria-hidden="true"
+              />
+            ) : (
+              <PlayCircleIcon
+                onClick={handleStartRecording}
+                className="h-7 w-7 cursor-pointer text-gray-400"
+                aria-hidden="true"
+              />
+            )}
+
             <input
               className="focus:border-primary focus:ring-primary ml-3 mr-3 w-full rounded-[22px] border border-gray-300 px-6 py-2 focus:outline-none focus:ring-1"
               placeholder="Type a message"
@@ -353,6 +451,11 @@ function MessageContainer({
                   handleSendMessage();
                 }
               }}
+            />
+            <MicrophoneIcon
+              onClick={() => handleStartListening()}
+              className="mr-3 h-6 w-6 text-gray-400"
+              aria-hidden="true"
             />
           </div>
           <button type="submit" onClick={handleSendMessage}>
@@ -371,6 +474,18 @@ function MessageContainer({
           width={450}
           onEmojiClick={(e) => handleSelectEmoji(e.emoji)}
         />
+        {activeRecordings.map((recording) => (
+          <div key={recording.id}>
+            {isRecording ? (
+              <div>
+                <video ref={recording.webcamRef} autoPlay />
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <video ref={recording.previewRef} autoPlay loop />
+          </div>
+        ))}
         <div
           data-rbd-droppable-id="imageList"
           data-rbd-droppable-context-id="0"

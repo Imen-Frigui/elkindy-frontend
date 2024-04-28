@@ -172,7 +172,6 @@ const Navbar = (props) => {
                 />
               ))}
               {itemNotification.map((notification, index) => (
-                console.log(notification.instrument),
                 <div>
                   <h1>New item posted with your search preferences</h1>
                   <Link to={`/marketplace/instrument/${notification.instrument._id}`}>See Instrument</Link>
