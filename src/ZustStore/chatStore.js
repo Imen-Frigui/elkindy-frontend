@@ -6,9 +6,10 @@ const useChatStore = create((set) => ({
   messages: [],
   loadingConversations: false,
   loadingMessages: false,
+  users: [],
   sendMessage: async (accessToken, messageData) => {
     try {
-      console.log(messageData)
+      console.log(messageData);
       await ChatService.sendMessage(accessToken, messageData);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -33,7 +34,18 @@ const useChatStore = create((set) => ({
       );
       set({ messages: response.data });
       set({ loadingMessages: false });
-      return response.data
+      return response.data;
+    } catch (error) {
+      console.error("Error getting messages:", error);
+    }
+  },
+  getUsers: async (accessToken) => {
+    try {
+      set({ loadingMessages: true });
+      const response = await ChatService.getUsersList(accessToken);
+      set({ users: response.data });
+      set({ loadingMessages: false });
+      return response.data;
     } catch (error) {
       console.error("Error getting messages:", error);
     }

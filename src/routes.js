@@ -12,6 +12,7 @@ import {
   FaShoppingBasket,
   FaFacebookMessenger,
 } from "react-icons/fa";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 
 // Auth Imports
 import EventsList from "views/events/EventsList";
@@ -55,7 +56,7 @@ const routes = [
     name: "ElKindy Chat",
     layout: "/admin",
     path: "chat",
-    icon: <FaFacebookMessenger className="h-6 w-6" />,
+    icon: <ChatBubbleLeftRightIcon className="h-6 w-6" />,
     component: <Conversations />,
   },
   {

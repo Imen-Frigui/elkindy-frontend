@@ -9,7 +9,9 @@ export default class ChatService {
     return apiRoutes.get(`/chat/${otherUserId}`, apiHeader(accessToken));
   }
   static async sendMessage(accessToken, messageData) {
-    console.log(messageData)
     return apiRoutes.post(`/chat`, messageData, apiHeader(accessToken));
+  }
+  static async getUsersList(accessToken) {
+    return apiRoutes.get(`/chat/listUsers`,  apiHeader(accessToken));
   }
 }
