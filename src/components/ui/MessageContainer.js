@@ -16,6 +16,7 @@ import {
   StopIcon,
   MicrophoneIcon,
   TrashIcon,
+  PuzzlePieceIcon,
 } from "@heroicons/react/24/solid";
 import { ZIM } from "zego-zim-web";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
@@ -26,6 +27,8 @@ import { useRecordWebcam } from "react-record-webcam";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import StartQuizz from "./PlayQuizz";
+import WaitModal from "./WaitModal";
 
 function MessageContainer({
   selectedConversation,
@@ -60,6 +63,9 @@ function MessageContainer({
   const [userInfo, setUserInfo] = useState();
   const [isRecording, setIsRecording] = useState(false);
   const [recordingId, setRecordingId] = useState(null);
+  const [showPlayModal, setShowPlayModal] = useState(null);
+  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
+
   const { socket } = useSocketStore();
   const messageEl = useRef(null);
   const zeroCloudInstance = useRef(null);
@@ -95,7 +101,6 @@ function MessageContainer({
   async function init(userID, userName) {
     const appID = 1024160343;
     const serverSecret = "b6392353ca3b75fde33a9df0f805c8e5";
-    // const userName = "aaa" + userID;
     const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -149,10 +154,25 @@ function MessageContainer({
     socket.on("stop-typing", (userId) => {
       setIsTyping(false);
     });
+    socket.on("start-playing", (userId) => {
+      setShowPlayModal(true);
+      if (!document.hasFocus()) {
+        const sound = new Audio(messageSound);
+        sound.play();
+      }
+    });
+    // socket.on("decline-invite", (userId) => {
+    //   // setShowPlayModal(false);
+    //   console.log("declining invite")
+    //   setIsWaitingForResponse(false);
+    // });
     return () => {
       socket.off("newMessage");
       socket.off("user-typing");
       socket.off("stop-typing");
+      socket.off("start-playing");
+      socket.off("decline-invite");
+
     };
   }, [socket]);
 
@@ -271,13 +291,15 @@ function MessageContainer({
     sound.play();
     SpeechRecognition.startListening({
       continuous: false,
-    }).then((e) => {
-    });
+    }).then((e) => {});
   }
   useEffect(() => {
     setMessageText(transcript);
   }, [transcript]);
-
+  const inviteToPlay = () => {
+    socket.emit("start-playing", selectedConversation.userId);
+    setIsWaitingForResponse(true);
+  };
   return (
     <div className=" hidden lg:col-span-2 lg:block">
       <div className="w-full">
@@ -314,6 +336,11 @@ function MessageContainer({
             />
             <VideoCameraIcon
               onClick={() => invite(ZegoUIKitPrebuilt.InvitationTypeVideoCall)}
+              className="h-6 w-6 text-gray-400"
+              aria-hidden="true"
+            />
+            <PuzzlePieceIcon
+              onClick={inviteToPlay}
               className="h-6 w-6 text-gray-400"
               aria-hidden="true"
             />
@@ -520,6 +547,16 @@ function MessageContainer({
             </div>
           )}
         </div>
+        <StartQuizz
+          isOpen={showPlayModal}
+          selectedConversation={userInfo}
+          userId={selectedConversation.userId}
+          onClose={() => setShowPlayModal(false)}
+        />
+        <WaitModal
+          isOpen={isWaitingForResponse}
+          onClose={() => setIsWaitingForResponse(false)}
+        />
       </div>
     </div>
   );
