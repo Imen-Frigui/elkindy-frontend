@@ -11,7 +11,7 @@ import {
 } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar4.png";
 import messageSound from "assets/sound/message.mp3";
-
+import {fetchNotifications} from '../../services/exam/examService';
 import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../slices/userApiSlice";
 
@@ -23,6 +23,8 @@ import axios from "axios";
 
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
+  const [notificationsobs, setNotificationsobs] = useState([]);
+  const [notifs, setNotifs] = useState([]);
   const [statusNotification, setStatusNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { onOpenSidenav, brandText, socket } = props;
@@ -38,6 +40,18 @@ const Navbar = (props) => {
 
   const [userData, setUserData] = useState(null);
 
+
+  
+// Fonction pour récupérer les notifications lors du chargement du composant
+const getNotifications = async () => {
+    try {
+        const notifications = await fetchNotifications('65ecb8cf0aa9cd63cbe37e52');
+        setNotificationsobs(notifications);
+    } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+    }
+};
+
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
@@ -46,7 +60,10 @@ const Navbar = (props) => {
         sound.play();
         setShowDropdown(true);
       });
-
+       socket.on('newobs', (data) => {
+        console.log("ihebbb"+data)
+        setNotificationsobs((prev) => [...prev, data]);
+      });
       socket.on("getTradeStatus", (data) => {
         setStatusNotifications((prev) => [...prev, data]);
         const sound = new Audio(messageSound);
@@ -74,8 +91,9 @@ const Navbar = (props) => {
         console.error('Failed to fetch user data:', error);
       }
     };
-
+    
     fetchUserData();
+    getNotifications();
   }, [socket]);
   if (!userData) {
     return <div>Loading...</div>;
@@ -167,7 +185,11 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-              {notifications.map((notification, index) => (
+              {notificationsobs.map((notification, index) => (
+                  <p>{notification.message}</p>
+))}
+
+            {  notifications.map((notification, index) => (
                 <TradeNotification
                   key={index}
                   notification={notification}

@@ -4,7 +4,7 @@ import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import TableEvalution from './examBanner.jsx';
 import getEvalGrades from './evaluation.jsx';
 
-const TableEvaluation = ({ filteredStudents, ButtonComponent, setIsDrawerOpen2, setUserName, setIsDrawerOpen ,setstudents , AllClasses }) => {
+const TableEvaluation = ({ filteredStudents, ButtonComponent, setIsDrawerOpen2, setUserName, setIsDrawerOpen ,setstudents , AllClasses ,setIsDrawerOpen4 }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
     const itemsPerPage = 5;
@@ -62,6 +62,13 @@ const TableEvaluation = ({ filteredStudents, ButtonComponent, setIsDrawerOpen2, 
                                 <ButtonComponent  text="Show" color="#ffd26d" onClick={() => {
                                     setUserName(student.username)
                                     setIsDrawerOpen(true);
+                                }}>
+                                    Evaluations
+                                </ButtonComponent>
+
+                                <ButtonComponent  text="Obsv" color="rgb(12 75 101 / var(--tw-text-opacity))" onClick={() => {
+                                    
+                                    setIsDrawerOpen4(true);
                                 }}>
                                     Evaluations
                                 </ButtonComponent>
