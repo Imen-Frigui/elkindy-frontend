@@ -36,6 +36,7 @@ import CourseDetails from "./views/rtl/default/components/front/CourseDetails";
 import Dashboard from "views/rtl/default";
 import Conversations from "views/chat/Conversations";
 
+
 const routes = [
   {
     name: "ElKindy Dashboard",

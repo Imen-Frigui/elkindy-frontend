@@ -21,6 +21,8 @@ import Student from "layouts/student";
 import Teacher from "layouts/teacher";
 import Conversations from "views/chat/Conversations";
 import StudentEnroll from "views/auth/StudentFormEnroll";
+import Quiz from "components/ui/Quiz";
+import QuizGame from "components/ui/QuizGame";
 
 
 
@@ -52,7 +54,7 @@ const App = () => {
                 </Route>
             </Route>
 
-            <Route element={<PrivateRoute allowedRoles={['admin','teacher']} />}>
+            <Route element={<PrivateRoute allowedRoles={['admin', 'teacher']} />}>
                 <Route path="admin/*" element={<AdminLayout />}>
                 </Route>
             </Route>
@@ -70,9 +72,10 @@ const App = () => {
             <Route path="rtl/*" element={<RtlLayout />} />
             <Route path="evaluations" element={<EvaluationList />} />
             <Route path="chat" element={<Conversations />} />
+            <Route path="chat/quiz" element={<QuizGame />} />
             <Route path="auth/register/:courseId" element={<StudentEnroll />} />
-        <Route path="rtl/*" element={<RtlLayout />} />
-        <Route path="evaluations" element={<EvaluationList />} />
+            <Route path="rtl/*" element={<RtlLayout />} />
+            <Route path="evaluations" element={<EvaluationList />} />
 
             {/* <Route path="/assign-teachers/:courseId" element={<AssignTeachers />} /> */}
         </Routes>

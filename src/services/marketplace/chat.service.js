@@ -14,4 +14,7 @@ export default class ChatService {
   static async getUsersList(accessToken) {
     return apiRoutes.get(`/chat/listUsers`,  apiHeader(accessToken));
   }
+  static async getQuizQuestions(accessToken) {
+    return apiRoutes.get(`/chat/generateQuizQuestions`,  apiHeader(accessToken));
+  }
 }

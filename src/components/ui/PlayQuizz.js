@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import useChatStore from "ZustStore/chatStore";
 import useSocketStore from "ZustStore/socketStore";
 
-function StartQuizz({ isOpen, onClose, selectedConversation,userId }) {
+function StartQuizz({ isOpen, onClose, selectedConversation, userId }) {
   const [waiting, setWaiting] = useState(false);
 
   const { getUsers, users, sendMessage, getConversations } = useChatStore();
@@ -16,15 +17,14 @@ function StartQuizz({ isOpen, onClose, selectedConversation,userId }) {
       //     sound.play();
       //   }
     });
-    socket.on("decline-invite",()=> {
-        onClose();
-    })
+    socket.on("decline-invite", () => {
+      onClose();
+    });
 
     return () => {
       socket.off("queue");
       socket.off("accept-invite");
       socket.off("decline-invite");
-
     };
   }, [socket]);
 
@@ -32,7 +32,7 @@ function StartQuizz({ isOpen, onClose, selectedConversation,userId }) {
     socket.emit("accept-invite");
   };
   const handleDeclineInvite = () => {
-    socket.emit("decline-invite",userId);
+    socket.emit("decline-invite", userId);
     onClose();
   };
 
@@ -52,12 +52,14 @@ function StartQuizz({ isOpen, onClose, selectedConversation,userId }) {
               >
                 Decline
               </button>
-              <button
-                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                onClick={handleAcceptInvite}
-              >
-                Accept
-              </button>
+              <Link to="quiz" target="_blank">
+                <button
+                  className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  onClick={handleAcceptInvite}
+                >
+                  Accept
+                </button>
+              </Link>
             </div>
           </div>
         </div>
