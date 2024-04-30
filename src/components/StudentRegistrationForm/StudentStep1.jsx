@@ -25,7 +25,7 @@ const StudentFormStep1 = ({ onNext }) => {
     const [errors, setErrors] = useState({});
     const [register, { isLoading }] = useRegisterMutation();
     const [selected, setSelected] = useState([]);
-
+    const acceptedValues = ['piano', 'guitar', 'violin', 'drums', 'flute', 'saxophone', 'trumpet', 'clarinet', 'trombone', 'bass', 'cello', 'viola', 'harp', 'accordion', 'banjo', 'mandolin', 'ukulele', 'bagpipes', 'harmonica', 'organ', 'synthesizer', 'keyboard', 'electric guitar', 'bass guitar', 'acoustic guitar', 'electric bass', 'double bass', 'electric'];
     let { courseId } = useParams();
 
 
@@ -205,32 +205,39 @@ const StudentFormStep1 = ({ onNext }) => {
                         label="Email Address"
                         placeholder="Email"
                         name='email'
-                        className="mt-7 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 text-[16px] text-gray-750 "
+                        className="mt-7 mb-4 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 text-[16px] text-gray-750 "
                         value={formData.email || ''}
                         onChange={handleChange}
                         error={Boolean(errors.email)}
                         helperText={errors.email}
                     />                    {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
 
-
+<div  className=" mt-7  ">
                     <Input 
                         type="date" 
                         label='Birth Date'
                         placeholder="Birth Date" 
-                        className="mt-7 flex h-12 w-full items-center justify-center dark:text-gray-500  text-gray-800 rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 text-[16px] text-gray-750 "
                         value={formData.dateOfBirth || ''}
+                        className="  h-12  mb-3  w-full items-center justify-center dark:text-gray-500  font-extrabold text-gray-800 rounded-xl border-none bg-white/0 p-3 text-lg outline-none text-[16px] text-gray-750 "
+ 
                         onChange={handleChange}
                         name="dateOfBirth"
+                        dateFormat="dd/MM/yyyy" 
                         error={Boolean(errors.dateOfBirth)}
                         helperText={errors.dateOfBirth}
+                        max="2018-12-31"
+                        min="1900-01-01"
                     />
-    {errors.dateOfBirth && <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>}
+                        {errors.dateOfBirth && <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>}
+                        </div>
                     <Input 
                         type="password"
                         name='password'
+                                                className="mt-7 flex h-12 w-full items-center justify-center dark:text-gray-500  text-gray-800 rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 text-[16px] text-gray-750 "
+
                         icon={<FontAwesomeIcon icon={faLock} />}
                         label="Password" 
-                        className="mt-7 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 text-[16px] text-gray-750"
+                        classNames="mt-7 flex h-12 w-full items-center dark:text-gray-500  text-gray-800 justify-center rounded-xl border-none bg-white/0 p-3 text-lg outline-none mb-3 text-[16px] text-gray-750"
                         value={formData.password || ''}
                         onChange={handleChange}
                         error={Boolean(errors.password)}
@@ -292,8 +299,8 @@ const StudentFormStep1 = ({ onNext }) => {
                 <TagsInput
                 
                 beforeAddValidate={(tag) => {
-                    if (tag.length < 3) {
-                        <p className="text-red-500 text-sm mt-1">error taille</p>
+                    if ( !acceptedValues.includes(tag.toLocaleLowerCase()) ) {
+                        <p className="text-red-500 text-sm mt-1">put a valid instrument ! </p>
                         return false;
                     }
                     return true;
@@ -306,6 +313,7 @@ const StudentFormStep1 = ({ onNext }) => {
                     input: "border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring focus:border-blue-500 text-[17px] text-gray-750"
                 }}
                 value={selected}
+                
                 onChange={handleTagsChange}
                 name="preferedInstrument"
                 placeHolder="piano, guitar, violin, etc."

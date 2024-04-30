@@ -36,7 +36,7 @@ const RegisterPage = () => {
         <div className="p-5">
             <div className="flex border-b">
                 <div 
-                    className={`mr-8 pb-2 cursor-pointer ${activeTab === 'user' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
+                    className={`mr-8 pb-2 cursor-pointer ${activeTab === 'student' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}`}
                     onClick={() => setActiveTab('student')}
                 >
                     As Student

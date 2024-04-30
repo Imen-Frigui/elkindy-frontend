@@ -181,19 +181,22 @@ const TeacherFormStep1 = ({ onNext }) => {
                     />
                       {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
 
+                      <div  className=" mt-7  ">
                       <Input 
                         type="date" 
                         label='Birth Date'
                         placeholder="12-345-678" 
-                        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3  text-base"
+                        className=" h-12 w-full items-center justify-center rounded-xl border-none bg-white/0 p-3 text-sm outline-none mb-3  text-base"
                         value={formData.dateOfBirth || ''}
                         onChange={handleChange}
                         name="dateOfBirth"
-                      
+                        max="2018-12-31"
+                        min="1900-01-01"
                         error={Boolean(errors.dateOfBirth)}
                         helperText={errors.dateOfBirth}
                     />
                              {errors.dateOfBirth && <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth}</p>}
+                          </div>
 
                     {/* Password */}
                       <Input 
