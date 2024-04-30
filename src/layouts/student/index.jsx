@@ -118,7 +118,7 @@ export default function Student(props) {
                   path="/marketplace/trades"
                   element={<UserTrades />}
                 />
-                 /
+               
               </Routes>
             </div>
             <div className="p-3">

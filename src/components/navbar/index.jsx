@@ -20,7 +20,7 @@ import { logout } from "../../slices/authSlice";
 import NotificationStatus from "components/ui/NotificationStatus";
 import TradeNotification from "components/ui/NotificationTrade";
 import axios from "axios";
-
+import { fetchUserData } from '../../slices/userSlice';
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [notificationsobs, setNotificationsobs] = useState([]);
@@ -38,7 +38,7 @@ const Navbar = (props) => {
 
   const [logoutApiCall] = useLogoutMutation();
 
-  const [userData, setUserData] = useState(null);
+  const userData = useSelector(state => state.user.userData);
 
 
   
@@ -71,30 +71,10 @@ const getNotifications = async () => {
         setShowDropdown(true);
       });
     }
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
-        console.log(response);
-        setUserData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-      }
-    };
-    
-    fetchUserData();
-    getNotifications();
-  }, [socket]);
+   dispatch(fetchUserData());
+   getNotifications();
+  }, [socket,dispatch]);
+  
   if (!userData) {
     return <div>Loading...</div>;
   }
