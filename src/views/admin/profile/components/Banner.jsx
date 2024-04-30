@@ -6,6 +6,8 @@ import axios from "axios";
 
 const Banner = ({ userData }) => {
   const [avatar, setAvatar] = useState(userData.user.image || avatarPlaceholder);
+ // const [upavatar, setUpAvatar] = useState
+  console.log(" imagess kfjkdjfkjsqkjfd",userData.user.image)
   const [userBanner, setUserBanner] = useState(banner);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const Banner = ({ userData }) => {
         });
 
         // Assuming the response includes the updated user data with the new avatar URL
-        setAvatar(response.data.profilePic);
+       // setAvatar(response.data.profilePic);
         window.location.reload()
       } catch (error) {
         console.error('Error uploading image:', error);
