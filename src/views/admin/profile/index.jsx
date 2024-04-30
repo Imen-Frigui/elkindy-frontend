@@ -10,77 +10,60 @@ import EditProfileModal from "./components/EditProfile";
 import { UserSearches } from "components";
 import Loader from "components/button/Loader";
 import ScheduleComponent from "./components/SchedualComponent";
+import { fetchUserData } from '../../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProfileOverview = () => {
-  const [userData, setUserData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { userData, isLoading, error } = useSelector((state) => state.user);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const handleEditClick = () => {
     setIsModalOpen(true);
   };
-
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
+    dispatch(fetchUserData());
+  }, [dispatch]);
 
-        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
-        console.log(response);
-        setUserData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  if (!userData) {
-    return <div><Loader></Loader></div>; // Or any other fallback UI
+  if (isLoading) {
+    return <Loader />;
   }
+
+  if (error) {
+    console.error("Error fetching user data:", error);
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="flex w-full flex-col items-center gap-7">
-    <div className="self-start">
-      <button
-        onClick={handleEditClick}
-        className="mt-20 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
-      >
-        Edit Profile
-      </button>
+      <div className="self-start">
+        <button
+          onClick={handleEditClick}
+          className="mt-20 bg-kindyblue hover:bg-kindyorange text-white font-bold py-2 px-4 rounded-tr-2xl rounded-bl-2xl"
+        >
+          Edit Profile
+        </button>
+      </div>
+      <EditProfileModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        userData={userData}
+      />
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="lg:col-span-4">
+          <Banner userData={userData} />
+        </div>
+        <div className="lg:col-span-8">
+          <ScheduleComponent userData={userData.user} />
+        </div>
+        <div className="lg:col-span-4">
+          <Project />
+        </div>
+        <div className="lg:col-span-4">
+          <UserSearches />
+        </div>
+      </div>
     </div>
-    <EditProfileModal
-      isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
-      userData={userData}
-    />
-    {/* Grid container */}
-    <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-5">
-      {/* Banner, Project, and UserSearches side by side */}
-     
-      <div className="lg:col-span-4">
-        <Banner userData={userData} />
-      </div>
-      <div className="lg:col-span-8">
-        <ScheduleComponent userData={userData.user} />
-      </div>
-      <div className="lg:col-span-4">
-        <Project />
-      </div>
-      <div className="lg:col-span-4">
-        <UserSearches />
-      </div>
-    
-    </div>
-  </div>
   );
 };
 
