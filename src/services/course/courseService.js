@@ -189,7 +189,6 @@ export const uploadCourseImage = async (courseId, file) => {
         const response = await fetch(`${API_BASE_URL}/courses/${courseId}/upload-image`, {
             method: 'PATCH',
             body: formData,
-            // `fetch` will set it automaticallTheContentTYpeof the FormData object
         });
 
         if (!response.ok) {
@@ -203,3 +202,15 @@ export const uploadCourseImage = async (courseId, file) => {
     }
 };
 
+export const fetchInstruments = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/instruments`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch instruments');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching instruments:', error);
+        return [];
+    }
+};
