@@ -12,6 +12,7 @@ import CheckTable from "views/admin/default/components/CheckTable";
 import TaskCard from "views/admin/default/components/TaskCard";
 import tableDataCheck from "./variables/tableDataCheck.json";
 import InstrumentDashboard from "./components/InstrumentDashboard";
+import InstrumentTrends from "./components/InstrumentTrends";
 
 const Dashboard = () => {
   return (
@@ -53,8 +54,11 @@ const Dashboard = () => {
           <WeeklyRevenue />
         </div>
       </div>
-      <InstrumentDashboard></InstrumentDashboard>
-    </div>
+      <div className="mt-3 grid  grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-2 ">
+          <InstrumentDashboard></InstrumentDashboard>
+        <InstrumentTrends></InstrumentTrends>
+      </div>
+  </div>
   );
 };
 
