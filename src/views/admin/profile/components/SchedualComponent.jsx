@@ -33,10 +33,10 @@ const userid = userData._id;
     try {
       await axios.post(`http://localhost:3000/api/users/${userid}/addAvailability`, { availability: schedule });
       setSubmitted(true); // Update submission status upon successful submission
-      alert('Schedule updated successfully!');
+      //alert('Schedule updated successfully!');
     } catch (error) {
       console.error('Error updating schedule:', error);
-      alert('An error occurred while updating the schedule.');
+     // alert('An error occurred while updating the schedule.');
     }
   };
 
@@ -50,6 +50,10 @@ const userid = userData._id;
       <ScheduleSelector
       hoveredColor='orange'
       numDays={7}
+      hourlyChunks={.5}
+
+      minTime={12}
+      maxTime={20}
       dateFormat='dddd'
         selection={schedule}
         onChange={handleChange}

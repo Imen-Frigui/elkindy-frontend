@@ -22,6 +22,9 @@ const useRoleValidation = () => {
 
         if (localStorage.getItem('token')) {
             fetchUserRole();
+        }//update the condtiton of loader to the loader dosnt keep spining if the user didnt login
+        if(localStorage.getItem('token') === null){
+            setIsLoading(false);
         }
     }, []);
 
