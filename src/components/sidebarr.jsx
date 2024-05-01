@@ -13,7 +13,6 @@ function SideBarr({ open, onClose }) {
 
 
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
 
 
 
