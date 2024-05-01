@@ -1,17 +1,11 @@
-import { Spinner } from "@material-tailwind/react";
+import React from 'react';
+import musicLoaderGif from '../../assets/img/Loading.gif' ;
 
 const Loader = () => {
   return (
-    <Spinner
-      animation='border'
-      role='status'
-      style={{
-        width: '100px',
-        height: '100px',
-        margin: 'auto',
-        display: 'block',
-      }}
-    ></Spinner>
+    <div className="flex justify-center items-center h-20">
+      <img src={musicLoaderGif} alt="Loading..." className="size-20" />
+    </div>
   );
 };
 

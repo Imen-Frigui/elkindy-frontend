@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
+
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';  // Import from @react-oauth/google
@@ -10,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCredentials, setLoginError ,setGoogleCredentials} from "../../slices/authSlice";
 import { useLoginMutation, useGoogleLoginMutation } from "../../slices/userApiSlice";
 import Loader from "components/button/Loader";
+import ImageLoader from "components/button/ImageLoader";
 
 
 export default function SignIn() {
@@ -169,7 +171,7 @@ export default function SignIn() {
             Sign In
           </button>
         </form>
-        {isLoading && <Loader />}
+        {isLoading && <ImageLoader/>}
 
         <div className="mt-4 flex justify-center">
           <span className="text-sm font-medium text-navy-700 dark:text-gray-600">

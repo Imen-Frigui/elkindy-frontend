@@ -1,0 +1,23 @@
+/* Loader.css */
+.loader-container {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .spinner {
+    animation: spin 2s linear infinite; /* Adjust animation duration as needed */
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
