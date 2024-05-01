@@ -20,6 +20,11 @@ function StartQuizz({ isOpen, onClose, selectedConversation, userId }) {
     socket.on("decline-invite", () => {
       onClose();
     });
+    socket.on("accept-invite", () => {
+      onClose();
+      const newWindow = window.open("/admin/chat/quiz", "_blank");
+      newWindow.focus();
+    });
 
     return () => {
       socket.off("queue");
@@ -29,7 +34,7 @@ function StartQuizz({ isOpen, onClose, selectedConversation, userId }) {
   }, [socket]);
 
   const handleAcceptInvite = () => {
-    socket.emit("accept-invite");
+    socket.emit("accept-invite", userId);
   };
   const handleDeclineInvite = () => {
     socket.emit("decline-invite", userId);

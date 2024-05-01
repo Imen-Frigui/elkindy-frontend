@@ -56,7 +56,7 @@ const ProfileOverview = () => {
         <div className="lg:col-span-8">
           <ScheduleComponent userData={userData.user} />
         </div>
-        <div className="lg:col-span-4">
+        <div className="md:col-span-6">
           <Project />
         </div>
         <div className="lg:col-span-4">

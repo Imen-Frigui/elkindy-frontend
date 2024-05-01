@@ -110,7 +110,10 @@ const ModelViewer = ({ item, addToWishlist, removeFromWishlist, wishlist }) => {
         auto-rotate
       >
         {ARSupported && (
-          <button slot="ar-button"  className=" absolute bottom-12 left-1/2 -translate-x-1/2 transform cursor-pointer rounded-full border border-gray-200 bg-white px-16 py-0 text-xl text-blue-500 transition-colors duration-300 hover:border-gray-300 hover:bg-gray-100 hover:text-blue-600">
+          <button
+            slot="ar-button"
+            className=" absolute bottom-12 left-1/2 -translate-x-1/2 transform cursor-pointer rounded-full border border-gray-200 bg-white px-16 py-0 text-xl text-blue-500 transition-colors duration-300 hover:border-gray-300 hover:bg-gray-100 hover:text-blue-600"
+          >
             View in your space
           </button>
         )}

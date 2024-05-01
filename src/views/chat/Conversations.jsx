@@ -59,6 +59,8 @@ function Conversations() {
                 const sound = new Audio(messageSound);
                 sound.play();
             }
+            const token = localStorage.getItem("token");
+            getConversations(token);
             setSelectedConversation((prevConversation) => ({
                 ...prevConversation,
                 lastMessage: {
@@ -110,13 +112,13 @@ function Conversations() {
                     <div className="w-full" >
                         <div className=" ">
                             {!selectedConversation._id &&
-                                   <div className='flex flex-col justify-center items-center align-middle mt-15 mx-auto p-5'>
-                                        <img src={selectDiscussion} className="w-1/2 lg:w-1/3 " alt="" />
-                                        <h1 className=" text-base font-normal text-gray-600 mt-8 " >Select a discussion to start chatting or start a new chat directly</h1>
-                                        <button onClick={handleSendMessageClick} className="mt-4 px-4 py-2 bg-kindyblue text-white rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                            Send Message
-                                        </button>
-                                    </div>
+                                <div className='flex flex-col justify-center items-center align-middle mt-15 mx-auto p-5'>
+                                    <img src={selectDiscussion} className="w-1/2 lg:w-1/3 " alt="" />
+                                    <h1 className=" text-base font-normal text-gray-600 mt-8 " >Select a discussion to start chatting or start a new chat directly</h1>
+                                    <button onClick={handleSendMessageClick} className="mt-4 px-4 py-2 bg-kindyblue text-white rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                        Send Message
+                                    </button>
+                                </div>
 
                             }
                         </div>

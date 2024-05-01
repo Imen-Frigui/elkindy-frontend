@@ -14,6 +14,7 @@ function ConversationModal({ isOpen, onClose }) {
       getUsers(token);
     }
   }, [isOpen]);
+  
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };

@@ -11,8 +11,12 @@ function WaitModal({ isOpen, onClose, selectedConversation }) {
 
   useEffect(() => {
     socket.on("decline-invite", (message) => {
-      console.log("closing");
       onClose();
+    });
+    socket.on("accept-invite", (message) => {
+      onClose();
+      const newWindow = window.open("/admin/chat/quiz", "_blank");
+      newWindow.focus();
     });
 
     return () => {

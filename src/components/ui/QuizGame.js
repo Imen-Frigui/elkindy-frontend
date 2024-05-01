@@ -16,8 +16,7 @@ function QuizGame() {
     };
     fetchData();
   }, []);
-  console.log(questions.length);
-  console.log(unanswered);
+
   return (
     <div>
       

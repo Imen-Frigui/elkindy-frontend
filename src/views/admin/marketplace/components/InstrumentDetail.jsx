@@ -84,9 +84,11 @@ function InstrumentDetail() {
     const user = userData.user._id;
     const token = localStorage.getItem("token");
     await sendMessage(token, {
-      message: "Hello, I'm interested in your instrument. Can we discuss further? Here is the instrument i want: "+  window.location.href,
+      message: "Hello, I'm interested in your instrument. Can we discuss further? Here is the instrument i want: " + window.location.href,
       recipientId: instrument.author[0]._id,
     });
+
+    navigate("/admin/chat")
   }
 
   return (

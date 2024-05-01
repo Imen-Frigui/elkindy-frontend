@@ -5,7 +5,7 @@ function Conversation({ conversation, isOnline }) {
   const user = conversation.participants[0];
   const lastMessage = conversation.lastMessage;
   const updatedAt = conversation.updatedAt;
-  const formattedDate = format(new Date(updatedAt), "MMMM do yyyy, h:mm:ss a");
+  const formattedDate = format(new Date(updatedAt), "MMMM do yyyy, h:mm a");
   const [isTruncated, setIsTruncated] = useState(true);
   const [selectedConversation, setSelectedConversation] = useState(null);
 

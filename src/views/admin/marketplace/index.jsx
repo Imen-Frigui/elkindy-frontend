@@ -144,11 +144,13 @@ const Marketplace = () => {
           button1Text="Post your instrument now"
           button2Link="trades"
           button2Text="My trades"
+          button3Link="inventory"
+          button3Text="See El Kindy Inventory"
         />
 
-        <Link to='inventory'>
+        {/* <Link to='inventory'>
           See El Kindy Inventory
-        </Link>
+        </Link> */}
         <div className=" mb-2 mt-2  flex flex-col flex-wrap justify-between rounded-[20px] bg-kindydarkblue px-4 py-0 dark:bg-indigo-50 md:flex-row md:items-center">
           <h4 className="ml-1 text-2xl font-bold text-white dark:text-navy-700 ">
             Explore Instruments:

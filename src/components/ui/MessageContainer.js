@@ -17,6 +17,8 @@ import {
   MicrophoneIcon,
   TrashIcon,
   PuzzlePieceIcon,
+  ArrowDownCircleIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/solid";
 import { ZIM } from "zego-zim-web";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
@@ -48,8 +50,10 @@ function MessageContainer({
     openCamera,
     startRecording,
     stopRecording,
-    downloadRecording,
+    download,
     activeRecordings,
+    closeCamera,
+    clearPreview,
   } = useRecordWebcam();
   const [messagesList, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
@@ -62,10 +66,11 @@ function MessageContainer({
   const [isTyping, setIsTyping] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [isRecording, setIsRecording] = useState(false);
+  const [isCleared, setIsCleared] = useState(false);
   const [recordingId, setRecordingId] = useState(null);
   const [showPlayModal, setShowPlayModal] = useState(null);
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
-
+  const [formData, setFormData] = useState(new FormData());
   const { socket } = useSocketStore();
   const messageEl = useRef(null);
   const zeroCloudInstance = useRef(null);
@@ -172,7 +177,7 @@ function MessageContainer({
       socket.off("stop-typing");
       socket.off("start-playing");
       socket.off("decline-invite");
-
+      socket.off("accept-invite");
     };
   }, [socket]);
 
@@ -206,7 +211,9 @@ function MessageContainer({
         message: messageText,
         recipientId: selectedConversation.userId,
         img: filePreview,
+        // video: formData,
       });
+      setFormData(new FormData());
       setMessageText("");
       setFilePreview(null);
       getMessagesWithUser(token, selectedConversation.userId);
@@ -241,12 +248,15 @@ function MessageContainer({
       alert("userID cannot be empty!!");
       return;
     }
+    const sound = new Audio(ringtone);
     zeroCloudInstance.current.setCallInvitationConfig({
       ringtoneConfig: {
         incomingCallFileName: ringtone,
         outgoingCallFileName: ringtone,
       },
+     
     });
+
     zeroCloudInstance.current
       .sendCallInvitation({
         callees: [{ userID: callee, userName: selectedConversation.username }],
@@ -260,32 +270,32 @@ function MessageContainer({
         console.warn(err);
       });
   }
-  // const recordVideo = async () => {
-  //   setIsRecording(true);
-  //   const recording = await createRecording();
-  //   await openCamera(recording.id);
-  //   await startRecording(recording.id);
-  //   await new Promise((resolve) => setTimeout(resolve, 3000));
-  //   const recorded = await stopRecording(recording.id);
-  //   setIsRecording(false);
-  //   await downloadRecording(recording.id);
-  //   const formData = new FormData();
-  //   formData.append("file", recorded.blob, "recorded.webm");
-  // };
-  const handleStartRecording = async () => {
+
+  async function handleStartRecording() {
     setIsRecording(true);
     const recording = await createRecording();
     await openCamera(recording.id);
     await startRecording(recording.id);
     setRecordingId(recording.id);
-  };
-  const handleStopRecording = async () => {
+  }
+  async function handleStopRecording() {
     setIsRecording(false);
     const recorded = await stopRecording(recordingId);
     const formData = new FormData();
     formData.append("file", recorded.blob, "recorded.webm");
-  };
+    setFormData(formData);
+  }
+  async function handleDownloadRecording() {
+    await download(recordingId);
+    setIsCleared(true);
+  }
+  async function handleClearRecording() {
+    // await closeCamera(recordingId);
 
+    await clearPreview(recordingId);
+    await closeCamera(recordingId);
+    setIsCleared(true);
+  }
   async function handleStartListening() {
     const sound = new Audio(unmute);
     sound.play();
@@ -386,13 +396,7 @@ function MessageContainer({
             </button> */}
           </div>
         </div>
-        {/* <button onClick={recordVideo}>Record Video</button>;
-        {activeRecordings.map((recording) => (
-          <div key={recording.id}>
-            <video ref={recording.webcamRef} autoPlay />
-            <video ref={recording.previewRef} autoPlay loop />
-          </div>
-        ))} */}
+
         <div
           className="relative h-[320px] w-full overflow-y-auto bg-gray-100 p-6 lg:h-[480px]"
           ref={messageEl}
@@ -451,13 +455,13 @@ function MessageContainer({
 
             {isRecording ? (
               <StopIcon
-                onClick={handleStopRecording}
+                onClick={() => handleStopRecording()}
                 className="h-7 w-7 cursor-pointer text-gray-400"
                 aria-hidden="true"
               />
             ) : (
               <PlayCircleIcon
-                onClick={handleStartRecording}
+                onClick={() => handleStartRecording()}
                 className="h-7 w-7 cursor-pointer text-gray-400"
                 aria-hidden="true"
               />
@@ -504,13 +508,31 @@ function MessageContainer({
         {activeRecordings.map((recording) => (
           <div key={recording.id}>
             {isRecording ? (
-              <div>
+              <div className="p-4">
                 <video ref={recording.webcamRef} autoPlay />
               </div>
             ) : (
               <div></div>
             )}
-            <video ref={recording.previewRef} autoPlay loop />
+            {!isCleared ? (
+              <div className="relative p-5">
+                <video ref={recording.previewRef} autoPlay loop />
+                {recording.blob && (
+                  <div className=" relative right-1 top-1 mt-3 flex -translate-y-1/2 translate-x-1/2">
+                    <ArrowDownCircleIcon
+                      onClick={() => handleDownloadRecording()}
+                      className="h-8 w-8 text-kindyorange"
+                    />
+                    <XCircleIcon
+                      onClick={() => handleClearRecording()}
+                      className="h-8 w-8 text-kindyorange"
+                    />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         ))}
         <div
