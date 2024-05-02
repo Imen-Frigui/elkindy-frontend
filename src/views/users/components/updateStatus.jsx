@@ -6,7 +6,7 @@ const EditStatusPopup = ({ userId, currentStatus, onClose, fetchUsers }) => {
 
   const handleStatusChange = async () => {
     try {
-      await axios.put(`https://elkindy-backend.onrender.com/api/users/updateUser/${userId}`, { status: newStatus });
+      await axios.put(`http://localhost:3000/api/users/updateUser/${userId}`, { status: newStatus });
       onClose(); // Close the pop-up after status is updated
       fetchUsers(); // Re-fetch the user data to update the table
     } catch (error) {

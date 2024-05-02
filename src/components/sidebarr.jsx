@@ -18,7 +18,7 @@ function SideBarr({ open, onClose }) {
 
   const getRoutesForRole = (routes, role) => {
     if (role === 'teacher') {
-      const teacherPaths = ['default',  'teacher', 'Schedule','evaluations', 'profile', 'marketplace', 'create-instrument', 'instrument-detail','chat'];
+      const teacherPaths = ['default',  'teacher', 'Schedule','evaluation', 'profile', 'marketplace', 'create-instrument', 'instrument-detail','chat','exam'];
       return routes.filter(route => teacherPaths.includes(route.path));
     } else {
       const adminPath = ['default',  'admin', 'marketplace', 'data-tables', 'profile', 'exams', 'events', 'courses', 'assign-teachers', 'class-config', 'create-instrument', 'instrument-detail', 'event-details', 'update-event', 'archived-events', 'users','examClass','chat' ];
@@ -41,7 +41,7 @@ function SideBarr({ open, onClose }) {
       };
 
       try {
-        const response = await axios.get('https://elkindy-backend.onrender.com/api/auth/validateSession', config);
+        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
         setUserData(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
