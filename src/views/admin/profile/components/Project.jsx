@@ -65,7 +65,7 @@ const Project = ({ onInstrumentClick }) => {
   };
 
   return (
-    <div className=" p-6 mb-4 ">
+    <div className=" p-0  ">
       <div className="">
         <ToastContainer
           position="top-center"

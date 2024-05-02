@@ -467,7 +467,7 @@ useEffect(() => {
           </button>
         )}
       </div>
-
+      <div className="flex justify-center">
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
       {/* {visibleEvents.length > 0 ? (
           visibleEvents.map((event, index) => ( */}
@@ -552,6 +552,7 @@ useEffect(() => {
             />
           </div>
         )}
+      </div>
       </div>
       {/* Modal */}
       <Dialog open={open} handler={handleModalClose} size="md">
