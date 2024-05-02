@@ -1,28 +1,30 @@
 import Card from "components/card";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import DataService from "services/marketplace/data.service";
 
-const StudentForm = ({ studentId,userData }) => {
+const StudentForm = ({ studentId, userData }) => {
   const [formData, setFormData] = useState({
-    motherJob: "",
-    fatherJob: "",
-    activity: "",
-    familySize: "",
+    Mjob: "",
+    Fjob: "",
+    activities: "",
+    famsize: "",
     Pstatus: "",
     Medu: "",
     Fedu: "",
   });
 
+  console.log(userData);
+
   useEffect(() => {
     if (userData) {
       setFormData({
-        motherJob: userData.motherJob || "",
-        fatherJob: userData.fatherJob || "",
-        activity: userData.activity || "",
-        familySize: userData.familySize || "",
+        Mjob: userData.Mjob || "",
+        Fjob: userData.Fjob || "",
+        activities: userData.activities || "",
+        famsize: userData.famsize || "",
         Pstatus: userData.Pstatus || "",
-        Medu: userData.Medu ? userData.Medu.toString() : "", 
-        Fedu: userData.Fedu ? userData.Fedu.toString() : "", 
+        Medu: userData.Medu ? userData.Medu.toString() : "",
+        Fedu: userData.Fedu ? userData.Fedu.toString() : "",
       });
     }
   }, [userData]);
@@ -35,7 +37,7 @@ const StudentForm = ({ studentId,userData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(studentId)
+      console.log(studentId);
       const token = localStorage.getItem("token");
       await DataService.updateStudentDetails(studentId, formData, token);
       console.log("Student details updated successfully");
@@ -46,16 +48,19 @@ const StudentForm = ({ studentId,userData }) => {
 
   return (
     <Card extra={"w-full p-4 h-full"}>
+      <h4 className="text-xl font-bold text-navy-700 dark:text-white">
+        Personal Details Update Form
+      </h4>
       <div className="flex w-full flex-wrap">
         <form onSubmit={handleSubmit} className="mx-auto mt-8 max-w-md">
           <div className="mb-4 flex">
             <div className="mr-2 w-1/2">
-              <label htmlFor="motherJob" className="mb-1 block">
+              <label htmlFor="Mjob" className="mb-1 block">
                 Mother's Job:
               </label>
               <select
-                name="motherJob"
-                value={formData.motherJob}
+                name="Mjob"
+                value={formData.Mjob}
                 onChange={handleChange}
                 className="block w-full rounded border border-gray-300 p-2"
               >
@@ -68,12 +73,12 @@ const StudentForm = ({ studentId,userData }) => {
               </select>
             </div>
             <div className="ml-2 w-1/2">
-              <label htmlFor="fatherJob" className="mb-1 block">
+              <label htmlFor="Fjob" className="mb-1 block">
                 Father's Job:
               </label>
               <select
-                name="fatherJob"
-                value={formData.fatherJob}
+                name="Fjob"
+                value={formData.Fjob}
                 onChange={handleChange}
                 className="block w-full rounded border border-gray-300 p-2"
               >
@@ -88,12 +93,12 @@ const StudentForm = ({ studentId,userData }) => {
           </div>
           <div className="mb-4 flex">
             <div className="mr-2 w-1/2">
-              <label htmlFor="activity" className="mb-1 block">
+              <label htmlFor="activities" className="mb-1 block">
                 Extra Activities:
               </label>
               <select
-                name="activity"
-                value={formData.activity}
+                name="activities"
+                value={formData.activities}
                 onChange={handleChange}
                 className="block w-full rounded border border-gray-300 p-2"
               >
@@ -103,12 +108,12 @@ const StudentForm = ({ studentId,userData }) => {
               </select>
             </div>
             <div className="ml-2 w-1/2">
-              <label htmlFor="familySize" className="mb-1 block">
+              <label htmlFor="famsize" className="mb-1 block">
                 Family Size:
               </label>
               <select
-                name="familySize"
-                value={formData.familySize}
+                name="famsize"
+                value={formData.famsize}
                 onChange={handleChange}
                 className="block w-full rounded border border-gray-300 p-2"
               >
@@ -175,7 +180,7 @@ const StudentForm = ({ studentId,userData }) => {
           </div>
           <button
             type="submit"
-            className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
+            className="hover:bg-transparent ${submitted ? 'cursor-not-allowed opacity-50' rounded-br-3xl rounded-tl-3xl border-2 border-white/0 bg-kindyorange px-4  py-2 text-sm font-medium text-white hover:border-2 hover:border-kindyorange hover:bg-white/0 hover:text-kindyorange"
           >
             Save My Details
           </button>

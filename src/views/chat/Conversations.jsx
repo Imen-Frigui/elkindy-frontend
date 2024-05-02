@@ -77,7 +77,7 @@ function Conversations() {
         setIsModalOpen(true);
     };
     return (
-        <div className="container-fluid mx-auto mt-25 md:mt-15 bg-white">
+        <div className="container-fluid mx-auto mt-25 md:mt-15 bg-white rounded-3xl">
             <div className="mt-20 md:mt-12 min-w-full border rounded md:grid md:grid-cols-3">
                 <div className="border-r border-gray-300 md:col-span-1">
                     <div className="mx-3 my-3"></div>
