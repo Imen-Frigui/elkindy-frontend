@@ -3,49 +3,26 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { fetchSessionsForTeacher } from '../../services/class/classService';
-import axios from "axios";
+import {fetchUserData} from "../../slices/userSlice";
+import Loader from "../../components/button/Loader";
+import {useDispatch, useSelector} from "react-redux";
+
 
 const TeacherSchedule = () => {
     const [events, setEvents] = useState([]);
-    const [userData, setUserData] = useState(null);
-
+    const dispatch = useDispatch();
+    const { userData, isLoading, error } = useSelector((state) => state.user);
 
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found');
-                return;
-            }
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            try {
-                const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Failed to fetch user data:', error);
-            }
-        };
-
-        if (!userData) {
-            fetchUserData().then(r => console.log(r, 'userData', userData));
-        }
-    }, [userData]);
-
-
-    const teacherId = userData?.user?._id;
-
-    useEffect(() => {
+        dispatch(fetchUserData());
+        const teacherId = userData?.user?._id;
         const loadSessions = async () => {
             const sessions = await fetchSessionsForTeacher(teacherId);
+            console.log(sessions);
             // Transform sessions into events FullCalendar can use
             const calendarEvents = sessions.map((session) => ({
-                title: session.classId.name+ ' - Room: ' + session.room,
+                title: session?.classId?.name+ ' - Room: ' + session.room,
                 start: session.startTime,
                 end: session.endTime,
             }));
@@ -55,10 +32,23 @@ const TeacherSchedule = () => {
         if (teacherId) {
             loadSessions();
         }
-    }, [teacherId]);
+
+    }, [dispatch, userData?.user?._id]);
+
+    if (isLoading) {
+        return <Loader />;
+    }
+
+    if (error) {
+        console.error("Error fetching user data:", error);
+        return <div>Error: {error}</div>;
+    }
+
+
+
 
     return (
-        <div className="mt-8 bg-[#F7F5EF] p-3  w-full" >
+        <div className="mt-8 bg-[#F7F5EF] p-3  w-full">
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin]}
                 initialView="timeGridWeek" // 'dayGridMonth', 'timeGridDay'
