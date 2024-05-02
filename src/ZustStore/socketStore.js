@@ -23,6 +23,12 @@ const useSocketStore = create((set) => ({
       localStorage.setItem("userid", response.data.user?._id);
 
       const socket = io("http://localhost:3000", {
+
+     
+      //console.log("true")
+    //  const socket = io("https://elkindy-backend.onrender.com", {
+
+
         query: {
           userId: response.data.user._id,
         },

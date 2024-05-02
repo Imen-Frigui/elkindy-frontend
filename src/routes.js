@@ -110,10 +110,10 @@ const routes = [
 
   {
     name: "All Evaluations",
-    layout: "/rtl",
+    layout: "/admin",
     path: "evaluation",
     icon: (
-      <MdBook className="h-6 w-6" style={{ color: "blue", display: "none" }} />
+      <MdBook className="h-6 w-6"  />
     ),
     hide: true,
     component: <EvaluationList />,
