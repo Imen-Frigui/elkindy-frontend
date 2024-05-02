@@ -122,7 +122,8 @@ const routes = [
       <MdBook className="h-6 w-6" style={{ color: "blue", display: "none" }} />
     ),
     hide: true,
-
+    component: <EvaluationList />,
+  },
 
     {
       name: "RTL Admin",
@@ -134,10 +135,6 @@ const routes = [
       component: <FeedBackForm />,
   },
 
-
-
-    component: <EvaluationList />,
-  },
 
   {
     //name: "Teacher Dashboard",
