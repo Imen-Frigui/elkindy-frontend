@@ -118,4 +118,17 @@ export default class DataService {
       return null;
     }
   }
+  static async predictIStudentOutcome(studentId, accessToken) {
+    try {
+      const response = await apiRoutes.post(
+        `/instruments/predict/${studentId}`,
+        {},
+        apiHeader(accessToken)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error predicting instrument outcome:", error);
+      return null;
+    }
+  }
 }
