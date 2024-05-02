@@ -3,12 +3,15 @@ import Card from "components/card";
 import BarChart from "components/charts/BarChart";
 import { fetchMonthlyEventCount } from '../../../../services/event/eventService';
 import { MdBarChart } from "react-icons/md";
+import axios from "axios"; 
 
 const WeeklyRevenue = () => {
   const [eventData, setEventData] = useState({
     labels: [],
     datasets: [{ data: [] }],
   });
+
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchEventsCount = async () => {
@@ -24,6 +27,39 @@ const WeeklyRevenue = () => {
 
     fetchEventsCount();
   }, []);
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    if (!userData) {
+      fetchUserData();
+    }
+  }, [userData]);
+
+  const isAdmin = userData?.user?.role === 'admin';
+
+  if (!isAdmin) {
+    return null; 
+  }
 
   return (
     <Card extra="flex flex-col bg-white w-full rounded-3xl py-6 px-2 text-center">

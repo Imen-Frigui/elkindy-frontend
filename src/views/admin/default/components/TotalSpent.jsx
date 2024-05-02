@@ -4,7 +4,7 @@ import { fetchEventById } from '../../../../services/event/eventService';
 import PieChart from "components/charts/PieChart";
 import { GrFormPreviousLink, GrFormNextLink } from 'react-icons/gr';
 import { GrScorecard } from "react-icons/gr";
-
+import axios from "axios";  
 import {
   MdArrowDropUp,
   MdOutlineCalendarToday,
@@ -20,11 +20,17 @@ import {
 import LineChart from "components/charts/LineChart";
 
 const TotalSpent = () => {
+
   const [eventDetails, setEventDetails] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 2; 
   const staticEventId = "660b1ae86f1883ba4168298e"; 
+  // const staticEventId = "65f37c7d16a359849e0e1eeb"; 
+  const [userData, setUserData] = useState(null);
+
+
+
   const indexOfLastFeedback = currentPage * itemsPerPage;
   const indexOfFirstFeedback = indexOfLastFeedback - itemsPerPage;
   const currentFeedbacks = feedbacks.slice(indexOfFirstFeedback, indexOfLastFeedback);
@@ -54,6 +60,7 @@ const TotalSpent = () => {
   }
 
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const event = await fetchEventById(staticEventId);
@@ -67,6 +74,38 @@ const TotalSpent = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      try {
+        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    if (!userData) {
+      fetchUserData();
+    }
+  }, [userData]);
+
+  const isAdmin = userData?.user?.role === 'admin';
+
+  if (!isAdmin) {
+    return null; 
+  }
 
   // const pieChartOptions = {
   //   responsive: [{
