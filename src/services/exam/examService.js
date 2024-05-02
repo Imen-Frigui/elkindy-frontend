@@ -406,7 +406,7 @@ export const predictPerformance = async (formdata) => {
             "Previous_general_grade": (formdata.Previous_theoretical_exam + formdata.Previous_practice_exam)/2
         };
 
-        const response = await axios.post(`http://127.0.0.1:8000/ai/aipredictstudentperformance`, JSON.stringify(data));
+        const response = await axios.post(`http://127.0.0.1:8050/ai/aipredictstudentperformance`, JSON.stringify(data));
         console.log("succccesss");
         console.log(response.data); // Logging the response data
         
