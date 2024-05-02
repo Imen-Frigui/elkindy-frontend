@@ -1,5 +1,5 @@
-const API_BASE_URL = 'https://elkindy-backend.onrender.com/api';
-
+//const API_BASE_URL = 'https://elkindy-backend.onrender.com/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 export const fetchEvents = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/events`);
