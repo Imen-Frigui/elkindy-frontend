@@ -77,9 +77,9 @@ function Conversations() {
         setIsModalOpen(true);
     };
     return (
-        <div className="container-fluid mx-auto mt-25 lg:mt-15 bg-white">
-            <div className="mt-20 lg:mt-12 min-w-full border rounded lg:grid lg:grid-cols-3">
-                <div className="border-r border-gray-300 lg:col-span-1">
+        <div className="container-fluid mx-auto mt-25 md:mt-15 bg-white rounded-3xl">
+            <div className="mt-20 md:mt-12 min-w-full border rounded md:grid md:grid-cols-3">
+                <div className="border-r border-gray-300 md:col-span-1">
                     <div className="mx-3 my-3"></div>
                     <div className='p-3'>
                         <input
@@ -108,7 +108,7 @@ function Conversations() {
                     )
                     }
                 </div>
-                <div className=" hidden md:col-span-2 md:block">
+                <div className=" md:col-span-2 md:block col-span-1">
                     <div className="w-full" >
                         <div className=" ">
                             {!selectedConversation._id &&
@@ -121,8 +121,11 @@ function Conversations() {
                                 </div>
 
                             }
+                            {selectedConversation._id && <MessageContainer selectedConversation={selectedConversation} setSelectedConversation={setSelectedConversation} isOnline={onlineUsers.includes(selectedConversation.userId)} />}
+
                         </div>
-                        {selectedConversation._id && <MessageContainer selectedConversation={selectedConversation} setSelectedConversation={setSelectedConversation} isOnline={onlineUsers.includes(selectedConversation.userId)} />}
+
+
                     </div>
                 </div>
                 <ConversationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

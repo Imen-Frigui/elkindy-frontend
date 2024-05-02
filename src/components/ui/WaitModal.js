@@ -27,12 +27,14 @@ function WaitModal({ isOpen, onClose, selectedConversation }) {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="h-1/2 w-1/3 rounded-md bg-white p-4 shadow-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 p-3">
+          <div className="h-auto w-1/3  flex-col items-center justify-center rounded-md bg-white p-4 shadow-lg">
             <h2 className="mb-2 text-lg font-semibold">
-              Waiting for the response
+              Waiting for opponent the response
             </h2>
-            <LoadingSpinner />
+            <div className=" flex items-center justify-center">
+              <LoadingSpinner />
+            </div>
           </div>
         </div>
       )}

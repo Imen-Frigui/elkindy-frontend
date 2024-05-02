@@ -105,4 +105,30 @@ export default class DataService {
       return null;
     }
   }
+  static async updateStudentDetails(studentId, formData, accessToken) {
+    try {
+      const response = await apiRoutes.put(
+        `/instruments/students/${studentId}`,
+        formData,
+        apiHeader(accessToken)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating student:", error);
+      return null;
+    }
+  }
+  static async predictIStudentOutcome(studentId, accessToken) {
+    try {
+      const response = await apiRoutes.post(
+        `/instruments/predict/${studentId}`,
+        {},
+        apiHeader(accessToken)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error predicting instrument outcome:", error);
+      return null;
+    }
+  }
 }

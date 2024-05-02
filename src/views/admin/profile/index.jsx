@@ -12,11 +12,13 @@ import Loader from "components/button/Loader";
 import ScheduleComponent from "./components/SchedualComponent";
 import { fetchUserData } from '../../../slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import StudentForm from "components/ui/StudentForm";
+import { UserIcon } from "@heroicons/react/24/solid";
 
 const ProfileOverview = () => {
   const dispatch = useDispatch();
   const { userData, isLoading, error } = useSelector((state) => state.user);
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -28,7 +30,7 @@ const ProfileOverview = () => {
   if (isLoading) {
     return <Loader />;
   }
-
+  console.log(userData.user);
   if (error) {
     console.error("Error fetching user data:", error);
     return <div>Error: {error}</div>;
@@ -53,16 +55,20 @@ const ProfileOverview = () => {
         <div className="lg:col-span-4">
           <Banner userData={userData} />
         </div>
-        <div className="lg:col-span-8">
+        <div className="md:col-span-8">
           <ScheduleComponent userData={userData.user} />
         </div>
         <div className="md:col-span-6">
           <Project />
         </div>
-        <div className="lg:col-span-4">
+        <div className="md:col-span-6">
           <UserSearches />
         </div>
+        {userData.user.role === "student" ? <div className="md:col-span-6"><StudentForm studentId={userData.user._id} userData={userData.user} /></div> : null
+
+        }
       </div>
+
     </div>
   );
 };

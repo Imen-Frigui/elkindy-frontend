@@ -13,7 +13,6 @@ function SideBarr({ open, onClose }) {
 
 
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
 
 
 
@@ -63,7 +62,7 @@ function SideBarr({ open, onClose }) {
   return (
     <>
       <div
-        className={`sm:none  duration-175 linear fixed left-0 !z-50 flex h-screen items-center justify-center bg-kindygray  transition-all dark:!bg-navy-900 md:!z-50 lg:!z-50 xl:!z-0  ${
+        className={`sm:none  duration-175 linear fixed left-0 !z-50 flex h-screen items-center justify-center bg-indigo-50  transition-all dark:!bg-navy-900 md:!z-50 lg:!z-50 xl:!z-0  ${
           open ? "translate-x-0" : "-translate-x-96"
         } `}
       >
