@@ -7,26 +7,26 @@ function InstrumentDashboard() {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('guitar');
 
-    useEffect(() => {
-        fetchInstruments();
-    }, []);
+    // useEffect(() => {
+    //     fetchInstruments();
+    // }, []);
 
-    const fetchInstruments = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch(`http://localhost:3000/api/courses/instruments?searchTerm=${searchTerm}`);
-            const data = await response.json();
-            if (response.ok) {
-                setProducts(data.products);
-                setAveragePrice(data.averagePrice);
-            } else {
-                throw new Error(data.message || "Error fetching data");
-            }
-        } catch (error) {
-            console.error("Failed to fetch instruments:", error);
-        }
-        setLoading(false);
-    };
+    // const fetchInstruments = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const response = await fetch(`http://localhost:3000/api/courses/instruments?searchTerm=${searchTerm}`);
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             setProducts(data.products);
+    //             setAveragePrice(data.averagePrice);
+    //         } else {
+    //             throw new Error(data.message || "Error fetching data");
+    //         }
+    //     } catch (error) {
+    //         console.error("Failed to fetch instruments:", error);
+    //     }
+    //     setLoading(false);
+    // };
 
     return (
         <Card extra="flex mt-5 flex-col gap-4 p-4 bg-white shadow rounded-lg">
@@ -40,9 +40,9 @@ function InstrumentDashboard() {
                         placeholder="Search term..."
                         className="px-4 py-2 border rounded"
                     />
-                    {<button onClick={fetchInstruments} className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300">
+                    {/* {<button onClick={fetchInstruments} className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300">
                         Search
-                    </button>}
+                    </button>} */}
                 </div>
             </div>
             {loading ? (

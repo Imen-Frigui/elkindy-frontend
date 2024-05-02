@@ -54,6 +54,8 @@ export function SidebarLinks(props) {
   }, [userData]);
 
   const isTeacher = userData?.user?.role === 'teacher';
+  const isAdmin = userData?.user?.role === 'admin';
+
   console.log('isTeacher', isTeacher);
 
   const createLinks = (routes) => {
@@ -66,24 +68,29 @@ export function SidebarLinks(props) {
       ) {
         return (
           <Link key={index} to={route.layout + "/" + route.path}>
-            <div className="relative mb-2 mt-10 flex hover:cursor-pointer">
-              <li
-                className="my-[3px] flex cursor-pointer items-center px-4"
-                key={index}
+            {/* <div className="relative mb-2 mt-10 flex hover:cursor-pointer"> */}
+            <li
+              className={`${activeRoute(route.path) === true
+                ? `flex cursor-pointer items-center p-3 justify-center rounded-3xl space-y-5 mt-3 ml-1 mr-1 ${isTeacher ? 'bg-kindyblue text-white' : isAdmin ? 'bg-kindyorange text-white' : 'bg-kindyorange'
+                }`
+                : `flex cursor-pointer items-center p-5 space-y-5 mt-3 ml-1 mr-1 ${isTeacher ? 'bg-kindyorange' : isAdmin ? 'bg-kindyblue' : 'bg-kindydarkblue'
+                }`
+                }`}
+              key={index}
+            >
+              <span
+                className={`${activeRoute(route.path) === true
+                  ? `font-bold ${isTeacher ? "text-white" : "text-white items-center "} dark:text-white`
+                  : "font-medium text-white"
+                  }`}
               >
-                <span
-                  className={`${activeRoute(route.path) === true
-                      ? `font-bold ${teacherId ? "text-kindyblue" : "text-kindyorange"} dark:text-white`
-                      : "font-medium text-white"
-                    }`}
-                >
-                  {route.icon ? route.icon : <DashIcon />}{" "}
-                </span>
-              </li>
-              {activeRoute(route.path) === true ? (
+                {route.icon ? route.icon : <DashIcon />}{" "}
+              </span>
+            </li>
+            {/* {activeRoute(route.path) === true ? (
                 <div class={`absolute right-0 top-px h-9 w-1 rounded-lg ${isTeacher ? "bg-kindyblue" : "bg-kindyorange"} dark:bg-brand-400`} />
-              ) : null}
-            </div>
+              ) : null} */}
+            {/* </div> */}
           </Link>
           /*<Link key={index} to={route.layout + "/" + route.path}>
           <div className="relative mb-2 mt-10 flex hover:cursor-pointer">
