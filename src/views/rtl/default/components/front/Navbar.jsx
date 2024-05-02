@@ -17,16 +17,16 @@ const Navbar = () => {
             }}
         >
             <nav className="flex justify-between items-center px-28 py-10">
-                <Link to="/rtl" className="flex items-center">
+                <Link to="/home" className="flex items-center">
                     <img src={logo} alt="El Kindy Conservatoire" />
                 </Link>
 
 
                 <div className="flex justify-between md:flex gap-28">
-                    <Link to="/" className="hover:underline">Home</Link>
-                    <Link to="/about" className="hover:underline">About School</Link>
-                    <Link to="/gallery" className="hover:underline">Gallery</Link>
-                    <Link to="/elkindy-band" className="hover:underline">El Kindy Band</Link>
+                    <Link to="/home" className="hover:underline">Home</Link>
+                    <Link to="/home" className="hover:underline">About School</Link>
+                    <Link to="/home" className="hover:underline">Gallery</Link>
+                    <Link to="/home" className="hover:underline">El Kindy Band</Link>
                     <Link to="/home/eventfeedbacks" className="hover:underline">Event Feedbacks</Link>
                 </div>
 
