@@ -18,7 +18,7 @@ function InstrumentDoughnutChart() {
             borderWidth: 1,
         }]
     });
-/*
+
     useEffect(() => {
         fetchInstrumentPopularity().then(data => {
             const labels = Object.keys(data);
@@ -38,7 +38,7 @@ function InstrumentDoughnutChart() {
             });
         });
     }, []);
-*/
+
     const options = {
         plugins: {
             legend: {
@@ -55,7 +55,7 @@ function InstrumentDoughnutChart() {
         <Card extra="flex mt-5 flex-col gap-4 p-4 bg-white shadow rounded-lg">
             <div className="flex flex-col justify-center ml-4">
                 <h1 className="text-xl font-bold text-navy-700 dark:text-white">Instrument Popularity</h1>
-                <Doughnut data={chartData} options={options}/>
+                <Doughnut data={chartData} options={options} />
             </div>
         </Card>
     );
