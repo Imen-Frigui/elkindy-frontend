@@ -35,7 +35,7 @@ function LatestTrades({ trades }) {
         };
 
         const response = await axios.get(
-          "https://elkindy-backend.onrender.com/api/auth/validateSession",
+          "http://localhost:3000/api/auth/validateSession",
           config
         );
         setUserId(response.data.user._id);

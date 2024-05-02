@@ -79,7 +79,7 @@ const StudentEnroll = ({ onNext }) => {
             await schema.validate(formData, { abortEarly: false });
              /*
             // Check email existence in your database
-            const emailExistsResponse = await fetch(`https://elkindy-backend.onrender.com/api/auth/check-email/${formData.email}`);
+            const emailExistsResponse = await fetch(`http://localhost:3000/api/auth/check-email/${formData.email}`);
             if (emailExistsResponse.ok) {
                 const data = await emailExistsResponse.json();
                 if (data.exists) {
@@ -115,7 +115,7 @@ const StudentEnroll = ({ onNext }) => {
             }
             */
             // Check phone number existence in your database
-            const phoneExistsResponse = await fetch(`https://elkindy-backend.onrender.com/api/auth/check-phone/${formData.phoneNumber}`);
+            const phoneExistsResponse = await fetch(`http://localhost:3000/api/auth/check-phone/${formData.phoneNumber}`);
             if (phoneExistsResponse.ok) {
                 const data = await phoneExistsResponse.json();
                 if (data.exists) {

@@ -7,10 +7,10 @@ const useQuizStore = create((set,get) => ({
   questions: [],
   currentQuestion: 0,
 
-  loadQuizData: async (token) => {
+  loadQuizData: async (token,topic,level,lengthOfQuestions) => {
     set({ loading: true });
     try {
-      const response = await ChatService.getQuizQuestions(token);
+      const response = await ChatService.getQuizQuestions(token,topic,level,lengthOfQuestions);
       const data = response.data.reply.quiz;
       console.log(data);
       set({ questions: data });

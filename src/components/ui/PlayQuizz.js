@@ -3,7 +3,15 @@ import { Link } from "react-router-dom";
 import useChatStore from "ZustStore/chatStore";
 import useSocketStore from "ZustStore/socketStore";
 
-function StartQuizz({ isOpen, onClose, selectedConversation, userId }) {
+function StartQuizz({
+  isOpen,
+  onClose,
+  selectedConversation,
+  userId,
+  topic,
+  level,
+  lengthOfQuestions,
+}) {
   const [waiting, setWaiting] = useState(false);
 
   const { getUsers, users, sendMessage, getConversations } = useChatStore();
@@ -22,6 +30,7 @@ function StartQuizz({ isOpen, onClose, selectedConversation, userId }) {
     });
     socket.on("accept-invite", () => {
       onClose();
+
       const newWindow = window.open("/admin/chat/quiz", "_blank");
       newWindow.focus();
     });

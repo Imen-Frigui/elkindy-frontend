@@ -9,7 +9,7 @@ const useRoleValidation = () => {
         const fetchUserRole = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('https://elkindy-backend.onrender.com/api/auth/verifyTokenAndRole', {
+                const response = await axios.get('http://localhost:3000/api/auth/verifyTokenAndRole', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUserRole(response.data.role);

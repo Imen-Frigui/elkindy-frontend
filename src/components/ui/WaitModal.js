@@ -3,7 +3,14 @@ import useChatStore from "ZustStore/chatStore";
 import useSocketStore from "ZustStore/socketStore";
 import LoadingSpinner from "./LoadingSpinner";
 
-function WaitModal({ isOpen, onClose, selectedConversation }) {
+function WaitModal({
+  isOpen,
+  onClose,
+  selectedConversation,
+  topic,
+  level,
+  lengthOfQuestions,
+}) {
   const [waiting, setWaiting] = useState(false);
 
   const { getUsers, users, sendMessage, getConversations } = useChatStore();
@@ -15,6 +22,13 @@ function WaitModal({ isOpen, onClose, selectedConversation }) {
     });
     socket.on("accept-invite", (message) => {
       onClose();
+      // const topic = "Music";
+      // const level = "easy";
+      // const lengthOfQuestions = 3;
+      // const url = `/admin/chat/quiz/${encodeURIComponent(
+      //   topic
+      // )}/${encodeURIComponent(level)}/${encodeURIComponent(lengthOfQuestions)}`;
+
       const newWindow = window.open("/admin/chat/quiz", "_blank");
       newWindow.focus();
     });
