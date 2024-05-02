@@ -14,7 +14,7 @@ const FeedBackForm = () => {
   const [feedbackData, setFeedbackData] = useState({
     entertainmentRating: 5,
     inspirationRating: 5,
-    //themeRelevance: 5,
+    themeRelevance: 5,
     valueForMoney: 5,
     bestPart: "",
     recommend: "",
@@ -717,7 +717,7 @@ const FeedBackForm = () => {
                 </button>
               </div>
             </form>
-            <Link to="/rtl/rtl">
+            <Link to="/home">
   <IoArrowBackCircle
     className="absolute bottom-0 left-0 mb-10 ml-3 cursor-pointer"
     style={{ fontSize: '3rem' }} // Adjust fontSize to increase the size of the icon
@@ -725,7 +725,7 @@ const FeedBackForm = () => {
   />
 </Link>
 
-<Link to="/rtl/rtl">
+<Link to="/home">
   <IoArrowForwardCircle
     className="absolute bottom-0 right-0 mb-10 ml-3 cursor-pointer"
     style={{ fontSize: '3rem' }} 

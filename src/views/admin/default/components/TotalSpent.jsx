@@ -29,8 +29,6 @@ const TotalSpent = () => {
   // const staticEventId = "65f37c7d16a359849e0e1eeb"; 
   const [userData, setUserData] = useState(null);
 
-
-
   const indexOfLastFeedback = currentPage * itemsPerPage;
   const indexOfFirstFeedback = indexOfLastFeedback - itemsPerPage;
   const currentFeedbacks = feedbacks.slice(indexOfFirstFeedback, indexOfLastFeedback);
