@@ -25,27 +25,27 @@ const Quiz = () => {
 
   const createHandleClick = (answer) => {
     selectAnswer(questionInfo, answer);
-    resetTimer();
+    // resetTimer();
   };
 
-  useEffect(() => {
-    setTimer(15);
-    const interval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(interval);
-          goNextQuestion();
-        }
-        return prevTimer - 1;
-      });
-    }, 1000);
+  // useEffect(() => {
+  //   setTimer(15);
+  //   const interval = setInterval(() => {
+  //     setTimer((prevTimer) => {
+  //       if (prevTimer === 0) {
+  //         clearInterval(interval);
+  //         goNextQuestion();
+  //       }
+  //       return prevTimer - 1;
+  //     });
+  //   }, 1000);
 
-    setTimerInterval(interval);
+  //   setTimerInterval(interval);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [currentQuestion]);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [currentQuestion]);
   const resetTimer = () => {
     clearInterval(timerInterval);
     setTimer(15);

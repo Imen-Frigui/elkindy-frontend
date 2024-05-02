@@ -89,7 +89,7 @@ function MessageContainer({
         };
 
         const response = await axios.get(
-          "http://localhost:3000/api/auth/validateSession",
+          "https://elkindy-backend.onrender.com/api/auth/validateSession",
           config
         );
         setUserId(response.data.user._id);
@@ -254,7 +254,6 @@ function MessageContainer({
         incomingCallFileName: ringtone,
         outgoingCallFileName: ringtone,
       },
-     
     });
 
     zeroCloudInstance.current
@@ -311,7 +310,7 @@ function MessageContainer({
     setIsWaitingForResponse(true);
   };
   return (
-    <div className=" hidden lg:col-span-2 lg:block">
+    <div className=" col-span-1 md:col-span-2 md:block">
       <div className="w-full">
         <div className="relative flex flex-wrap  items-center border-b border-gray-300 lg:flex-nowrap">
           <div className="my-0 ml-0 flex  w-full flex-col justify-center lg:my-2 lg:ml-4  ">
@@ -416,12 +415,16 @@ function MessageContainer({
               </div>
             ))}
             {isTyping ? (
-              <div className="flex w-1/6 items-center justify-center space-x-1 rounded-[22px] bg-white p-2 text-gray-700 shadow">
-                <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.2s]"></div>
-                <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.15s]"></div>
-                <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700"></div>
-              </div>
-            ) : null}
+              // <div className="flex h-auto w-auto items-center justify-center space-x-1 rounded-[22px] bg-white text-gray-700 shadow">
+              <li className="flex max-w-xl justify-start">
+                <div className="relative flex max-w-xl justify-center rounded-[22px] bg-white text-gray-700 shadow p-3">
+                  <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.2s]"></div>
+                  <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700 [animation-delay:-0.15s]"></div>
+                  <div class="h-2 w-2 animate-bounce rounded-full bg-gray-700"></div>
+                </div>
+              </li>
+            ) : // </div>
+            null}
           </ul>
         </div>
         <div className="flex w-full items-center justify-between border-gray-300 p-3 md:mb-0">

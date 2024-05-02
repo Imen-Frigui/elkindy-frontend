@@ -9,6 +9,8 @@ import Conversation from "components/ui/Conversations";
 import {GiPapers} from "react-icons/gi";
 import ExamsList from "./views/exams/exam";
 import StudentExams from "./views/studentExam/studentGrade";
+import Conversations from "views/chat/Conversations";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 
 const routes = [
   {
@@ -45,11 +47,12 @@ const routes = [
   },
   {
     name: "ElKindy Chat",
-    layout: "/admin",
+    layout: "/student",
     path: "chat",
-    icon: <FaFacebookMessenger className="h-6 w-6" />,
-    component: <Conversation />,
+    icon: <ChatBubbleLeftRightIcon className="h-6 w-6" />,
+    component: <Conversations />,
   },
+
   {
     name: "ElKindy Courses",
     layout: "/student",

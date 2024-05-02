@@ -17,6 +17,8 @@ import CreateInstrument from "views/admin/marketplace/components/CreateInstrumen
 import InstrumentDetail from "views/admin/marketplace/components/InstrumentDetail";
 import UserTrades from "views/admin/marketplace/components/UserTrades";
 import StudentExams from "../../views/studentExam/studentGrade";
+import { Inventory } from "components";
+import InventoryList from "views/admin/marketplace/components/InventoryProducts";
 
 export default function Student(props) {
   const { ...rest } = props;
@@ -85,7 +87,7 @@ export default function Student(props) {
       <SideBarrStudent open={open} onClose={() => setOpen(false)} />
       {/* <Sidebar open={open} onClose={() => setOpen(false)} /> */}
       {/* Navbar & Main Content */}
-      <div className="h-full w-full bg-kindygray dark:!bg-navy-900">
+      <div className="h-full w-full bg-indigo-50 dark:!bg-navy-900 ">
         {/* Main Content */}
         <main
           className={`mx-[5px] h-full flex-none transition-all md:pr-2 xl:ml-[100px]`}
@@ -118,7 +120,11 @@ export default function Student(props) {
                   path="/marketplace/trades"
                   element={<UserTrades />}
                 />
-               
+                <Route
+                  path="/marketplace/inventory"
+                  element={<InventoryList />}
+                />
+
               </Routes>
             </div>
             <div className="p-3">

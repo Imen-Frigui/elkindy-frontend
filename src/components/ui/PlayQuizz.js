@@ -45,7 +45,7 @@ function StartQuizz({ isOpen, onClose, selectedConversation, userId }) {
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="h-1/2 w-1/3 rounded-md bg-white p-4 shadow-lg">
+          <div className="h-auto w-1/3 rounded-md bg-white p-4 shadow-lg">
             <h2 className="mb-2 text-lg font-semibold">
               {selectedConversation} is inviting you to play a quick quiz!
             </h2>

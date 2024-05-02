@@ -97,7 +97,7 @@ export default function Admin(props) {
       <SideBarr open={open} onClose={() => setOpen(false)} />
       {/* <Sidebar open={open} onClose={() => setOpen(false)} /> */}
       {/* Navbar & Main Content */}
-      <div className="h-full w-full bg-kindygray dark:!bg-navy-900">
+      <div className="h-full w-full  bg-indigo-50 dark:!bg-navy-900">
         {/* Main Content */}
         <main
           className={`mx-[5px] h-full flex-none transition-all md:pr-2 xl:ml-[100px]`}
