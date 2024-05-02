@@ -21,13 +21,16 @@ const useSocketStore = create((set) => ({
     );
     if (response.data.user?._id) {
       console.log("true");
-      const socket = io("http://localhost:5000", {
+      const socket = io("http://localhost:3000", {
         query: {
           userId: response.data.user._id,
         },
       });
       set({ socket });
-      console.log(socket);
+      socket.on("getOnlineUsers", (users) => {
+        set({ onlineUsers: users });
+        console.log(users);
+      });
       return () => socket && socket.close();
     }
   },

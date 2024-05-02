@@ -4,22 +4,23 @@ import { FcGoogle } from "react-icons/fc";
 import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
 import "react-toastify/dist/ReactToastify.css";
-import * as Yup from "yup";
 import { useEffect } from "react";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';  // Import from @react-oauth/google
 import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation } from "../../slices/userApiSlice";
-import { setCredentials, setLoginError } from "../../slices/authSlice";
+import { setCredentials, setLoginError ,setGoogleCredentials} from "../../slices/authSlice";
+import { useLoginMutation, useGoogleLoginMutation } from "../../slices/userApiSlice";
 import Loader from "components/button/Loader";
 
 
 export default function SignIn() {
-  // const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [googleLogin, { isLoading: isGoogleLoading }] = useGoogleLoginMutation();
 
   const [login, { isLoading }] = useLoginMutation();
   const loginError = useSelector((state) => state.auth.loginError);
@@ -40,6 +41,19 @@ export default function SignIn() {
     }
   }, [navigate, userInfo]);
 
+
+  const handleCredentialResponse = async (response) => {
+    try {
+      const result = await googleLogin(response).unwrap();
+      dispatch(setCredentials(result));
+    } catch (err) {
+      dispatch(setLoginError(err.message || "Failed to authenticate with Google"));
+      console.error("Login failed:", err);
+    }
+  };
+  
+
+
   const handleChange = (setter) => (e) => {
     setter(e.target.value);
     // Reset login error when the user starts typing again
@@ -57,10 +71,11 @@ export default function SignIn() {
       dispatch(
         setLoginError(err?.data?.message || "An error occurred during login.")
       );
+      
     }
   };
-
   return (
+    <GoogleOAuthProvider clientId="1066912378965-hfmog74hpajilpefbq103tond3l9fvl7.apps.googleusercontent.com">
     <div className=" my-64 grid sm:grid-cols-1  md:grid-cols-1 lg:grid-cols-2 lg:gap-0  ">
       <div
         className=" ml-20 w-full max-w-xl bg-lightblue p-8 shadow-lg dark:bg-gray-800 sm:rounded-lg "
@@ -68,25 +83,34 @@ export default function SignIn() {
           borderRadius: "100px 0 0 0 ",
         }}
       >
+         
         <h4 className="mb-2.5 text-center text-4xl font-bold text-navy-700 dark:text-white md:rounded-lg">
-          Sign In
+          Login In
         </h4>
-        <p className="mb-9 text-center text-base text-gray-600">
-          Enter your email and password to sign in!
-        </p>
-        <div className="mb-6 flex h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-lightPrimary shadow-lg hover:cursor-pointer dark:bg-navy-800">
-          <div className="rounded-full text-xl">
-            <FcGoogle />
+        
+        <div className="flex justify-center mb-4  ">
+            <GoogleLogin
+              onSuccess={handleCredentialResponse}
+              onError={() => dispatch(setLoginError("Google sign-in was unsuccessful"))}
+              
+           shape="circle"
+           width={40}
+          theme="filled_blue"
+      
+     
+             
+            />
           </div>
-          <h5 className="text-sm font-medium text-navy-700 dark:text-white">
-            Sign In with Google
-          </h5>
-        </div>
+        
+   
         <div className="mb-6 flex items-center  gap-3">
           <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
           <p className="text-base text-gray-600 dark:text-white"> or </p>
           <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
         </div>
+        <p className="mb-9 text-center text-base text-gray-600">
+          Enter your email and password to sign in!
+        </p>
         <form onSubmit={submitHandler} className="container w-full">
           {/* Email */}
           <input
@@ -169,5 +193,6 @@ export default function SignIn() {
         }}
       />
     </div>
+           </GoogleOAuthProvider>
   );
 }
