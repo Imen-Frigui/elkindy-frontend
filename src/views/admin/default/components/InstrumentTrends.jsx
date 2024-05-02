@@ -18,7 +18,7 @@ function InstrumentDoughnutChart() {
             borderWidth: 1,
         }]
     });
-
+/*
     useEffect(() => {
         fetchInstrumentPopularity().then(data => {
             const labels = Object.keys(data);
@@ -38,7 +38,7 @@ function InstrumentDoughnutChart() {
             });
         });
     }, []);
-
+*/
     const options = {
         plugins: {
             legend: {

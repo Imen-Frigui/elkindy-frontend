@@ -6,7 +6,7 @@ function InstrumentDashboard() {
     const [averagePrice, setAveragePrice] = useState(0);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('guitar');
-
+/*
     useEffect(() => {
         fetchInstruments();
     }, []);
@@ -27,7 +27,7 @@ function InstrumentDashboard() {
         }
         setLoading(false);
     };
-
+*/
     return (
         <Card extra="flex mt-5 flex-col gap-4 p-4 bg-white shadow rounded-lg">
             <div className="flex justify-between items-center">
@@ -40,9 +40,9 @@ function InstrumentDashboard() {
                         placeholder="Search term..."
                         className="px-4 py-2 border rounded"
                     />
-                    <button onClick={fetchInstruments} className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300">
+                    {/*}  <button onClick={fetchInstruments} className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300">
                         Search
-                    </button>
+                    </button>*/}
                 </div>
             </div>
             {loading ? (

@@ -7,11 +7,11 @@ import {fetchUserData} from "../../slices/userSlice";
 import Loader from "../../components/button/Loader";
 import {useDispatch, useSelector} from "react-redux";
 
+
 const TeacherSchedule = () => {
     const [events, setEvents] = useState([]);
     const dispatch = useDispatch();
     const { userData, isLoading, error } = useSelector((state) => state.user);
-
 
 
     useEffect(() => {
@@ -19,9 +19,10 @@ const TeacherSchedule = () => {
         const teacherId = userData?.user?._id;
         const loadSessions = async () => {
             const sessions = await fetchSessionsForTeacher(teacherId);
+            console.log(sessions);
             // Transform sessions into events FullCalendar can use
             const calendarEvents = sessions.map((session) => ({
-                title: session.classId.name+ ' - Room: ' + session.room,
+                title: session?.classId?.name+ ' - Room: ' + session.room,
                 start: session.startTime,
                 end: session.endTime,
             }));
@@ -29,8 +30,9 @@ const TeacherSchedule = () => {
         };
 
         if (teacherId) {
-            loadSessions().then(r => console.log(r));
+            loadSessions();
         }
+
     }, [dispatch, userData?.user?._id]);
 
     if (isLoading) {
@@ -43,8 +45,10 @@ const TeacherSchedule = () => {
     }
 
 
+
+
     return (
-        <div className="mt-8 bg-[#F7F5EF] p-3  w-full" >
+        <div className="mt-8 bg-[#F7F5EF] p-3  w-full">
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin]}
                 initialView="timeGridWeek" // 'dayGridMonth', 'timeGridDay'

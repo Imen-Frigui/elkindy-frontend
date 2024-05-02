@@ -52,7 +52,7 @@ const TeacherDashboard = () => {
             <div className="w-full mb-4">
                 {selectedClassId && <AttendanceSheet classId={selectedClassId}/>}
             </div>
-            <AttendanceStats classId={selectedClassId}/>
+            {/*  <AttendanceStats classId={selectedClassId}/>*/}
         </div>
 )
     ;
