@@ -11,8 +11,8 @@ import {
 } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar4.png";
 import messageSound from "assets/sound/message.mp3";
+import {fetchNotifications} from '../../services/exam/examService';
 
-import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../slices/userApiSlice";
 
 import { logout } from "../../slices/authSlice";
@@ -21,8 +21,11 @@ import NotificationStatus from "components/ui/NotificationStatus";
 import TradeNotification from "components/ui/NotificationTrade";
 import axios from "axios";
 import { fetchUserData } from '../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
+  const [notificationsobs, setNotificationsobs] = useState([]);
+  const [notifs, setNotifs] = useState([]);
   const [statusNotification, setStatusNotifications] = useState([]);
   const [itemNotification, setItemNotification] = useState([]);
 
@@ -38,9 +41,22 @@ const Navbar = (props) => {
 
   const [logoutApiCall] = useLogoutMutation();
 
-  const userData = useSelector(state => state.user.userData);
+  const { userData, isLoading, error } = useSelector((state) => state.user);
+  const [userid, setuserid] = useState("")
+
+  
+// Fonction pour récupérer les notifications lors du chargement du composant
+const getNotifications = async () => {
+    try {
+        const notifications = await fetchNotifications(userid);
+        setNotificationsobs(notifications);
+    } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+    }
+};
 
   useEffect(() => {
+    dispatch(fetchUserData());
     if (socket) {
       socket.on("getNotification", (data) => {
         setNotifications((prev) => [...prev, data]);
@@ -48,7 +64,10 @@ const Navbar = (props) => {
         sound.play();
         setShowDropdown(true);
       });
-
+       socket.on('newobs', (data) => {
+        console.log("ihebbb"+data)
+        setNotificationsobs((prev) => [...prev, data]);
+      });
       socket.on("getTradeStatus", (data) => {
         setStatusNotifications((prev) => [...prev, data]);
         const sound = new Audio(messageSound);
@@ -64,7 +83,18 @@ const Navbar = (props) => {
 
 
     }
-   dispatch(fetchUserData());
+
+  const userid2 = localStorage.getItem("userid");
+  setuserid(userid2);
+  
+
+if(userid!=""){
+  console.log("innnn stateee");
+  console.log(userid);
+  getNotifications();
+}
+   
+  
   }, [socket,dispatch]);
   
   if (!userData) {
@@ -157,7 +187,11 @@ const Navbar = (props) => {
                 </p>
               </div>
 
-              {notifications.map((notification, index) => (
+              {/* {notificationsobs.map((notification, index) => (
+                  <p>{notification.message}</p>
+))} */}
+
+            {  notifications.map((notification, index) => (
                 <TradeNotification
                   key={index}
                   notification={notification}

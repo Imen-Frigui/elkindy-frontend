@@ -10,6 +10,9 @@ import { createGrade } from '../../services/exam/examService';
 import { createExam, updateStudentgrades } from '../../services/exam/examService';
 import { fetchStudentsexamsgrades } from '../../services/exam/examService';
 import { FaBan } from 'react-icons/fa';
+import { fetchUserData } from '../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from "components/button/Loader";
 
 
 const ExamClass = () => {
@@ -27,6 +30,8 @@ const ExamClass = () => {
     const [isDrawerOpen3, setIsDrawerOpen3] = useState(false);
     const [isButtonHovered, setIsButtonHovered] = useState(false);
     const [editableContent, setEditableContent] = useState('Editable Content');
+    const dispatch = useDispatch();
+    const { userData, isLoading, error } = useSelector((state) => state.user);
     const updategrade = (extraData,grade) =>  (event) => {
         // Check if Enter key is pressed
         if (event.key === 'Enter') {
@@ -49,7 +54,7 @@ const ExamClass = () => {
     const getExamClass = async () => {
 
         try {
-            const fetchExams = await fetchClassExams();
+            const fetchExams = await fetchClassExams(userData?.user?._id);
             if (fetchExams) {
                 console.log(fetchExams);
                 setFilteredExams(fetchExams);
@@ -124,8 +129,17 @@ const ExamClass = () => {
     useEffect(() => {
         getExamClass();
         getStudentClasses();
+        dispatch(fetchUserData());
 
-    }, [name]);
+    }, [name,dispatch]);
+    if (isLoading) {
+        return <Loader />;
+      }
+    
+      if (error) {
+        console.error("Error fetching user data:", error);
+        return <div>Error: {error}</div>;
+      }
 
 
     const handleClose3 = () => { 
@@ -149,6 +163,14 @@ const ExamClass = () => {
             console.error('Error adding exam:', error);
         }
     };
+    if (isLoading) {
+        return <Loader />;
+      }
+    
+      if (error) {
+        console.error("Error fetching user data:", error);
+        return <div>Error: {error}</div>;
+      }
 
 
     return (

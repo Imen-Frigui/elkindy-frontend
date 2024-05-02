@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost:3000/api/exam';
+import axios from 'axios';
+
+const API_BASE_URL = 'https://elkindy-backend.onrender.com/api/exam';
 
 export const fetchStudents = async () => {
     try {
@@ -129,6 +131,24 @@ export const createExam = async (examData) => {
     }
 };
 
+export const createObs = async (obsData) => {
+    try {
+        console.log("teest",JSON.stringify(obsData));
+        const response = await fetch(`http://localhost:3000/api/exam/createObs`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(obsData)
+        });
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("Failed to create exam:", error);
+    }
+};
+
 export const sendEmail = async (name) => {
     try {
         const response = await fetch(`${API_BASE_URL}/sendEmail/${name}`, {
@@ -193,9 +213,9 @@ export const fetchTeachers = async () => {
 };
 
 
-export const fetchStudentsExam = async () => {
+export const fetchStudentsExam = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/classes/studentsClass/6601738a95f6e1c274e23004`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/classes/studentsClass/6601738a95f6e1c274e23004`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -206,9 +226,9 @@ export const fetchStudentsExam = async () => {
     }
 };
 
-export const fetchClassExams = async () => {
+export const fetchClassExams = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/exam/examTeacher/6601738a95f6e1c274e23004`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/examTeacher/6601738a95f6e1c274e23004`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -259,7 +279,7 @@ export const fetchStudentsexamsgrades = async (id) => {
 };
 export const fetchStudentgrades = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/exam/studentgrades/${id}`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/studentgrades/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -267,6 +287,20 @@ export const fetchStudentgrades = async (id) => {
         }
     } catch (error) {
         console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+
+export const fetchNotifications = async (receiverId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/notifications/${receiverId}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("Failed to fetch exam:", error);
     }
 };
 export const updateStudentgrades = async (examData,grade) => {
@@ -300,5 +334,86 @@ export const fetchExamsGrades = async (id) => {
         }
     } catch (error) {
         console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+export const fetchClassesTeacher = async (id) => {  
+    try {
+        const response = await fetch(`http://localhost:3000/api/classes/classesTeacher/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+export const fetchstudentObs = async (username) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/student/${username}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+export const teacherUsername = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/exam/teacherName/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+
+export const fetchObservations = async (id) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/observations/${id}`);
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    } catch (error) {
+        console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+export const predictPerformance = async (formdata) => {
+    try {
+        const data = {
+            "sex": 0,
+            "age": 20,
+            "who_support_you?": 1,
+            "did_you_choose_to_study_music?":formdata.did_you_choose_to_study_music,
+            "reason": 3,
+            "internet":formdata.internet,
+            "romantic":0,
+            "do_you_sleep_enough":formdata.do_you_sleep_enough,
+            "freetime_per_day":3,
+            "Home_practice_hour_perweek": formdata.Home_practice_hour_perweek,
+            "health": formdata.health,
+            "absences": formdata.absences,
+            "Previous_theoretical_exam": formdata.Previous_theoretical_exam,
+            "Previous_practice_exam": formdata.Previous_practice_exam,
+            "Previous_general_grade": (formdata.Previous_theoretical_exam + formdata.Previous_practice_exam)/2
+        };
+
+        const response = await axios.post(`http://127.0.0.1:8050/ai/aipredictstudentperformance`, JSON.stringify(data));
+        console.log("succccesss");
+        console.log(response.data); // Logging the response data
+        
+        return response.data; // Returning the response data
+    } catch (error) {
+        console.error("ERRROOOOOOORRRRRRRRRR:", error);
+        throw error; // Re-throwing the error for further handling if needed
     }
 };
