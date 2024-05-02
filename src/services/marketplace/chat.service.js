@@ -12,9 +12,12 @@ export default class ChatService {
     return apiRoutes.post(`/chat`, messageData, apiHeader(accessToken));
   }
   static async getUsersList(accessToken) {
-    return apiRoutes.get(`/chat/listUsers`,  apiHeader(accessToken));
+    return apiRoutes.get(`/chat/listUsers`, apiHeader(accessToken));
   }
-  static async getQuizQuestions(accessToken) {
-    return apiRoutes.get(`/chat/generateQuizQuestions`,  apiHeader(accessToken));
+  static async getQuizQuestions(accessToken, topic, level, lengthOfQuestions) {
+    return apiRoutes.get(
+      `/chat/generateQuizQuestions?topic=${topic}&level=${level}&lengthOfQuestions=${lengthOfQuestions}`,
+      apiHeader(accessToken)
+    );
   }
 }

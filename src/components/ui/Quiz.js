@@ -64,9 +64,7 @@ const Quiz = () => {
                   <h5 className="w-24 justify-end text-right text-green-500">
                     {currentQuestion + 1} / {questions.length}
                   </h5>
-                  <div className="mt-3 flex justify-center text-white">
-                    <p>{timer} seconds remaining</p>
-                  </div>
+                 
                 </div>
               )}
             </div>

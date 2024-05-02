@@ -16,12 +16,12 @@ const useSocketStore = create((set) => ({
       },
     };
     const response = await axios.get(
-      "https://elkindy-backend.onrender.com/api/auth/validateSession",
+      "http://localhost:3000/api/auth/validateSession",
       config
     );
     if (response.data.user?._id) {
       console.log("true");
-      const socket = io("https://elkindy-backend.onrender.com", {
+      const socket = io("http://localhost:3000", {
         query: {
           userId: response.data.user._id,
         },

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiRoutes = axios.create({
     withCredentials: true,
-    baseURL: "https://elkindy-backend.onrender.com",
+    baseURL: "http://localhost:3000",
     headers: {
         "Content-Type": "application/json",
     },

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://elkindy-backend.onrender.com/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 export const fetchCourses = async (page = 1, pageSize = 10, searchQuery = '', isInternship ='false') => {
     const query = new URLSearchParams({ page, pageSize, searchQuery, isInternship }).toString();

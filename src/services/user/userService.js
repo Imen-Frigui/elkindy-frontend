@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://elkindy-backend.onrender.com/api";
+const API_BASE_URL = "http://localhost:3000/api";
 export const fetchTeachers = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/users/teachers`, {
@@ -25,7 +25,7 @@ export const fetchTeachers = async () => {
 export const validateSession = async () => {
   try {
     const response = await axios.get(
-      "https://elkindy-backend.onrender.com/api/auth/validate-session",
+      "http://localhost:3000/api/auth/validate-session",
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, 

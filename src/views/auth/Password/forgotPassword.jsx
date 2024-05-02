@@ -19,7 +19,7 @@ function ForgotPassword() {
             setIsLoading(true)
             setMessage("");
             setError("");
-            const res = await axios.post("https://elkindy-backend.onrender.com/api/auth/forgot-Password", {email})
+            const res = await axios.post("http://localhost:3000/api/auth/forgot-Password", {email})
             console.log(res);
             setMessage(res.data.message);
             console.log(res.data.message);

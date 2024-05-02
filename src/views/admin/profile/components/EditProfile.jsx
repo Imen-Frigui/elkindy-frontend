@@ -44,7 +44,7 @@ const EditProfileModal = ({ isOpen, onClose, userData }) => {
           ...(values.password && { password: values.password }),
         };
 
-        const response = await axios.put(`https://elkindy-backend.onrender.com/api/users/updateUser/${userId}`, updatedData, config);
+        const response = await axios.put(`http://localhost:3000/api/users/updateUser/${userId}`, updatedData, config);
 
         console.log('User updated successfully:', response.data);
         window.location.reload();
