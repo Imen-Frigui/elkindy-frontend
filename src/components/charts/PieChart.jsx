@@ -8,7 +8,7 @@ const PieChart = (props) => {
       options={options}
       type="pie"
       width="100%"
-      height="100%"
+      height="70%"
       series={series}
     />
   );
