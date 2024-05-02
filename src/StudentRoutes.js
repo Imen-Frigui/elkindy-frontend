@@ -3,11 +3,14 @@ import React from "react";
 import { MdHome, MdPerson } from "react-icons/md";
 import ProfileOverview from "views/admin/profile";
 import NFTMarketplace from "views/admin/marketplace";
-import { FaCalendarAlt, FaShoppingBasket, FaBook } from "react-icons/fa";
+import { FaCalendarAlt, FaShoppingBasket, FaBook, FaFacebookMessenger } from "react-icons/fa";
 import StudentDashboard from "./views/student/StudentDashboard";
+import Conversation from "components/ui/Conversations";
 import {GiPapers} from "react-icons/gi";
 import ExamsList from "./views/exams/exam";
 import StudentExams from "./views/studentExam/studentGrade";
+import Conversations from "views/chat/Conversations";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 
 const routes = [
   {
@@ -17,7 +20,7 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />, // Make sure to import MdHome in the actual component file
     component: <Dashboard />, // Render Dashboard component for student layout
   },
-  
+
   {
     name: "ElKindy Dashboard",
     layout: "/admin",
@@ -42,6 +45,14 @@ const routes = [
     component: <NFTMarketplace />,
     secondary: true,
   },
+  {
+    name: "ElKindy Chat",
+    layout: "/student",
+    path: "chat",
+    icon: <ChatBubbleLeftRightIcon className="h-6 w-6" />,
+    component: <Conversations />,
+  },
+
   {
     name: "ElKindy Courses",
     layout: "/student",

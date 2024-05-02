@@ -16,7 +16,7 @@ const CourseCard = ({ course }) => {
                     <FaDollarSign className="mr-1"/>
                     {course.price}
                 </div>
-                <Link to={`/rtl/course/${course._id}`}
+                <Link to={`/home/course/${course._id}`}
                       className="text-white hover:text-gray-800 hover:bg-indigo-300 text-sm font-semibold rounded-md bg-kindyblue py-2 px-4 transition duration-200">
                     more info
                 </Link>

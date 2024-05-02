@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Banner1 = ({ backgroundImage, title, subtitle, button1Link, button1Text, button2Link, button2Text }) => {
+const Banner1 = ({ backgroundImage, title, subtitle, button1Link, button1Text, button2Link, button2Text, button3Link, button3Text }) => {
   return (
     <div
       className="flex w-full h-full flex-col rounded-[20px] bg-cover px-[25px] py-[30px] "
@@ -20,11 +20,17 @@ const Banner1 = ({ backgroundImage, title, subtitle, button1Link, button1Text, b
               {button1Text}
             </button>
           </Link>
+          <Link to={button3Link}>
+            <button className="linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium text-black transition duration-200 hover:!bg-white/80 active:!bg-white/70">
+              {button3Text}
+            </button>
+          </Link>
           <Link to={button2Link}>
-            <button className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2">
+            <button className="linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium text-black transition duration-200 hover:!bg-white/80 active:!bg-white/70">
               {button2Text}
             </button>
           </Link>
+
         </div>
       </div>
     </div>

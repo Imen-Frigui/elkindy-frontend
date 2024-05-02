@@ -13,16 +13,15 @@ function SideBarr({ open, onClose }) {
 
 
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
 
 
 
   const getRoutesForRole = (routes, role) => {
     if (role === 'teacher') {
-      const teacherPaths = ['default',  'teacher', 'Schedule','evaluations', 'profile', 'marketplace', 'create-instrument', 'instrument-detail'];
+      const teacherPaths = ['default',  'teacher', 'Schedule','evaluations', 'profile', 'marketplace', 'create-instrument', 'instrument-detail','chat'];
       return routes.filter(route => teacherPaths.includes(route.path));
     } else {
-      const adminPath = ['default',  'admin', 'marketplace', 'data-tables', 'profile', 'exams', 'events', 'courses', 'assign-teachers', 'class-config', 'create-instrument', 'instrument-detail', 'event-details', 'update-event', 'archived-events', 'users','examClass' ];
+      const adminPath = ['default',  'admin', 'marketplace', 'data-tables', 'profile', 'exams', 'events', 'courses', 'assign-teachers', 'class-config', 'create-instrument', 'instrument-detail', 'event-details', 'update-event', 'archived-events', 'users','examClass','chat' ];
       return routes.filter(route => adminPath.includes(route.path));
     }
     //return routes;
@@ -42,7 +41,7 @@ function SideBarr({ open, onClose }) {
       };
 
       try {
-        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        const response = await axios.get('https://elkindy-backend.onrender.com/api/auth/validateSession', config);
         setUserData(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
@@ -63,7 +62,7 @@ function SideBarr({ open, onClose }) {
   return (
     <>
       <div
-        className={`sm:none  duration-175 linear fixed left-0 !z-50 flex h-screen items-center justify-center bg-kindygray  transition-all dark:!bg-navy-900 md:!z-50 lg:!z-50 xl:!z-0  ${
+        className={`sm:none  duration-175 linear fixed left-0 !z-50 flex h-screen items-center justify-center bg-indigo-50  transition-all dark:!bg-navy-900 md:!z-50 lg:!z-50 xl:!z-0  ${
           open ? "translate-x-0" : "-translate-x-96"
         } `}
       >

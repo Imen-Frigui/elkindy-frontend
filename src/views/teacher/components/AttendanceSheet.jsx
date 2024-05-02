@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { fetchSessionsByClassId, fetchStudentsByClassId, manageAttendanceForSession } from '../../../services/class/classService';
 import '../../../assets/css/Table.css'
 import ButtonComponent from "../../../components/button/ButtonComponnent";
-import { FaCheck, FaTimes } from 'react-icons/fa';
 import { FaMicrophone } from 'react-icons/fa';
 
 const AttendanceSheet = ({ classId }) => {

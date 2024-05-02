@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { addEvent } from "../../../services/event/eventService";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import Select from 'react-select';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Card from "components/card";
@@ -31,7 +33,31 @@ const AddEvent = () => {
   const [endTimeError, setEndTimeError] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [selectedParticipants, setSelectedParticipants] = useState([]);
+  const [users, setUsers] = useState([]);
 
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('https://elkindy-backend.onrender.com/api/users/getAllUsers');
+        const options = response.data.map(user => ({
+          value: user._id,
+          label: user.email
+        }));
+        setUsers(options);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        toast.error("Failed to fetch users.");
+      }
+    };
+    
+  fetchUsers();
+}, []);
+
+  const handleParticipantsChange = (selectedOptions) => {
+    setSelectedParticipants(selectedOptions);
+  };
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -89,7 +115,10 @@ const AddEvent = () => {
     formData.append('capacity', capacity);
     formData.append('eventType', eventType === "Other" ? eventTypeInput : eventType);
     formData.append('status', eventStatus);
-  
+  // Append other event details to formData
+      selectedParticipants.forEach(option => {
+      formData.append('participants', option.value);
+  });
     if (imageFile) { 
       formData.append('image', imageFile);
     }
@@ -118,6 +147,8 @@ const AddEvent = () => {
     setEventStatus("Scheduled");
     setFormValid(false);
     setTitleError("");
+    setImageFile("");
+    setSelectedParticipants("");
   };
 
   const validateTitle = () => {
@@ -489,6 +520,7 @@ const AddEvent = () => {
       )}
     </div>
   </div>
+
   <div>
     <label
       htmlFor="capacity"
@@ -514,7 +546,22 @@ const AddEvent = () => {
       <p className="text-sm text-red-500">{capacityError}</p>
     )}
   </div>
-  
+  <div>
+  <label htmlFor="participants" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+    Invite Participants
+  </label>
+  <Select
+    id="participants"
+    options={users}
+    isMulti
+    closeMenuOnSelect={false}
+    value={selectedParticipants}
+    onChange={handleParticipantsChange}
+    className="basic-multi-select"
+    classNamePrefix="select"
+    required
+  />
+</div>
               <div className="flex justify-center space-x-4">
                 <button
                   type="submit"

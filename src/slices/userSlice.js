@@ -17,7 +17,7 @@ export const fetchUserData = createAsyncThunk(
     };
 
     try {
-      const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+      const response = await axios.get('https://elkindy-backend.onrender.com/api/auth/validateSession', config);
       console.log(response.data);
       return response.data;
     } catch (error) {

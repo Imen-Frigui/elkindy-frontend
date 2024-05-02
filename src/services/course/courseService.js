@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://elkindy-backend.onrender.com/api';
 
 export const fetchCourses = async (page = 1, pageSize = 10, searchQuery = '', isInternship ='false') => {
     const query = new URLSearchParams({ page, pageSize, searchQuery, isInternship }).toString();
@@ -189,7 +189,6 @@ export const uploadCourseImage = async (courseId, file) => {
         const response = await fetch(`${API_BASE_URL}/courses/${courseId}/upload-image`, {
             method: 'PATCH',
             body: formData,
-            // `fetch` will set it automaticallTheContentTYpeof the FormData object
         });
 
         if (!response.ok) {
@@ -203,3 +202,28 @@ export const uploadCourseImage = async (courseId, file) => {
     }
 };
 
+export const fetchInstrument = async (searchTerm) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/instruments?searchTerm=${searchTerm}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch instruments');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching instruments:', error);
+        return [];
+    }
+};
+
+export const fetchInstrumentPopularity = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/instruments/popularity`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch instrument popularity data');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching instrument popularity:', error);
+        return {};
+    }
+};

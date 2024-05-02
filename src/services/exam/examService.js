@@ -1,9 +1,12 @@
+
 import axios from "axios";
 const API_BASE_URL = 'http://localhost:3000/api/exam';
 
+//const API_BASE_URL = 'https://elkindy-backend.onrender.com/api/exam';
+
 export const fetchStudents = async () => {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/Students`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/users/Students`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -186,7 +189,7 @@ export const createGrade = async (gradeData) => {
 
 export const fetchClasses = async () => {
     try {
-        const response = await fetch(`http://localhost:3000/api/classes/Allclasses`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/classes/Allclasses`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -200,7 +203,7 @@ export const fetchClasses = async () => {
 
 export const fetchTeachers = async () => {
     try {
-        const response = await fetch(`http://localhost:3000/api/users/teachers`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/users/teachers`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -214,7 +217,11 @@ export const fetchTeachers = async () => {
 
 export const fetchStudentsExam = async (id) => {
     try {
+
         const response = await fetch(`http://localhost:3000/api/classes/studentsClass/${id}`);
+
+  //      const response = await fetch(`https://elkindy-backend.onrender.com/api/classes/studentsClass/6601738a95f6e1c274e23004`);
+
         if (response.ok) {
             return await response.json();
         } else {
@@ -227,7 +234,11 @@ export const fetchStudentsExam = async (id) => {
 
 export const fetchClassExams = async (id) => {
     try {
+
         const response = await fetch(`http://localhost:3000/api/exam/examTeacher/${id}`);
+
+   //     const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/examTeacher/6601738a95f6e1c274e23004`);
+
         if (response.ok) {
             return await response.json();
         } else {
@@ -241,7 +252,7 @@ export const fetchClassExams = async (id) => {
 
 export const fetchStudentClasses = async (name) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/classes/StudentsByClass/${name}`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/classes/StudentsByClass/${name}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -254,7 +265,7 @@ export const fetchStudentClasses = async (name) => {
 //check Evaluation grade for student 
 export const fetchStudentsgrades = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/exam/studentEvalgrades/${id}`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/studentEvalgrades/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -266,7 +277,7 @@ export const fetchStudentsgrades = async (id) => {
 };
 export const fetchStudentsexamsgrades = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/exam/ExamsstudentsGrades/${id}`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/ExamsstudentsGrades/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -278,7 +289,11 @@ export const fetchStudentsexamsgrades = async (id) => {
 };
 export const fetchStudentgrades = async (id) => {
     try {
+
         const response = await fetch(`http://localhost:3000/api/exam/studentExams/${id}`);
+
+//        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/studentgrades/${id}`);
+
         if (response.ok) {
             return await response.json();
         } else {
@@ -306,7 +321,7 @@ export const updateStudentgrades = async (examData,grade) => {
     try {
         const dataToSend = typeof examData === 'object' ? examData : { id: examData , grade : grade };
         console.log(examData);
-        const response = await fetch(`http://localhost:3000/api/exam/updateEvalGrades`, {
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/updateEvalGrades`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataToSend)
@@ -325,7 +340,7 @@ export const updateStudentgrades = async (examData,grade) => {
 
 export const fetchExamsGrades = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/exam/studentgrades/${id}`);
+        const response = await fetch(`https://elkindy-backend.onrender.com/api/exam/studentgrades/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
