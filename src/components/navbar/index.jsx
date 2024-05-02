@@ -189,7 +189,7 @@ if(userid!=""){
 
               {notificationsobs.map((notification, index) => (
                   <p>{notification.message}</p>
-))} 
+))}
 
             {  notifications.map((notification, index) => (
                 <TradeNotification
