@@ -19,25 +19,25 @@ function InstrumentDoughnutChart() {
         }]
     });
 
-    useEffect(() => {
-        fetchInstrumentPopularity().then(data => {
-            const labels = Object.keys(data);
-            const chartData = labels.map(label => data[label]);
-            const backgroundColor = labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.2)`);
-            const borderColor = labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`);
+    // useEffect(() => {
+    //     fetchInstrumentPopularity().then(data => {
+    //         const labels = Object.keys(data);
+    //         const chartData = labels.map(label => data[label]);
+    //         const backgroundColor = labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.2)`);
+    //         const borderColor = labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`);
 
-            setChartData({
-                labels: labels,
-                datasets: [{
-                    label: '# of Instruments',
-                    data: chartData,
-                    backgroundColor,
-                    borderColor,
-                    borderWidth: 1
-                }]
-            });
-        });
-    }, []);
+    //         setChartData({
+    //             labels: labels,
+    //             datasets: [{
+    //                 label: '# of Instruments',
+    //                 data: chartData,
+    //                 backgroundColor,
+    //                 borderColor,
+    //                 borderWidth: 1
+    //             }]
+    //         });
+    //     });
+    // }, []);
 
     const options = {
         plugins: {
