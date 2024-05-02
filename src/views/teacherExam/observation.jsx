@@ -6,7 +6,9 @@ import { createObs } from '../../services/exam/examService';
 import { fetchstudentObs } from '../../services/exam/examService';
 import { fetchObservations } from '../../services/exam/examService';
 import nft1 from "assets/img/nfts/teacherViolan.jpg";
-
+import { fetchUserData } from '../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from "components/button/Loader";
 const Observationclass = ({ setIsDrawerOpenClass }) => {
 
   const [teacherClasses, setTeacherClasses] = useState([]);
@@ -15,14 +17,15 @@ const Observationclass = ({ setIsDrawerOpenClass }) => {
   const [text, setText] = useState('');
   const [studentclass, setStudentclass] = useState({});
   const [name, setName] = useState();
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState('');
   const [observation, setObservation] = useState([]);
   const [student, setStudent] = useState();
   const [teacher, setTeacher] = useState();
   const [description, setDescription] = useState('');
 
   const [studentobs, setStudentobs] = useState();
-
+  const dispatch = useDispatch();
+  const { userData, isLoading, error } = useSelector((state) => state.user);
 
   const handleDrawerClose = () => setIsDrawerOpen4(false);
   const handleAddObs2 = async (examData) => {
@@ -44,7 +47,7 @@ const Observationclass = ({ setIsDrawerOpenClass }) => {
 
     try {
       const student = studentobs;
-      const teacher = "6601738a95f6e1c274e23004";
+      const teacher = userData?.user?._id;
       const examData = { student, teacher, description };
       // Utiliser les valeurs correctes des états
       await handleAddObs2(examData);
@@ -88,7 +91,7 @@ const Observationclass = ({ setIsDrawerOpenClass }) => {
   const getTeacherClasses = async () => {
 
     try {
-      const fetchClasses = await fetchClassesTeacher();
+      const fetchClasses = await fetchClassesTeacher(userData?.user?._id);
       if (fetchClassesTeacher) {
         console.log(fetchClasses);
         setTeacherClasses(fetchClasses);
@@ -111,10 +114,11 @@ const Observationclass = ({ setIsDrawerOpenClass }) => {
     getTeacherClasses();
     if (name) {
       getclassStudents();
-
+     //dispatch(fetchUserData());
     }
     getObsStudent();
-  }, [name, username]);
+    
+  }, [name, username,dispatch]);
 
   return (
     <>
@@ -186,13 +190,14 @@ const Observationclass = ({ setIsDrawerOpenClass }) => {
               </table>
             </div></div>
 
-
+            {!isDrawerOpen4 && (
           <div className="space-y-2 p-1.5 absolute top-32 right-40 group h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 hover:bg-slate-200" onClick={() => setIsDrawerOpen(false)}>
             <span className="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
             <span className="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
             {/* Title */}
             <span className="block text-m text-center mx-5 text-orange-500">Close</span>
           </div>
+            )}
         </div>
       )}
 

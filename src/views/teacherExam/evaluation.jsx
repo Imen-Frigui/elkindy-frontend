@@ -10,6 +10,10 @@ import { fetchStudentsExam } from '../../services/exam/examService';
 import { fetchStudentsgrades } from '../../services/exam/examService';
 import { FaBan } from 'react-icons/fa';
 import { fetchClassesTeacher } from '../../services/exam/examService';
+import { fetchUserData } from '../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from "components/button/Loader";
+
 const EvaluationList = () => {
 
     const [filteredStudents, setFilteredStudents] = useState();
@@ -37,9 +41,14 @@ const EvaluationList = () => {
     const [evalgrade, setevalgrade] = useState([]);
     const [isButtonHovered, setIsButtonHovered] = useState(false);
     const [editableContent, setEditableContent] = useState('Editable Content');
+    const dispatch = useDispatch();
+    const { userData, isLoading, error } = useSelector((state) => state.user);
     const [text, setText] = useState('');
+    const [userid, setuserid] = useState("")
     // Function to handle key press
-    const updategrade = (extraData, grade) => (event) => {
+    const userid2 = localStorage.getItem("userid");
+    
+   const updategrade = (extraData, grade) => (event) => {
         // Check if Enter key is pressed
         if (event.key === 'Enter') {
             // Perform the action (e.g., display the content)
@@ -73,9 +82,12 @@ const EvaluationList = () => {
         setText(text + emoji); // Append emoji to the current text
       };
     const getEvaluationClass = async () => {
-
+        
+      
         try {
-            const fetchEvaluations = await fetchStudentsExam();
+            console.log(userid2)
+           
+            const fetchEvaluations = await fetchStudentsExam(userid2);
             if (fetchStudentsExam) {
                 console.log(fetchEvaluations);
                 setEvaluationClass(fetchEvaluations);
@@ -166,14 +178,16 @@ const EvaluationList = () => {
 
         if (username !== '') {
             getEvaluations(username);
-
+          
         }
-
-        getStudents();
-        getEvaluationClass();
         
 
-    }, [username]);
+        getStudents();
+     
+       dispatch(fetchUserData());
+        getEvaluationClass();
+    }, [username,dispatch]);
+    
 
 
 
@@ -267,7 +281,14 @@ const EvaluationList = () => {
     // };
 
     const handleDrawerClose = () => setIsDrawerOpen(false);
-
+    if (isLoading) {
+        return <Loader />;
+      }
+    
+      if (error) {
+        console.error("Error fetching user data:", error);
+        return <div>Error: {error}</div>;
+      }
 
 
     return (

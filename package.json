@@ -44,7 +44,7 @@
     "@yaireo/tagify": "^4.21.2",
     "animate.css": "^4.1.1",
     "apexcharts": "3.35.5",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "chart.js": "^4.4.2",
     "date-fns": "^3.6.0",
     "emailjs-com": "^3.2.0",

@@ -12,7 +12,7 @@ import {
 import avatar from "assets/img/avatars/avatar4.png";
 import messageSound from "assets/sound/message.mp3";
 import {fetchNotifications} from '../../services/exam/examService';
-import { useDispatch, useSelector } from "react-redux";
+
 import { useLogoutMutation } from "../../slices/userApiSlice";
 
 import { logout } from "../../slices/authSlice";
@@ -21,6 +21,7 @@ import NotificationStatus from "components/ui/NotificationStatus";
 import TradeNotification from "components/ui/NotificationTrade";
 import axios from "axios";
 import { fetchUserData } from '../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 const Navbar = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [notificationsobs, setNotificationsobs] = useState([]);
@@ -38,14 +39,14 @@ const Navbar = (props) => {
 
   const [logoutApiCall] = useLogoutMutation();
 
-  const userData = useSelector(state => state.user.userData);
-
+  const { userData, isLoading, error } = useSelector((state) => state.user);
+  const [userid, setuserid] = useState("")
 
   
 // Fonction pour récupérer les notifications lors du chargement du composant
 const getNotifications = async () => {
     try {
-        const notifications = await fetchNotifications('65ecb8cf0aa9cd63cbe37e52');
+        const notifications = await fetchNotifications(userid);
         setNotificationsobs(notifications);
     } catch (error) {
         console.error("Failed to fetch notifications:", error);
@@ -53,6 +54,7 @@ const getNotifications = async () => {
 };
 
   useEffect(() => {
+    dispatch(fetchUserData());
     if (socket) {
       socket.on("getNotification", (data) => {
         setNotifications((prev) => [...prev, data]);
@@ -71,8 +73,18 @@ const getNotifications = async () => {
         setShowDropdown(true);
       });
     }
-   dispatch(fetchUserData());
-   getNotifications();
+
+  const userid2 = localStorage.getItem("userid");
+  setuserid(userid2);
+  
+
+if(userid!=""){
+  console.log("innnn stateee");
+  console.log(userid);
+  getNotifications();
+}
+   
+  
   }, [socket,dispatch]);
   
   if (!userData) {

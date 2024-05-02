@@ -5,12 +5,18 @@ import nft1 from "assets/img/nfts/grades.jpg";
 import {fetchExamsGrades} from '../../services/exam/examService';
 import {fetchObservations} from '../../services/exam/examService';
 import {teacherUsername} from '../../services/exam/examService';
+import {predictPerformance} from '../../services/exam/examService';
 import io from 'socket.io-client';
 import ApexCharts from 'apexcharts';
 import { Carousel,IconButton } from "@material-tailwind/react";
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { fetchUserData } from '../../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from "components/button/Loader";
+import { Rating } from "@material-tailwind/react";
+
+
 //
-import SwipeableViews from 'react-swipeable-views';
+
 /**const CustomArrow = ({ direction, onClick }) => {
   return (
     <IconButton
@@ -30,14 +36,72 @@ const StudentExams = ({ studentId }) => {
     const [username, setUsername] = useState({});
     const [examgrades, setExamGrades] = useState([]);
     const [observations, setObservations] = useState([]);
-    const [socket, setSocket] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [databack, setdataback] = useState(false);
+    const [predictionResult, setPredictionResult] = useState(null);
+    const [rated, setRated] = React.useState(4);
+    const [formData, setFormData] = useState({
+      sex: 0,
+      age: 15,
+      did_you_choose_to_study_music: 1,
+      internet: 1,
+      do_you_sleep_enough: 1,
+      Home_practice_hour_perweek: 6,
+      health: 4,
+      absences: 4,
+      Previous_theoretical_exam: 9,
+      Previous_practice_exam: 11,
+      Previous_general_grade: 10,
+    });
     const [id, setId] = useState('');
     const colors = ['bg-kindydarkblue ', 'bg-blue-500', 'bg-blue-300'];
-    
+    const dispatch = useDispatch();
+    const [userid, setuserid] = useState("")
+  const { userData, isLoading, error } = useSelector((state) => state.user);
+  const userid2 = localStorage.getItem("userid");
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await predictPerformance(formData);
+      if(result < 0.76){
+         if(result < 0.76 && result > 0.70) {
+          setPredictionResult(" fail but you are close enough, maybe a little more of course atteding and practice can help you to get back on track ");
+  
+        }
+        else if(formData.absences > 3 && formData.Home_practice_hour_perweek < 2){
+          setPredictionResult("fail , you need to attend the courses more and practice more at home to catch up for what you missed");
+          }
+      else if(formData.absences > 3){
+      setPredictionResult("fail , you need to attend the courses more and stop skipping");
+      }
+      else if(formData.Home_practice_hour_perweek < 2) {
+        setPredictionResult("fail , you need to parctice more at home , practice makes perfection and you cant rely only on the cources");
+
+      }
+      
+    }
+    else if(result > 0.76 && result < 0.82) {
+      setPredictionResult("barely making it , maybe a little more of cource atteding and practice can help you to get back on track ");
+
+    }
+    else if(result > 0.82) {
+      setPredictionResult(" pass , keep going this way Maestro , never forget practice makes perfection ");
+
+    }
+      setdataback(true);
+      // Close the modal upon successful response
+    } catch (error) {
+      console.error('Failed to predict performance:', error);
+      // Handle error if needed
+    }
+  };
     const getEvalGrades = async () => {
    
       try {
-          const fetchgradeEvaluations = await fetchStudentgrades('65de945086e6c9f4fcc6559f');
+          const fetchgradeEvaluations = await fetchStudentgrades(userid2);
           if (fetchgradeEvaluations) {
               console.log(fetchgradeEvaluations);
               setGrades(fetchgradeEvaluations);
@@ -72,7 +136,7 @@ const StudentExams = ({ studentId }) => {
   const getExamGrades = async () => {
 
     try {
-        const fetchgradeExam = await fetchExamsGrades('65de945086e6c9f4fcc6559f');
+        const fetchgradeExam = await fetchExamsGrades(userid2);
         if (fetchgradeExam) {
             console.log(fetchgradeExam);
             setExamGrades(fetchgradeExam);
@@ -85,7 +149,10 @@ const StudentExams = ({ studentId }) => {
     }
 };
 
-
+const handleDrawerClose = async () => { 
+   setIsOpen(false);
+  setdataback(false);
+}
 
 const getChartOptions = () => {
     return {
@@ -156,7 +223,7 @@ const getChartOptions = () => {
 const getObservations = async () => {
 
     try {
-        const fetchObserv = await fetchObservations('65de945086e6c9f4fcc6559f');
+        const fetchObserv = await fetchObservations(userData?.user?._id);
         if (fetchObserv) {
             console.log(fetchObserv);
            // setObservations(fetchObserv);
@@ -182,25 +249,51 @@ console.log("innnnnn")
      
     useEffect(() => {
         // Effect hook code here if needed
-        getEvalGrades();
-        getExamGrades();
-        getObservations();
-        getTeacherUserName();
-        const socket = io('http://localhost:5000');
-        setSocket(socket);
-        return () => {
-            if (socket) {
-                socket.disconnect();
-            }
-        };
+        dispatch(fetchUserData());
+        
        
-    }, [id]);
+  setuserid(userid2);
+       
+       
+          getEvalGrades();
+          getExamGrades();
+          getObservations();
+          getTeacherUserName();
+
+        
+       
+    }, [id,dispatch]);
+
+    if (isLoading) {
+      return <Loader />;
+    }
+  
+    if (error) {
+      console.error("Error fetching user data:", error);
+      return <div>Error: {error}</div>;
+    }
+
+    const handleInputChange = (e) => {
+      const value = e.target.value === 'yes' ? 1 : 0; // Convertir la valeur en 1 ou 0
+      setFormData({ ...formData, internet: value });
+    };
+
+    const handleSleepChange = (e) => {
+      const value = e.target.value === 'yes' ? 1 : 0; // Convertir la valeur en 1 ou 0
+      setFormData({ ...formData, do_you_sleep_enough: value });
+    };
+
+    const handleMusicChange = (e) => {
+      const value = e.target.value === 'yes' ? 1 : 0; // Convertir la valeur en 1 ou 0
+      setFormData({ ...formData, did_you_choose_to_study_music: value });
+    };
+
 
     return (
         <>
          
             <div>
-                <StudentBanner setIsDrawerOpen={setIsDrawerOpen} setIsDrawerOpen2={setIsDrawerOpen2} setIsDrawerOpen3={setIsDrawerOpen3} setId={setId} />
+                <StudentBanner setIsDrawerOpen={setIsDrawerOpen} setIsDrawerOpen2={setIsDrawerOpen2} setIsDrawerOpen3={setIsDrawerOpen3} setId={setId} setIsOpen={setIsOpen} />
             </div>
 
             <div className="mt-10 flex justify-center">
@@ -243,6 +336,158 @@ console.log("innnnnn")
 </div>
 
             </div>
+          
+            {isOpen && ( 
+              <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md ">
+
+<div className="flex items-center mb-6 ">
+<div className="max-w-md w-96 mx-auto  relative overflow-hidden z-10 bg-white p-6 rounded-lg shadow-md before:w-24 before:h-24 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12 table-drawer">
+    <h2 className="text-2xl font-bold text-kindydarkblue mb-6">Get your chances to succeed <img src="https://img.freepik.com/premium-vector/hand-drawn-headphones-music-notes-realistic-notebook-page_53562-7929.jpg?w=740" alt="Exam Image" className="w-full rounded-lg mb-6" /></h2>
+</div>
+<div
+            class="group flex h-0 w-0 cursor-pointer items-center justify-center rounded-3xl  p-2 hover:bg-slate-200"
+            onClick={handleDrawerClose}
+        >
+            <div class="space-y-2  p-1.5 absolute top-2.5 right-2.5 ">
+                <span class="block h-1 w-10 origin-center rounded-full bg-kindydarkblue transition-transform ease-in-out group-hover:translate-y-1.5 group-hover:rotate-45"></span>
+                <span class="block h-1 w-8 origin-center rounded-full bg-orange-500 transition-transform ease-in-out group-hover:w-10 group-hover:-translate-y-1.5 group-hover:-rotate-45"></span>
+            </div>
+
+        </div>
+        <div className="max-w-md w-full mx-auto -my-16 px-4 relative overflow-hidden z-10 bg-white p-8 rounded-lg shadow-md before:w-24 before:h-24 before:absolute before:bg-kindyyellow before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-sky-400 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12 table-drawer">
+{!databack ? (
+<form onSubmit={handleSubmit}>
+    <div className="mb-4" >
+        
+       
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div class="mb-4 flex flex-col ">
+                <label className="block text-sm font-medium text-navy-900" htmlFor="internet">
+        Do you spend more than 3 hours on internet?
+      </label>
+      <select
+        id="internet"
+        value={formData.internet === 1 ? 'yes' : 'no'} // Convertir la valeur en 'yes' ou 'no'
+        onChange={handleInputChange}
+        className="mt-1 p-2 w-full bg-transparent border-gray-600 rounded-md text-kindydarkblue"
+        name="internet"
+      >
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+                </div>
+
+
+
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-navy-900" htmlFor="do_you_sleep_enough">
+        Do you sleep enough?
+      </label>
+      <select
+        id="do_you_sleep_enough"
+        value={formData.do_you_sleep_enough === 1 ? 'yes' : 'no'} // Convertir la valeur en 'yes' ou 'no'
+        onChange={handleSleepChange}
+        className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
+        name="do_you_sleep_enough"
+      >
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-navy-900" htmlFor="updatedDuration">Previous practice exam</label>
+                    <input type="number" id="updatedDuration" value={formData.Previous_practice_exam} onChange={(e) => setFormData({ ...formData, Previous_practice_exam: parseInt(e.target.value) })}
+                        className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
+                        name="updatedDuration"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-navy-900" htmlFor="updatedExamHour">Previous_theoretical_exam</label>
+                    <input
+                        type="number"
+                        id="updatedExamHour"
+                        value={formData.Previous_theoretical_exam}
+                        onChange={(e) => setFormData({ ...formData, Previous_theoretical_exam: parseInt(e.target.value) })}
+                        className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
+                        name="updatedHour"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-navy-900" htmlFor="updatedExamHour">Number of absences </label>
+                    <input
+                        type="number"
+                        id="absences"
+                        value={formData.absences}
+                        onChange={(e) => setFormData({ ...formData, absences: parseInt(e.target.value) })}
+                        className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
+                        name="updatedHour"
+                    />
+                </div>
+
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-navy-900" htmlFor="updatedExamHour">Hour of practicing at home </label>
+                    <input
+                        type="number"
+                        id="updatedExamHour"
+                        value={formData.Home_practice_hour_perweek}
+                        onChange={(e) => setFormData({ ...formData, Home_practice_hour_perweek: parseInt(e.target.value) })}
+                        className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
+                        name="updatedHour"
+                    />
+                </div>
+                <div className="mb-4">
+                <label className="block text-sm font-medium text-navy-900" htmlFor="updatedDuration">Rate your health</label>
+      <div className="flex items-center space-x-2">
+      
+      <Rating value={formData.health} onChange={(e) => setFormData({ ...formData, health: e })} />
+        <span>{formData.health}</span>
+      </div>
+                </div>
+
+                <div className="mb-4">
+                     <label className="block text-sm font-medium text-navy-900" htmlFor="did_you_choose_to_study_music">
+        Did you choose to study music?
+      </label>
+      <select
+        id="did_you_choose_to_study_music"
+        value={formData.did_you_choose_to_study_music === 1 ? 'yes' : 'no'} // Convertir la valeur en 'yes' ou 'no'
+        onChange={handleMusicChange}
+        className="mt-1 p-2 w-full bg-white border-gray-600 rounded-md text-kindydarkblue"
+        name="did_you_choose_to_study_music"
+      >
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+                </div>
+
+                <div class="flex justify-end">
+                    <button 
+                        class="bg-kindyyellowlight text-black px-2 py-1 font-semibold rounded-md hover:opacity-100 w-20 h-10" type="submit"
+                        style={{ borderRadius: '22px 0px' }}
+                    >
+                        Save
+                    </button>
+                </div>
+            </div></div>
+
+    
+</form>
+ ) : (
+   <p colSpan="2" className="border border-kindydarkblue p-4"> if you keep going on this track you will {predictionResult}</p>
+ 
+)}
+</div>
+</div>
+
+
+</div>
+
+
+  )}
 
             {isDrawerOpen && ( 
 

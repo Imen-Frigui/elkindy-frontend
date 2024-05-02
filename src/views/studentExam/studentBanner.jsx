@@ -1,7 +1,8 @@
 import nft1 from "assets/img/nfts/Allstudents.jpg";
 import { Link } from 'react-router-dom';
+import ButtonComponent from "../../components/button/ButtonComponnent";
 
-const StudentBanner = ({setIsDrawerOpen , setIsDrawerOpen2 , setIsDrawerOpen3 , setId , observation}) => {
+const StudentBanner = ({setIsDrawerOpen , setIsDrawerOpen2 , setIsDrawerOpen3 , setId , observation , setIsOpen}) => {
   return (
     <div className="mt-8 flex w-full flex-col rounded-[20px] bg-cover px-[30px] py-[30px] md:px-[30px] md:py-[56px] relative overflow-hidden">
       <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${nft1})`, filter: 'blur(4px)', borderRadius: '20px' }}></div>
@@ -40,7 +41,13 @@ const StudentBanner = ({setIsDrawerOpen , setIsDrawerOpen2 , setIsDrawerOpen3 , 
 >
   Check your Observations
 </button>
-
+<div className="pl-96"><ButtonComponent onClick={() => setIsOpen(true)}
+            text="Are you on the right path ?  "
+            color="#FCCB67"
+            
+          >
+           
+          </ButtonComponent></div>
 
 
 

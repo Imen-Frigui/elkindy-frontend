@@ -66,12 +66,7 @@ const TableEvaluation = ({ filteredStudents, ButtonComponent, setIsDrawerOpen2, 
                                     Evaluations
                                 </ButtonComponent>
 
-                                <ButtonComponent  text="Obsv" color="rgb(12 75 101 / var(--tw-text-opacity))" onClick={() => {
-                                    
-                                    setIsDrawerOpen4(true);
-                                }}>
-                                    Evaluations
-                                </ButtonComponent>
+                               
                             </td>
                         </tr>
                     ))}

@@ -1,3 +1,4 @@
+import axios from "axios";
 const API_BASE_URL = 'http://localhost:3000/api/exam';
 
 export const fetchStudents = async () => {
@@ -211,9 +212,9 @@ export const fetchTeachers = async () => {
 };
 
 
-export const fetchStudentsExam = async () => {
+export const fetchStudentsExam = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/classes/studentsClass/6601738a95f6e1c274e23004`);
+        const response = await fetch(`http://localhost:3000/api/classes/studentsClass/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -224,9 +225,9 @@ export const fetchStudentsExam = async () => {
     }
 };
 
-export const fetchClassExams = async () => {
+export const fetchClassExams = async (id) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/exam/examTeacher/6601738a95f6e1c274e23004`);
+        const response = await fetch(`http://localhost:3000/api/exam/examTeacher/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -334,9 +335,9 @@ export const fetchExamsGrades = async (id) => {
         console.error("There has been a problem with your fetch operation:", error);
     }
 };
-export const fetchClassesTeacher = async () => {
+export const fetchClassesTeacher = async (id) => {  
     try {
-        const response = await fetch(`http://localhost:3000/api/classes/classesTeacher/6601738a95f6e1c274e23004`);
+        const response = await fetch(`http://localhost:3000/api/classes/classesTeacher/${id}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -383,5 +384,35 @@ export const fetchObservations = async (id) => {
         }
     } catch (error) {
         console.error("There has been a problem with your fetch operation:", error);
+    }
+};
+export const predictPerformance = async (formdata) => {
+    try {
+        const data = {
+            "sex": 0,
+            "age": 20,
+            "who_support_you?": 1,
+            "did_you_choose_to_study_music?":formdata.did_you_choose_to_study_music,
+            "reason": 3,
+            "internet":formdata.internet,
+            "romantic":0,
+            "do_you_sleep_enough":formdata.do_you_sleep_enough,
+            "freetime_per_day":3,
+            "Home_practice_hour_perweek": formdata.Home_practice_hour_perweek,
+            "health": formdata.health,
+            "absences": formdata.absences,
+            "Previous_theoretical_exam": formdata.Previous_theoretical_exam,
+            "Previous_practice_exam": formdata.Previous_practice_exam,
+            "Previous_general_grade": (formdata.Previous_theoretical_exam + formdata.Previous_practice_exam)/2
+        };
+
+        const response = await axios.post(`http://127.0.0.1:8000/ai/aipredictstudentperformance`, JSON.stringify(data));
+        console.log("succccesss");
+        console.log(response.data); // Logging the response data
+        
+        return response.data; // Returning the response data
+    } catch (error) {
+        console.error("ERRROOOOOOORRRRRRRRRR:", error);
+        throw error; // Re-throwing the error for further handling if needed
     }
 };

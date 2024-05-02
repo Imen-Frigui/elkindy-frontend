@@ -20,11 +20,12 @@ const useSocketStore = create((set) => ({
       config
     );
     if (response.data.user?._id) {
-      console.log("true");
-      const socket = io("http://localhost:5000", {
+      localStorage.setItem('userid', response.data.user?._id);
+      const socket = io("http://localhost:3000", {
         query: {
           userId: response.data.user._id,
         },
+        
       });
       set({ socket });
       console.log(socket);
