@@ -10,6 +10,7 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import "@google/model-viewer/dist/model-viewer.min.js";
 
 
 
