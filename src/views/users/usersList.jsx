@@ -19,7 +19,7 @@ const UserList = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/users/getAllUsers');
+      const response = await axios.get('https://elkindy-backend.onrender.com/api/users/getAllUsers');
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -29,7 +29,7 @@ const UserList = () => {
 
   const deleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/users/deleteUser/${userId}`);
+      await axios.delete(`https://elkindy-backend.onrender.com/api/users/deleteUser/${userId}`);
       fetchUsers();  // Re-fetch users after deletion
     } catch (error) {
       console.error("Error deleting user:", error);

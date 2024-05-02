@@ -89,7 +89,7 @@ function MessageContainer({
         };
 
         const response = await axios.get(
-          "http://localhost:3000/api/auth/validateSession",
+          "https://elkindy-backend.onrender.com/api/auth/validateSession",
           config
         );
         setUserId(response.data.user._id);

@@ -30,7 +30,7 @@ const Banner = ({ userData }) => {
 
       try {
         // Adjust the URL and endpoint as necessary
-        const response = await axios.patch(`http://localhost:3000/api/users/${userData.user._id}/upload-image`, formData, {
+        const response = await axios.patch(`https://elkindy-backend.onrender.com/api/users/${userData.user._id}/upload-image`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             // Include other headers as necessary, e.g., Authorization if required

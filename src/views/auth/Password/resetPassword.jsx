@@ -22,7 +22,7 @@ const Navigate = useNavigate();
         } else {
             try {
                 const token = searchParams.get("token");
-                const res = await axios.post("http://localhost:3000/api/auth/reset-Password", {token, password })
+                const res = await axios.post("https://elkindy-backend.onrender.com/api/auth/reset-Password", {token, password })
                 setMessage(res.data.message);
                 Navigate("/auth/sign-in")
             } catch (error) {
