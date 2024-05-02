@@ -33,6 +33,7 @@ import UserList from "views/users/usersList";
 import TeacherDashboard from "./views/teacher/TeacherDashboard";
 import TeacherSchedule from "./views/teacher/TeacherSchedule";
 import CourseDetails from "./views/rtl/default/components/front/CourseDetails";
+import FeedBackForm  from "./views/rtl/default/components/front/FeedBackForm";
 import Dashboard from "views/rtl/default";
 import Conversations from "views/chat/Conversations";
 
@@ -121,6 +122,19 @@ const routes = [
       <MdBook className="h-6 w-6" style={{ color: "blue", display: "none" }} />
     ),
     hide: true,
+
+
+    {
+      name: "RTL Admin",
+      layout: "/rtl",
+      path: "eventfeedbacks",
+      icon: <MdBook className="h-6 w-6" style={{ color: 'blue', display: 'none' }} />,
+      hide: true,
+
+      component: <FeedBackForm />,
+  },
+
+
 
     component: <EvaluationList />,
   },
