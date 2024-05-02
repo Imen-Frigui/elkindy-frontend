@@ -64,7 +64,7 @@ const TeacherFormStep1 = ({ onNext }) => {
               await schema.validate(formData, { abortEarly: false });
       
               // Check if the email already exists in your database
-              const emailExistsResponse = await fetch(`http://localhost:3000/api/auth/check-email/${formData.email}`);
+              const emailExistsResponse = await fetch(`https://elkindy-backend.onrender.com/api/auth/check-email/${formData.email}`);
               if (emailExistsResponse.ok) {
                   const data = await emailExistsResponse.json();
                   if (data.exists) {

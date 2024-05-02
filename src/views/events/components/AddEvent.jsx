@@ -40,7 +40,7 @@ const AddEvent = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/users/getAllUsers');
+        const response = await axios.get('https://elkindy-backend.onrender.com/api/users/getAllUsers');
         const options = response.data.map(user => ({
           value: user._id,
           label: user.email

@@ -61,13 +61,7 @@ const routes = [
     icon: <ChatBubbleLeftRightIcon className="h-6 w-6" />,
     component: <Conversations />,
   },
-  {
-    name: "ElKindy Users",
-    layout: "/admin",
-    icon: <FaCalendarAlt className="h-6 w-6" />,
-    path: "data-tables",
-    component: <DataTables />,
-  },
+
   {
     name: "Profile",
     layout: "/admin",

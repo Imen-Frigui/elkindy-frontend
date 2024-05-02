@@ -17,7 +17,7 @@ const ScheduleComponent = ({ userData }) => {
   const fetchAvailability = async () => {
     console.log(userid)
     try {
-      const response = await axios.get(`http://localhost:3000/api/users/${userid}/availability`);
+      const response = await axios.get(`https://elkindy-backend.onrender.com/api/users/${userid}/availability`);
       setSchedule(response.data.availability);
       setLoading(false);
     } catch (error) {
@@ -32,7 +32,7 @@ const ScheduleComponent = ({ userData }) => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`http://localhost:3000/api/users/${userid}/addAvailability`, { availability: schedule });
+      await axios.post(`https://elkindy-backend.onrender.com/api/users/${userid}/addAvailability`, { availability: schedule });
       setSubmitted(true); // Update submission status upon successful submission
       //alert('Schedule updated successfully!');
     } catch (error) {

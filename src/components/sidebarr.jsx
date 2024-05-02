@@ -41,7 +41,7 @@ function SideBarr({ open, onClose }) {
       };
 
       try {
-        const response = await axios.get('http://localhost:3000/api/auth/validateSession', config);
+        const response = await axios.get('https://elkindy-backend.onrender.com/api/auth/validateSession', config);
         setUserData(response.data);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
