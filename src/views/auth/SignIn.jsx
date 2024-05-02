@@ -12,6 +12,7 @@ import { setCredentials, setLoginError ,setGoogleCredentials} from "../../slices
 import { useLoginMutation, useGoogleLoginMutation } from "../../slices/userApiSlice";
 import Loader from "components/button/Loader";
 import ImageLoader from "components/button/ImageLoader";
+import logo from "../../assets/img/el_kindy_logo.jpg";  // Make sure the path to your logo is correct
 
 
 export default function SignIn() {
@@ -78,17 +79,18 @@ export default function SignIn() {
   return (
     <GoogleOAuthProvider clientId="1066912378965-hfmog74hpajilpefbq103tond3l9fvl7.apps.googleusercontent.com">
     <div className=" my-64 grid sm:grid-cols-1  md:grid-cols-1 lg:grid-cols-2 lg:gap-0  ">
+   
       <div
         className=" ml-20 w-full max-w-xl bg-lightblue p-8 shadow-lg dark:bg-gray-800 sm:rounded-lg "
         style={{
           borderRadius: "100px 0 0 0 ",
         }}
       >
-         
+            <img src={logo} alt="Logo" className="h-12 " />    
         <h4 className="mb-2.5 text-center text-4xl font-bold text-navy-700 dark:text-white md:rounded-lg">
           Login In
         </h4>
-        
+       {/* Place the logo at the top left */}
         <div className="flex justify-center mb-4  ">
             <GoogleLogin
               onSuccess={handleCredentialResponse}
