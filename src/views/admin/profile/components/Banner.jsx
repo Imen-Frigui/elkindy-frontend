@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import avatarPlaceholder from "assets/img/avatars/avatar11.png"; // Default avatar
+import avatarPlaceholder from "assets/img/1d04a87b8e6cf2c3829c7af2eccf6813.jpg"; // Default avatar
 import banner from "assets/img/profile/banner.png";
 import Card from "components/card";
 import axios from "axios";

@@ -6,13 +6,14 @@ import EditStatusPopup from "./components/updateStatus";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/modal";
 import ScheduleComponentpopup from "./components/schedualPopup";
 import { Button } from "@chakra-ui/react";
+import AdminEnrollmentManagementModal from "./components/updateEnrollment";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
   const [search, setSearch] = useState("");
- 
+  const [isEnrollmentModalOpen, setIsEnrollmentModalOpen] = useState(false);
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -68,7 +69,6 @@ const UserList = () => {
 
     // Use filteredUsers to include all filtered results in the PDF
     const data = filteredUsers.map(user => [
-      user._id,
       user.username, 
       `${user.firstName} ${user.lastName}`, 
       user.email, 
@@ -93,6 +93,7 @@ const showDeleteConfirmation = (userId) => {
 };
 const [selectedUser, setSelectedUser] = useState(null);
 const handleEditStatus = (user) => {
+  console.log(user)
   setSelectedUser(user);
 };
 
@@ -112,6 +113,13 @@ const handleViewAvailability = (user) => {
 const handleCloseScheduleModal = () => {
   setIsScheduleModalOpen(false); // Close the modal
 };
+const handleManageEnrollments = () => {
+  setIsEnrollmentModalOpen(true);
+};
+
+const handleCloseEnrollmentModal = () => {
+  setIsEnrollmentModalOpen(false);
+};
   return (
     <div className="container mx-auto mt-5">
       <div className="flex justify-between items-center">
@@ -125,6 +133,9 @@ const handleCloseScheduleModal = () => {
         <button onClick={exportPDF} className="bg-kindyblue rounded-tr-2xl rounded-bl-2xl hover:bg-kindyorange text-white font-bold py-2 px-4 rounded">
           Export PDF
         </button>
+        <button onClick={handleManageEnrollments} className="bg-kindyblue rounded-tr-2xl rounded-bl-2xl hover:bg-kindyorange text-white font-bold py-2 px-4 rounded">
+          Manage Enrollments
+        </button>
       </div>
       
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-4">
@@ -136,7 +147,8 @@ const handleCloseScheduleModal = () => {
               <th scope="col" className="py-3 px-6">Email</th>
               <th scope="col" className="py-3 px-6">Role</th>
               <th scope="col" className="py-3 px-6">Status</th>
-              <th scope="col" className="py-3 px-6">Action</th>
+              <th scope="col" className="py-3 px-6">Edit</th>
+              <th scope="col" className="py-3 px-6">Availability</th>
 
             </tr>
           </thead>
@@ -159,7 +171,12 @@ const handleCloseScheduleModal = () => {
             ))}
           </tbody>
         </table>
-        
+        {isEnrollmentModalOpen && (
+        <AdminEnrollmentManagementModal
+          isVisible={isEnrollmentModalOpen}
+          onClose={handleCloseEnrollmentModal}
+        />
+      )}
       {selectedUser && (
         <EditStatusPopup
           userId={selectedUser._id}

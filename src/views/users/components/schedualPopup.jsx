@@ -35,10 +35,10 @@ const ScheduleComponentpopup = ({ userData, onClose }) => {
     try {
       await axios.post(`http://localhost:3000/api/users/${userid}/addAvailability`, { availability: schedule });
       setSubmitted(true); // Update submission status upon successful submission
-      alert('Schedule updated successfully!');
+    //  alert('Schedule updated successfully!');
     } catch (error) {
       console.error('Error updating schedule:', error);
-      alert('An error occurred while updating the schedule.');
+   //   alert('An error occurred while updating the schedule.');
     }
   };
 

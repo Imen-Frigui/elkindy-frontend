@@ -1,10 +1,14 @@
+import React from 'react';
+import PaymentPage from './components/paymentComponenet'; // Make sure the path is correct
+import CourseList from './components/Courselist';
+  const Dashboard = () => {
+      return (
+          <div>
+              {/* Card widget */}
+           
+              <CourseList />
+          </div>
+      );
+  }
 
-const Dashboard = () => {
-    return (
-      <div>
-        {/* Card widget */}
-        <h1>helloword</h1>
-       
-        </div>);
-        }
-        export default  Dashboard;
+  export default Dashboard;
