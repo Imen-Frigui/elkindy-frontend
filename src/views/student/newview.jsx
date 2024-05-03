@@ -5,8 +5,7 @@ import CourseList from './components/Courselist';
       return (
           <div>
               {/* Card widget */}
-              <h1>Hello, world!</h1>
-              <PaymentPage />
+           
               <CourseList />
           </div>
       );

@@ -37,7 +37,7 @@ function PaymentPage() {
 
     return (
         <div className="text-center mt-8">
-            <h1 className="text-3xl font-bold mb-4">Payment Page</h1>
+            <h1 className="text-3xl font-bold mb-4">Make Payment </h1>
             <div className="flex justify-center">
                 <Button onClick={generatePaymentPage}>Generate Payment Page</Button>
                 {paymentLink && (

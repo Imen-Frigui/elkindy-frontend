@@ -30,9 +30,7 @@ export default function Auth() {
           <div className="relative flex">
             <div className="mx-auto flex w-full flex-col justify-start pt-12 md:max-w-[75%] lg:max-w-[1013px] lg:px-8 lg:pt-0 xl:max-w-[1383px] xl:px-0 xl:pl-[70px]">
               <div className="mb-auto flex flex-col pl-5 pr-5 md:pr-0 md:pl-12 lg:max-w-[48%] lg:pl-0 xl:max-w-full">
-                <Link to="/admin" className="mt-0 w-max lg:pt-5 block">
-                  <img src={logo} alt="Logo" className="h-12" />  
-                </Link>
+               
                 <Routes>
                   {getRoutes(routes)}
                   <Route path="/" element={<Navigate to="/auth" replace />} />
