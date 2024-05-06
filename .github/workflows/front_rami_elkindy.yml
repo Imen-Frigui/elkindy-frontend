@@ -8,6 +8,8 @@ on:
     branches:
       - Front_Rami
   workflow_dispatch:
+env:
+  CI: false
 
 jobs:
   build:
