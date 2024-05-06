@@ -32,7 +32,7 @@ const TaskCard = () => {
 
 
   return (
-    <Card extra="pb-7 p-[20px]">
+    <Card extra="pb-7 h-96 p-[20px]">
       {/* task header */}
       <div className="relative flex flex-row justify-between">
         <div className="flex items-center">
@@ -50,7 +50,7 @@ const TaskCard = () => {
       <div className="h-full w-full">
         {upcomingEvents.length > 0 ? (
           upcomingEvents.map((event, index) => (
-            <div key={index} className="mt-2 flex items-center justify-between p-2">
+            <div key={index} className="mt-3 mb-3 space-y-7 flex items-center justify-between p-2">
               <div className="flex items-center justify-center gap-2">
                 <Checkbox />
                 <p className="text-base font-bold text-navy-700 dark:text-white">

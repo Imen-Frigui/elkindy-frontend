@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import Checkbox from "components/checkbox";
 import authImg from "assets/img/auth/auth1.png";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -88,7 +86,7 @@ export default function SignIn() {
           borderRadius: "100px 0 0 0 ",
         }}
       >
-          <img src={logo} alt="Logo" className="h-12 mb-8 ml-4" />    
+          <img src={logo} alt="Logo" className="size-1/6 justify-center ml-52" />
         <h4 className="mb-2.5 text-center text-4xl font-bold text-navy-700 dark:text-white md:rounded-lg">
           Login In
         </h4>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import authImg from "assets/img/auth/register1.jpg";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import{updateRegistrationData} from 'slices/authSlice';
 import axios from 'axios';
 import { Input, Typography } from '@material-tailwind/react';
     // Clear the error as soon as the user starts correcting it.

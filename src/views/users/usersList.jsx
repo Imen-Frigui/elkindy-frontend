@@ -5,7 +5,6 @@ import "jspdf-autotable";
 import EditStatusPopup from "./components/updateStatus";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/modal";
 import ScheduleComponentpopup from "./components/schedualPopup";
-import { Button } from "@chakra-ui/react";
 import AdminEnrollmentManagementModal from "./components/updateEnrollment";
 
 const UserList = () => {
