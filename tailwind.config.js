@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const withMT = require("@material-tailwind/react/utils/withMT");
+module.exports = withMT({
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -106,9 +107,16 @@ module.exports = {
         "99p": "99%",
       },
       fontFamily: {
-        jost: ["Jost", "sans-serif"],
-        poppins: ["Poppins", "sans-serif"],
-        dm: ["DM Sans", "sans-serif"],
+        body: ["Jost"]
+      },
+      fontSize: {
+        sm: '1rem',
+        base: '1rem',
+        xl: '1.25rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
       },
       boxShadow: {
         "3xl": "14px 17px 40px 4px",
@@ -136,8 +144,6 @@ module.exports = {
       "4xl-max": { max: "1850px" },
     },
     colors: () => ({
-      pageBackground: "#f7f5ef",
-      customBackground: "#F7F8FD",
       white: "#ffffff",
       lightPrimary: "#F4F7FE",
       blueSecondary: "#4318FF",
@@ -154,7 +160,14 @@ module.exports = {
       kindyyellow: '#FCCB67',
       kindygray: '#F7F5EF',
       fontcolor: '#3A4374',
+      lightblue :'#f4fbff',
       bluebg: '#F7F8FD',
+      lightkindydarkblue :'#2f82a4',
+      kindyyellowlight :'#ffd26d',
+
+      lightwhite : '#ffffff96',
+
+      kindyStudentBlue :'#0C4B65',
 
       gray: {
         50: "#f8f9fa",
@@ -336,10 +349,12 @@ module.exports = {
         800: "#190793",
         900: "#11047A",
       },
+      black: '#000000',
+      blackOpacity: 'rgba(0, 0, 0, 0.7)',
       shadow: {
         500: "rgba(112, 144, 176, 0.08)",
       },
     }),
   },
   plugins: [require("tailwindcss-rtl")],
-};
+});

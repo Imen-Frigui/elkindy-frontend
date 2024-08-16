@@ -1,8 +1,9 @@
 const API_BASE_URL = 'http://localhost:3000/api';
 
-export const fetchCourses = async () => {
+export const fetchCourses = async (page = 1, pageSize = 10, searchQuery = '', isInternship ='false') => {
+    const query = new URLSearchParams({ page, pageSize, searchQuery, isInternship }).toString();
     try {
-        const response = await fetch(`${API_BASE_URL}/courses`);
+        const response = await fetch(`${API_BASE_URL}/courses?${query}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -96,9 +97,9 @@ export const archiveCourse = async (courseId) => {
     }
 };
 
-export const fetchArchivedCourses = async () => {
+export const fetchArchivedCourses = async (page = 1, pageSize = 10) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/courses/courses/archived`);
+        const response = await fetch(`${API_BASE_URL}/courses/arch/archived?page=${page}&pageSize=${pageSize}`);
         if (response.ok) {
             return await response.json();
         } else {
@@ -111,22 +112,94 @@ export const fetchArchivedCourses = async () => {
 
 export const updateCourseTeachers = async (courseId, teacherIds) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/courses/${courseId}/teachers`, {
+        const response = await fetch(`${API_BASE_URL}/courses/details/${courseId}/teachers`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                teacherIds: teacherIds,
-            }),
+            body: JSON.stringify(teacherIds),
         });
-        if (response.ok) {
-            return await response.json();
-        } else {
-            throw new Error('Network response was not ok.');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok. Status: ${response.status}`);
         }
+        return await response.json();
     } catch (error) {
-        console.error("Failed to fetch archived courses:", error);
+        console.error("Failed to update course teachers:", error);
+        throw error;
+    }
+};
+
+export const fetchAssignedTeachers = async (courseId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/details/${courseId}/teachers`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.assignedTeachers;
+    } catch (error) {
+        console.error("Failed to fetch assigned teachers:", error);
+    }
+};
+
+export const fetchTopThreeCourses = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/popular`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch top three courses:", error);
+        throw error;
+    }
+};
+
+export const fetchStudentStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/students-stats`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch student stats:", error);
+        throw error;
+    }
+};
+
+export const fetchTeacherStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/teachers-stats`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch teacher stats:", error);
+        throw error;
+    }
+};
+
+export const uploadCourseImage = async (courseId, file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/${courseId}/upload-image`, {
+            method: 'PATCH',
+            body: formData,
+            // `fetch` will set it automaticallTheContentTYpeof the FormData object
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to upload course image:", error);
+        throw error;
     }
 };
 

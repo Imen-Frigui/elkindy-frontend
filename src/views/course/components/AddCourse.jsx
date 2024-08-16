@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { addCourse } from '../../../services/course/courseService'
 import ButtonComponent from "../../../components/button/ButtonComponnent";
-
-
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 const AddCourse = ({ onCourseAdded }) => {
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -13,7 +16,7 @@ const AddCourse = ({ onCourseAdded }) => {
     const [inputValues, setInputValues] = useState({
         courseName: '',
         courseDescription: '',
-        courseCategory: '',
+        courseCategory: 'Violon Ori',
         price: 0,
         startDate: '',
         endDate: '',
@@ -24,43 +27,39 @@ const AddCourse = ({ onCourseAdded }) => {
     const [errors, setErrors] = useState({
         courseName: '',
         courseDescription: '',
-        courseCategory: '',
         price: ''
     });
+    const [showInternshipAlert, setShowInternshipAlert] = useState(false);
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
         setInputValues(prevState => ({
             ...prevState,
             [name]: value,
+            // Automatically determine isInternship based on dates
+            isInternship: name === 'startDate' || name === 'endDate' ? !!prevState.startDate && !!prevState.endDate : prevState.isInternship,
         }));
-        if (name === 'startDate' || name === 'endDate') {
-            const isInternship = inputValues.startDate && inputValues.endDate;
-            setIsInternship(isInternship);
-            handleInternshipChange({ target: { checked: true } })// Set the checkbox state
-            if (isInternship) {
-                alert('Setting both start and end dates will categorize this course as an internship.');
 
-            }
+
+        if ((name === 'startDate' || name === 'endDate') && inputValues.startDate && inputValues.endDate) {
+            alert('Setting both start and end dates will categorize this course as an internship.');
         }
     };
+
 
     const handleInternshipChange = (e) => {
         setIsInternship(e.target.checked);
     };
 
     useEffect(() => {
-        console.log(errors);
-        const { startDate, endDate } = inputValues
-        if (startDate && endDate) {
-            setIsInternship(true);
-            alert('Setting both start and end dates will categorize this course as an internship.');
-            handleInternshipChange({ target: { checked: true } })
-        } else {
-            setIsInternship(false);
-            handleInternshipChange({ target: { checked: false } })
+        const { startDate, endDate } = inputValues;
+        const newIsInternship = !!startDate && !!endDate;
+
+        if (newIsInternship !== isInternship) {
+            setIsInternship(newIsInternship);
+            setShowInternshipAlert(newIsInternship); // Trigger the alert through state
         }
-    }, [errors, inputValues.startDate, inputValues.endDate, inputValues]);
+    }, [inputValues.startDate, inputValues.endDate, inputValues, isInternship]);
 
 
     const handleDrawerClose = () => setIsDrawerOpen(false);
@@ -68,14 +67,13 @@ const AddCourse = ({ onCourseAdded }) => {
     const validateForm = () => {
         let formIsValid = true;
         let newErrors = { ...errors };
+        const today = new Date();
+        const startDate = new Date(inputValues.startDate);
+        const endDate = new Date(inputValues.endDate);
 
         if (!inputValues.courseName) {
             formIsValid = false;
             newErrors["courseName"] = "Course name is required.";
-        }
-        if (!inputValues.courseCategory) {
-            formIsValid = false;
-            newErrors["courseCategory"] = "Category is required.";
         }
         if (!inputValues.courseDescription) {
             formIsValid = false;
@@ -84,6 +82,18 @@ const AddCourse = ({ onCourseAdded }) => {
         if (!inputValues.price) {
             formIsValid = false;
             newErrors["price"] = "Price is required.";
+        }
+        if (isInternship){
+            if (!inputValues.startDate || startDate <= today) {
+                formIsValid = false;
+                newErrors["startDate"] = "Must be in the future.";
+            }
+
+            if ( !inputValues.endDate || endDate <= today || endDate <= startDate) {
+                formIsValid = false;
+                newErrors["endDate"] = "Must be after the start date. Must be in the future.";
+            }
+
         }
 
         setErrors(newErrors);
@@ -96,7 +106,7 @@ const AddCourse = ({ onCourseAdded }) => {
             title: inputValues.courseName,
             description: inputValues.courseDescription,
             category: inputValues.courseCategory,
-            price: inputValues.price, // Ensure price is a number
+            price: inputValues.price,
             startDate: inputValues.startDate,
             endDate: inputValues.endDate,
             isArchived: false,
@@ -121,7 +131,25 @@ const AddCourse = ({ onCourseAdded }) => {
 
     return (
         <>
-            <ButtonComponent className="mb-3" text="Add Course" color="#006BBE" onClick={() => setIsDrawerOpen(true)}>
+            <Dialog
+                open={showInternshipAlert}
+                onClose={() => setShowInternshipAlert(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Internship Alert"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Setting both start and end dates will categorize this course as an internship.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowInternshipAlert(false)} color="primary" autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <ButtonComponent className="mb-3 shadow-shadow-900" text="Add Course" color="#0C4B65" onClick={() => setIsDrawerOpen(true)}>
                 Add course
             </ButtonComponent>
             {isDrawerOpen && (
@@ -153,7 +181,7 @@ const AddCourse = ({ onCourseAdded }) => {
                                       placeholder="Enter course description"
                                       value={inputValues.courseDescription}
                                       onChange={handleOnChange}
-                                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                      className={`bg-gray-50 border ${errors.courseDescription ? 'border-red-500' : 'border-gray-300'} block p-2.5 w-full text-sm text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
                             ></textarea>
                             {errors.courseDescription && (
                                 <div className="error-message text-red-500 text-sm mt-1">
@@ -174,11 +202,7 @@ const AddCourse = ({ onCourseAdded }) => {
                                 <option value="Pinture">Pinture</option>
                                 <option value="Danse">Danse</option>
                             </select>
-                            {errors.courseCategory && (
-                                <div className="error-message text-red-500 text-sm mt-1">
-                                    {errors.courseCategory}
-                                </div>
-                            )}
+
                         </div>
                         <div>
                             <label htmlFor="price"
@@ -186,7 +210,7 @@ const AddCourse = ({ onCourseAdded }) => {
                             <input type="number" id="price" name="price" placeholder="Enter course price"
                                    value={inputValues.price}
                                    onChange={handleOnChange}
-                                   className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
+                                   className={`bg-gray-50 border ${errors.price ? 'border-red-500' : 'border-gray-300'} w-full p-2.5 text-sm text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600`} />
                             {errors.price && (
                                 <div className="error-message text-red-500 text-sm mt-1">
                                     {errors.price}
@@ -217,6 +241,11 @@ const AddCourse = ({ onCourseAdded }) => {
                                    value={inputValues.startDate}
                                    onChange={handleOnChange}
                                    className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
+                            {errors.startDate && (
+                                <div className="error-message text-red-500 text-sm mt-1">
+                                    {errors.startDate}
+                                </div>
+                            )}
                         </div>
 
                         {/* End Date Input */}
@@ -228,6 +257,11 @@ const AddCourse = ({ onCourseAdded }) => {
                                    value={inputValues.endDate}
                                    onChange={handleOnChange}
                                    className="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-primary-600 focus:border-primary-600"/>
+                            {errors.endDate && (
+                                <div className="error-message text-red-500 text-sm mt-1">
+                                    {errors.endDate}
+                                </div>
+                            )}
                         </div>
 
 
