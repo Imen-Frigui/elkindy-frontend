@@ -57,7 +57,7 @@
     "formik-stepper": "^2.2.1",
     "framer-motion": "^7.10.2",
     "javascript-time-ago": "^2.5.9",
-    "jspdf": "^3.0.1",
+    "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",
     "leaflet": "^1.9.4",
     "nodemailer": "^6.9.13",
