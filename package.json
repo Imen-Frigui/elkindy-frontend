@@ -139,7 +139,7 @@
     "eslint-plugin-react": "^7.34.1",
     "globals": "^15.1.0",
     "install": "^0.13.0",
-    "npm": "^10.7.0",
+    "npm": "^11.8.0",
     "postcss": "^8.4.16",
     "prettier": "^2.8.3",
     "prettier-plugin-tailwindcss": "^0.2.1",
